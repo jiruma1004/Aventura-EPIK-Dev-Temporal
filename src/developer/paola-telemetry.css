@@ -1,0 +1,55 @@
+/* Same lettering, parchment edging and green instruments as Ignitia's console. */
+#paola-tablet[hidden]{display:none!important}
+#paola-tablet{position:absolute;z-index:48;box-sizing:border-box;left:50%;top:12px;transform:translateX(-50%);width:min(1040px,calc(100% - 28px));max-height:calc(100% - 26px);overflow:auto;overscroll-behavior:contain;padding:18px 22px;border:1px solid #c4b489;border-radius:9px;background:linear-gradient(135deg,#202d40fc,#101d2cfc);box-shadow:inset 0 0 0 3px #b4aa8c18,0 12px 45px #000a;color:#f2ead7;font:17px/1.4 var(--adventure-lettering);text-align:left}
+#paola-tablet .telemetry-header{position:relative;display:flex;align-items:center;gap:16px;padding:0 35px 12px 0;margin:0;border:0;border-bottom:1px solid #75806c;background:none;min-height:0}
+#paola-tablet .telemetry-header canvas{width:72px;height:72px;flex:0 0 72px;image-rendering:pixelated}
+#paola-tablet .telemetry-header>div{flex:1;min-width:0;margin:0}
+#paola-tablet h2{margin:2px 0 5px!important;color:#ffe4a1;font:400 26px/1.2 var(--adventure-title)!important}
+#paola-tablet p{margin:8px 0}#paola-tablet .eyebrow{margin:0;font-size:12px;letter-spacing:1px;color:#d8cba6}
+#paola-tablet #telemetry-close{position:absolute;right:0;top:0;width:34px;min-height:34px;padding:0;font-size:25px;background:#263b4c;color:#f9e7b9;border:1px solid #ad9e7b}
+#paola-tablet .telemetry-meta{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-top:12px;font-size:13px;color:#a5e8c5}
+#paola-tablet #telemetry-progress{color:#ffe3a1;font-size:16px}
+#paola-tablet .telemetry-model{font-size:13px;color:#bacfce;margin-bottom:14px}
+#paola-tablet .telemetry-workspace{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:20px;align-items:start}
+#paola-tablet .telemetry-plot{margin:0;min-width:0;background:#061d22;border:1px solid #4c796a;border-radius:4px;overflow:hidden}
+#paola-tablet figcaption{padding:7px 10px;color:#d6f2db;font-size:14px;border-bottom:1px solid #315c50}
+#paola-tablet canvas[data-plot]{display:block;width:100%;height:210px}
+#paola-tablet .mini canvas{height:125px}
+#paola-tablet[data-stage="1"] canvas[data-plot=velocity]{height:150px}
+#paola-tablet .telemetry-points{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+#paola-tablet button{font:16px/1.3 var(--adventure-lettering);border:1px solid #8b9c94;border-radius:4px;color:#f1ead6;background:#263a4a;padding:8px 12px;min-height:40px;cursor:pointer;margin:0;white-space:normal}
+#paola-tablet button:hover:not(:disabled){background:#354e60}
+#paola-tablet button:focus-visible,#paola-tablet select:focus-visible,#paola-tablet input:focus-visible{outline:2px solid #ffe094;outline-offset:3px}
+#paola-tablet button:disabled{cursor:default;opacity:.6}
+#paola-tablet [aria-pressed=true]{border:2px solid #f4d68d;background:#344d51;box-shadow:inset 0 0 0 1px #f4d68d66}
+#paola-tablet .telemetry-fields{display:grid;gap:10px}
+#paola-tablet .telemetry-fields.two{grid-template-columns:1fr 1fr;margin:14px 0;align-items:end}
+#paola-tablet .telemetry-select{display:grid;gap:4px;font-size:16px;margin:0;min-width:0}
+#paola-tablet select,#paola-tablet input:not([type=range]){width:100%;box-sizing:border-box;margin:0;min-height:38px;padding:7px 10px;font:17px/1.25 var(--calculation-lettering);color:#f2f6e5;background:#0b1d2a;border:1px solid #6b8984;border-radius:4px;letter-spacing:0}
+#paola-tablet .telemetry-choice{border:0;padding:0;margin:18px 0 0;min-width:0}
+#paola-tablet legend{font:19px var(--adventure-title);margin-bottom:8px;color:#ffe4a1}
+#paola-tablet .telemetry-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#paola-tablet .telemetry-cards button{display:block;text-align:left;padding:5px;min-width:0;border-width:2px}
+#paola-tablet .telemetry-cards button[aria-pressed=true]::after{content:'✓ Seleccionada';display:block;color:#ffe4a1;text-align:center;padding:4px 0;font-size:14px}
+#paola-tablet .telemetry-cards button[aria-pressed=false]::after{content:'Seleccionar';display:block;text-align:center;padding:4px 0;font-size:14px;color:#c4d8d0}
+#paola-tablet .telemetry-cards figcaption{min-height:37px;display:flex;align-items:center;font-size:14px;line-height:1.25}
+#paola-tablet .telemetry-transport{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin-top:12px;align-items:center}
+#paola-tablet .telemetry-transport label{font-size:15px;margin:0}
+#paola-tablet input[type=range]{grid-column:1/-1;min-height:28px;width:100%;padding:0;margin:0;accent-color:#92dfb5}
+#paola-tablet #telemetry-reading{grid-column:1/-1;color:#c5f4da;font-size:15px;min-height:22px}
+#paola-tablet output{font-variant-numeric:tabular-nums}
+#paola-tablet #telemetry-delta{display:block;font-size:14px;color:#efdba5}
+#paola-tablet #telemetry-feedback{padding:9px 12px;border-left:3px solid #dea078;background:#111e2a;color:#ffe3bd;margin-top:14px}
+#paola-tablet #telemetry-feedback:empty{display:none}
+#paola-tablet #telemetry-feedback[data-ok=true]{border-color:#85ddad;color:#b8f6d0}
+#paola-tablet #telemetry-help{padding:10px 12px;background:#35414e;border-left:3px solid #d7c18e;color:#fff0cc}
+#paola-tablet .telemetry-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid #61716c}
+#paola-tablet .primary{font-size:17px;padding:9px 15px;background:linear-gradient(#405368,#26394b);border:1px solid #c7b585;min-height:42px}
+#paola-tablet .telemetry-synced{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#paola-tablet .telemetry-recap{font-size:15px;color:#d9e7cf}
+.scene-view:has(#paola-tablet:not([hidden])) #eric-headstart,.scene-view:has(#paola-tablet:not([hidden])) #interaction-hint{display:none!important}
+.scene-view:has(#paola-tablet:not([hidden])) #ask-paola{visibility:hidden}
+#eric-headstart.telemetry-pause{top:auto;bottom:76px;font-size:14px;padding:6px 12px}
+@media(max-width:700px){#paola-tablet{padding:14px;top:7px;width:calc(100% - 14px);max-height:calc(100% - 14px)}#paola-tablet .telemetry-workspace{grid-template-columns:1fr}#paola-tablet .telemetry-synced{grid-template-columns:1fr}#paola-tablet .telemetry-fields.two{grid-template-columns:1fr}#paola-tablet .telemetry-header{gap:8px}#paola-tablet .telemetry-header canvas{width:50px;height:50px;flex-basis:50px}#paola-tablet h2{font-size:23px!important}}
+@media(max-width:540px){#paola-tablet .telemetry-cards{grid-template-columns:1fr}#paola-tablet .telemetry-cards figcaption{min-height:0}#paola-tablet .mini canvas{height:145px}#paola-tablet .telemetry-transport{grid-template-columns:1fr}#paola-tablet .telemetry-actions button{flex:1 1 145px}#paola-tablet .telemetry-points button{flex:1 1 90px}#paola-tablet .telemetry-header canvas{display:none}}
+@media(pointer:coarse){#paola-tablet button,#paola-tablet select,#paola-tablet input:not([type=range]){min-height:44px}}

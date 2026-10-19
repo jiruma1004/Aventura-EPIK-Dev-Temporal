@@ -51,7 +51,7 @@
    </section>`);
    this.panel=document.querySelector('#paola-tablet');
    this.praise=document.createElement('aside');this.praise.id='paola-encouragement';this.praise.hidden=true;this.praise.setAttribute('role','status');this.praise.setAttribute('aria-live','polite');
-   this.praise.innerHTML='<img src="assets/cast/paola-b-v1-portrait.webp" alt=""><p></p>';document.querySelector('.scene-view').append(this.praise);
+   this.praise.innerHTML='<canvas width="128" height="128" aria-label="Paola"></canvas><p></p>';document.querySelector('.scene-view').append(this.praise);
 
    this.panel.querySelector('#telemetry-close').onclick=()=>this.close();
    this.panel.querySelector('#telemetry-check').onclick=()=>this.submit();
@@ -72,7 +72,7 @@
   near(p){return this.enabled&&Math.hypot(p.x-7.4,p.y-7.3)<2.7&&Math.cos(Math.atan2(7.3-p.y,7.4-p.x)-p.angle)>.65;}
   open(){if(!this.enabled)return;this.owner.closeConsole();this.owner.speaking=false;document.querySelector('#ignitia-dialog').hidden=true;document.querySelector('#paola-dialog').hidden=true;window.dispatchEvent(new Event('astralia:ui-open'));this.panel.hidden=false;this.render();this.panel.querySelector('#telemetry-close').focus({preventScroll:true});}
   close(){this.playing=false;if(this.panel){this.panel.hidden=true;document.querySelector('#game')?.focus({preventScroll:true});}}
-  drawPortrait(){RPGCast.portrait(this.panel.querySelector('canvas'),this.portrait,false,0);}
+  drawPortrait(){RPGCast.portrait(this.panel.querySelector('canvas'),this.portrait,false,0);if(this.praise)RPGCast.portrait(this.praise.querySelector('canvas'),this.portrait,false,0);}
   select(name,label,options){return `<label class="telemetry-select" data-field="${name}">${label}<select name="${name}"><option value="">Elige…</option>${options.map(([v,t])=>`<option value="${v}">${t}</option>`).join('')}</select></label>`;}
   plot(kind,label,mini=false){return `<figure class="telemetry-plot${mini?' mini':''}"><figcaption>${label}</figcaption><canvas data-plot="${kind}" role="img" aria-label="${label}"></canvas></figure>`;}
   choices(name,label,options){return `<fieldset class="telemetry-choice" data-field="${name}"><legend>${label}</legend><div class="telemetry-cards">${options.map(([value,text,kind])=>`<button type="button" data-choice="${name}" data-value="${value}" aria-pressed="false">${this.plot(kind,text,true)}</button>`).join('')}</div></fieldset>`;}

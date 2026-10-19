@@ -1,0 +1,27 @@
+#parachute-vectors{box-sizing:border-box;width:min(1130px,96vw);max-width:96vw;max-height:94dvh;position:fixed;inset:0;margin:auto;padding:22px;color:#eee8d6;background:linear-gradient(140deg,#182835f5,#0d1928fa);border:2px solid #c2a76c;border-radius:8px;box-shadow:0 12px 65px #000b;overflow:auto;font:17px/1.45 var(--adventure-lettering,Georgia)}
+#parachute-vectors::backdrop{background:#050c16c9}
+#parachute-vectors [hidden]{display:none!important}
+#parachute-vectors header{display:block;padding:0 0 12px;margin:0 0 16px;border:0;border-bottom:1px solid #9f946a;background:none}
+#parachute-vectors h2{font:30px/1.2 var(--adventure-title,Georgia);margin:3px 0 8px;color:#f4d998}
+#parachute-vectors h3{font:23px/1.25 var(--adventure-title,Georgia);color:#f4d998;margin:0 0 12px}
+#parachute-vectors p{margin:10px 0}#parachute-vectors .vector-kicker{font-size:12px;letter-spacing:2px;color:#a6c4bb}
+#parachute-vectors .vector-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(270px,1fr);gap:22px;align-items:start}
+#parachute-vectors figure{margin:0;min-width:0}#parachute-vectors canvas{width:100%;height:auto;display:block;image-rendering:auto}
+#parachute-vectors figcaption{font-size:14px;color:#c0d5ce;margin:8px 0}
+#parachute-vectors .vector-task{min-width:0}#parachute-vectors .vector-equation{padding:10px;border:1px solid #b09d6b;color:#ffdfa2;text-align:center;background:#243b4666}
+#parachute-vectors .vector-components{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#parachute-vectors label{display:grid;gap:5px;min-width:0;margin:0;color:#f6dda3}
+#parachute-vectors input{box-sizing:border-box;width:100%;min-width:0;margin:0;padding:10px;font:18px var(--calculation-lettering,Georgia);color:#f6efd9;background:#091a28;border:1px solid #779a92;border-radius:4px}
+#parachute-vectors input[aria-invalid=true]{border-color:#ffa29b;background:#782b3655}
+#parachute-vectors small{display:block;font-size:14px;margin:9px 0;color:#c3cec6}
+#parachute-vectors button{padding:9px 13px;min-height:44px;border:1px solid #aa9871;border-radius:4px;background:#283e4e;color:#f6e6c0;font:16px/1.3 var(--adventure-lettering,Georgia);cursor:pointer;white-space:normal;margin:0}
+#parachute-vectors button:hover:not(:disabled){background:#3e5964}#parachute-vectors button:disabled{opacity:.5;cursor:default}
+#parachute-vectors .primary{background:linear-gradient(#536342,#293b35);border-color:#d6c18a;width:100%;font-size:18px}
+#parachute-vectors :is(input,button):focus-visible{outline:2px solid #ffe0a2;outline-offset:3px}
+#parachute-vectors .vector-help-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+#parachute-vectors #vector-help{padding:10px;border-left:3px solid #c6b278;background:#37494a}
+#parachute-vectors #vector-feedback:empty{display:none}
+#parachute-vectors #vector-feedback{padding:10px;background:linear-gradient(110deg,#71374099,#50253444);border-left:3px solid #e99a92}
+#parachute-vectors[data-phase=capture] #vector-feedback{background:#2d624a77;border-color:#a3e5b1}
+#parachute-vectors[data-phase=gameover] #vector-result-title{color:#f2a49b;font-size:32px}
+@media(max-width:760px){#parachute-vectors{padding:14px}#parachute-vectors .vector-layout{grid-template-columns:1fr;gap:12px}#parachute-vectors h2{font-size:26px}#parachute-vectors canvas{max-height:43dvh;object-fit:contain}#parachute-vectors .vector-help-buttons button{flex:1}}

@@ -91,7 +91,7 @@ window.SpaceCinematic=class {
   }else if(t<27){
    this.prison(0);const u=(t-20)/7,scale=1-.55*u,body=size*.20*scale,x=w*.5+Math.sin(u*6)*size*.065*(1-u),feet=h*(.38+.23*u);
    c.save();if(u>.78)c.globalAlpha=Math.max(0,1-(u-.78)/.22);this.parachute(x,feet,body,Math.min(1,.5+u*4));c.restore();
-   caption='Eric abre el paracaídas. El viento lo desvía hacia el patio de la prisión.';speech=t>21.2?'¡Esto no termina aquí!':'';
+   caption='El viento que calculaste dirige a Eric hacia el patio de la prisión.';speech=t>21.2?'¡Esto no termina aquí!':'';
   }else{
    this.prison(1);const u=Math.min(1,(t-27)/4),body=Math.min(h*.62,w*.72),feet=-body*.3+(h*.85+body*.3)*(1-(1-u)**2),x=w*.5;
    if(t<32)this.parachute(x,feet,body,Math.max(0,Math.min(1,(32-t)/1.2))); else this.sprite('ericBody',x,h*.85-body/2,body);

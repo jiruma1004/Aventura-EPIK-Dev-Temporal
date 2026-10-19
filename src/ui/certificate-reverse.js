@@ -13,7 +13,9 @@ window.CertificateReverse = class {
     this.flip = document.createElement('button');this.flip.id = 'certificate-flip';this.flip.type = 'button';
     this.flip.setAttribute('aria-controls', 'certificate-front certificate-back');
     this.flip.onclick = () => {this.back.hidden = !this.back.hidden;this.front.hidden = !this.back.hidden;this.updateButton();certificate.scrollTop = 0;};
-    actions.append(this.flip, ...buttons);certificate.append(actions);
+    this.pdf=document.createElement('button');this.pdf.id='certificate-pdf';this.pdf.type='button';
+    this.pdf.onclick=()=>{if(this.verified&&this.performance)CertificatePDF.download(this.front,this.performance,I18n.lang==='en');};
+    actions.append(this.flip, this.pdf, ...buttons);certificate.append(actions);
     this.sheet=document.createElement('div');this.sheet.className='certificate-sheet';
     this.sheet.append(...certificate.children);certificate.append(this.sheet);
     this.page=0;
@@ -39,6 +41,7 @@ window.CertificateReverse = class {
   }
   updateButton() {
     const en = I18n.lang === 'en';
+    this.pdf.textContent=en?'Download certificate PDF':'Descargar certificado PDF';this.pdf.hidden=!this.verified;
     this.flip.textContent = this.back.hidden ? (en ? 'View stars and titles ↻' : 'Ver estrellas y títulos ↻') : (en ? 'Return to certificate ↺' : 'Volver al certificado ↺');
     this.flip.setAttribute('aria-pressed', String(!this.back.hidden));
     this.el.classList.toggle('showing-ranks', !this.back.hidden);

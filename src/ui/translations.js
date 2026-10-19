@@ -1285,3 +1285,5 @@ Object.assign(window.ENGLISH, {
  'Escribe una rapidez entre 1 y 30 m/s y elige 30°, 45° o 60°.':'Enter a speed between 1 and 30 m/s and choose 30°, 45° or 60°.',
  'Acércate al cañón y pulsa E. Elige y carga una bala; elige 30°, 45° o 60° y calcula la rapidez con los datos del panel. Al acertar el botón se abrirá la verja y aparecerá el puente. H: pista.':'Approach the cannon and press E. Choose and load an orb; select 30°, 45° or 60° and calculate the speed using the panel data. Hitting the button opens the gate and reveals the bridge. H: hint.'
 });
+
+Object.assign(window.ENGLISH,{'Descarga tu certificado en PDF y súbelo a la actividad junto con los procedimientos de tus ejercicios.':'Download your certificate as a PDF and submit it with your worked solutions.'});

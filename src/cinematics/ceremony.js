@@ -21,7 +21,7 @@ window.CeremonyScene=class {
   document.querySelector('.certificate-score').textContent=(this.verified?result.stars:0)+' / 7';
   document.querySelector('#certificate-results').textContent='';
   document.querySelector('#certificate-csv').hidden=!this.verified;
-  document.querySelector('#certificate-instruction').textContent=this.verified?'Puedes tomar una captura de esta imagen y subirla a la actividad, junto con tus apuntes de los ejercicios, para validar tu trabajo.':'Vista previa: completa las siete pruebas para obtener tu certificado de la actividad.';
+  document.querySelector('#certificate-instruction').textContent=this.verified?'Descarga tu certificado en PDF y súbelo a la actividad junto con los procedimientos de tus ejercicios.':'Vista previa: completa las siete pruebas para obtener tu certificado de la actividad.';
  }
  draw(t){
   const lib=this.lib,c=lib.ctx,w=lib.canvas.width,h=lib.canvas.height,image=lib.images.ceremonyHall;

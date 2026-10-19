@@ -1,0 +1,2 @@
+#advance-prompt{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:5;pointer-events:none;max-width:80%;padding:9px 30px;border:1px solid #e3cf8cb3;border-radius:6px;background:#153a32b8;box-shadow:0 3px 16px #0004,inset 0 0 0 3px #e9d8a113;color:#fff1c6;font:600 clamp(20px,2.8vw,30px)/1.2 Georgia,serif;text-align:center;text-shadow:0 2px 3px #0009}
+@media(max-width:600px){#advance-prompt{top:10px;padding:7px 20px;font-size:21px}}

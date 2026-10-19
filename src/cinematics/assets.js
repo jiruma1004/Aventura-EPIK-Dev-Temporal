@@ -4,7 +4,7 @@ for(const [key,id] of Object.entries({castAngelica:'angelica',castPaola:'paola-b
 for(const [key,id] of Object.entries({ivanRun:'ivan-gait-v4',ericRun:'eric-run-b-v1',ericAir:'eric-air-b-v1',karlaCeremony:'karla-ceremony-v2',ericImpact:'eric-impact-b-v1',ivanAction:'ivan-action-v2',studentsClass:'students-cutouts-v3',ivanForest:'ivan-forest',ivanWalk:'ivan-gait-v4',joseHammer:'jose-hammer',angelicaTea:'angelica-tea',karlaTea:'karla-tea-inward-v4',paolaClass:'paola-class-b-v1'}))CINEMA_ASSETS[key]='assets/cast/'+id+'.webp';
 CINEMA_ASSETS.angelicaTalk='assets/cast/angelica-portrait.webp';
 for(const [key,id] of Object.entries({radioPaola:'paola-b-v1',radioJose:'jose-medieval',radioIvan:'ivan-medieval',radioEric:'eric-b-v1'}))CINEMA_ASSETS[key]='assets/cast/'+id+'-portrait.webp';
-CINEMA_ASSETS.paolaCeremony='assets/cast/paola-ceremony-b-v1.png';
+CINEMA_ASSETS.paolaCeremony='assets/cast/paola-ceremony-matched-v2.png';
 window.CINEMA_SCENE_ASSETS={
  'aplausos-finales':['applauseSky','castEric','castIvan','castKarla','castPaola','castAngelica','castJose'],
  'ignitia-launch':['ivanAction','ivanWalk','castIvan','radioPaola','radioJose','radioIvan'],

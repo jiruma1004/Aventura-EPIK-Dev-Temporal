@@ -91,7 +91,7 @@ window.SpaceCinematic=class {
   }else if(t<27){
    this.prison(0);const u=(t-20)/7,scale=1-.55*u,body=size*.20*scale,x=w*.5+Math.sin(u*6)*size*.065*(1-u),feet=h*(.38+.23*u);
    c.save();if(u>.78)c.globalAlpha=Math.max(0,1-(u-.78)/.22);this.parachute(x,feet,body,Math.min(1,.5+u*4));c.restore();
-   caption='El paracaídas se abre. Una corriente lo lleva directo al patio de una prisión.';speech=t>21.2?'¡Esto no termina aquí!':'';
+   caption='Eric abre el paracaídas. El viento lo desvía hacia el patio de la prisión.';speech=t>21.2?'¡Esto no termina aquí!':'';
   }else{
    this.prison(1);const u=Math.min(1,(t-27)/4),body=Math.min(h*.62,w*.72),feet=-body*.3+(h*.85+body*.3)*(1-(1-u)**2),x=w*.5;
    if(t<32)this.parachute(x,feet,body,Math.max(0,Math.min(1,(32-t)/1.2))); else this.sprite('ericBody',x,h*.85-body/2,body);
@@ -101,7 +101,7 @@ window.SpaceCinematic=class {
      for(let k=0;k<15;k++){const ry=((k*71+n*47)%521)/521*h;c.fillStyle=k%2?'#b86831':'#76371e';c.fillRect(bx+(k%2)*bar*.3,ry,bar*.7,h*.012+(k%3)*2);}}
     for(const by of [h*.13,h*.91]){c.fillStyle='#514034';c.fillRect(w*.09,by,w*.84,bar*1.5);c.fillStyle='#a8582c';for(let i=0;i<12;i++)c.fillRect(w*(.12+i*.063),by+(i%3),bar*(1+i%3),bar*.7);}c.restore();
    }
-   caption=t<31?'Sin escalas: del cielo a una celda.':t<35?'La reja se cierra. Eric queda bajo custodia.':'La divergencia está a salvo… por ahora.';
+   caption=t<31?'Eric termina su descenso en la prisión.':t<35?'La reja se cierra. Eric queda bajo custodia.':'La divergencia está a salvo… por ahora.';
    speech=t<31?'¿Una celda? ¡Esto no estaba en mis cálculos!':t<37?'¡Saldré de aquí! ¡No han visto mi último experimento!':'¡Me vengaré, Ignitia!';
   }
   return {caption,speech};

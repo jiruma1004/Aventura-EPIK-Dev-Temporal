@@ -42,6 +42,12 @@
 #paola-tablet #telemetry-feedback{padding:9px 12px;border-left:3px solid #dea078;background:#111e2a;color:#ffe3bd;margin-top:14px}
 #paola-tablet #telemetry-feedback:empty{display:none}
 #paola-tablet #telemetry-feedback[data-ok=true]{border-color:#85ddad;color:#b8f6d0}
+#paola-tablet #telemetry-feedback[data-ok=false]{border-color:#ff8b82;background:linear-gradient(110deg,#942c3b99,#4e263d55);color:#ffe5df}
+#paola-tablet .telemetry-invalid{padding:10px;box-sizing:border-box;border:1px solid #f28580;border-radius:5px;background:linear-gradient(110deg,#9c293a99,#732a3a66 55%,#422b3b33);box-shadow:inset 3px 0 #ff9b8b}
+#paola-tablet fieldset.telemetry-invalid{margin-top:18px}
+#paola-tablet .telemetry-invalid legend{padding:0 5px;color:#ffe2c7}
+#paola-tablet .telemetry-field-error{display:block;margin-top:6px;font:15px/1.4 var(--adventure-lettering);color:#ffe3dd;text-shadow:0 1px 1px #36131f}
+#paola-tablet .telemetry-invalid [aria-pressed=true]{border-color:#ff9e8e}
 #paola-tablet #telemetry-help{padding:10px 12px;background:#35414e;border-left:3px solid #d7c18e;color:#fff0cc}
 #paola-tablet .telemetry-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid #61716c}
 #paola-tablet .primary{font-size:17px;padding:9px 15px;background:linear-gradient(#405368,#26394b);border:1px solid #c7b585;min-height:42px}

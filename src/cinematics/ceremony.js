@@ -36,7 +36,7 @@ window.CeremonyScene=class {
    const age=line?t-line.at:0,pose=t>=33?'clap':speaking?(age<1.2?'greet':motion%4<.8?'explain':'talk'):line?.at===24?'think':'idle';
    c.save();c.globalAlpha=1;
    if(row&&this.karla)RPGCast.action(c,lib.images.karlaCeremony,SceneActing.ceremony(t,motion,speaking,true),w*.75,feet,body);
-   else if(row)RPGCast.draw(c,lib.images[key],'idle',motion,w*.75,feet,body,{frame:SceneActing.ceremony(t,motion,speaking)});
+   else if(row)RPGCast.ceremonyPaola(c,lib.images.paolaCeremony,SceneActing.paolaCeremony(t,motion,speaking),w*.75,feet,body);
    else RPGCast.draw(c,lib.images[key],pose,motion,w*.25,feet,body);c.restore();
   }
   const confettiTime=motion;c.save();for(let i=0;i<100;i++){const x=((i*.618033+Math.sin(motion*.8+i)*.014)%1+1)%1*w,y=((i*.137+confettiTime*(.035+i%4*.004))%1)*h;c.fillStyle=['#edcf83','#cf97dd','#89d9c5','#a9c6fa'][i%4];c.save();c.translate(x,y);c.rotate(motion+i);c.fillRect(-2,-4,3+i%3,7);c.restore();}c.restore();

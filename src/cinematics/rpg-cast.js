@@ -12,6 +12,13 @@ window.RPGCast={
   const [sx,sy,sw,sh]=sourceBounds||[0,0,cell.w,cell.h];
   c.drawImage(image,f%4*cell.w+sx,Math.floor(f/4)*cell.h+sy,sw,sh,-cell.x+sx,-cell.foot+sy,sw,sh);c.restore();return true;
  },
+ ceremonyPaola(c,image,frame,x,feet,height){
+  if(!image?.complete||!image.naturalWidth)return false;
+  const w=image.naturalWidth/4,h=image.naturalHeight/3,row=Math.floor(frame/4),inset=row?4:0;
+  c.save();c.imageSmoothingEnabled=false;
+  c.drawImage(image,frame%4*w,row*h+inset,w,h-inset,x-height*w/h/2,feet-height+height*inset/h,height*w/h,height*(h-inset)/h);
+  c.restore();return true;
+ },
  action(c,image,frame,x,feet,height,options={}){return this.draw(c,image,'idle',0,x,feet,height,{...options,frame,cell:this.actionCell});},
  portrait(canvas,image,speaking,time=0){
   const c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;c.clearRect(0,0,w,h);

@@ -1,6 +1,15 @@
 /* Acting is driven by scene time, not by draw count. No clip downloads mid-pose. */
 window.SceneActing={
  // These actors have their own expression clocks; a new line never restarts a wave.
+ paolaCeremony(t,motion,speaking){
+  // A short applause resolves into a held blush; it never restarts a wave.
+  if(t>=36)return 11;
+  if(t>=35)return 10;
+  if(t>=33)return [8,9][Math.floor((t-33)*5)%2];
+  if(t>=8&&t<9.2)return [4,5,4][Math.min(2,Math.floor((t-8)*3))];
+  if(speaking)return [0,2,3,2][Math.floor(motion*7)%4];
+  return motion%5>4.7?1:0;
+ },
  ceremony(t,motion,speaking,karla=false){
   if(karla){if(t>=24&&t<33)return 3;return speaking?Math.floor(motion*6)%2:motion%5>4.7?2:0;}
   return speaking?[0,2,3,2][Math.floor(motion*7)%4]:motion%5<4.4?1:0;

@@ -193,8 +193,8 @@ window.ParachuteVectors=class {
   }
   if(this.phase==='capture'){
    const frame=this.elapsed<.7?1:this.elapsed<3.8?2:3;
-   this.angelicaSprite(frame,650,458,220,this.ctx,true);
-   this.wind({x:600,y:320},pos,this.elapsed*1.5,'#c2f7ff');this.text('Angélica · magia de viento',570,595,'#ffe7b7',22);
+   this.angelicaSprite(frame,650,408,220,this.ctx,true);
+   this.wind({x:600,y:270},pos,this.elapsed*1.5,'#c2f7ff');this.text('Angélica · magia de viento',570,595,'#ffe7b7',22);
   }
 this.scene.currentTime=22+this.elapsed;this.scene.parachute(pos.x,pos.y-4,40,1);
   c.strokeStyle='#c2aa6c';c.lineWidth=3;c.strokeRect(3,3,w-6,h-6);

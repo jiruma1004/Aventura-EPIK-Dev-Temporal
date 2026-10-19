@@ -187,8 +187,8 @@ window.addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));
 window.addEventListener('keydown',e=>{if(e.key==='Escape'){corridor?.guardian.close();camera.release();classroom.aid.close();measurement.close();ignitia.closeConsole();cannon.close();boss?.close();companions.closeHelp();companions.closeConsole();}});
 document.querySelector('#station-fire').onclick=()=>shoot();
 document.querySelector('#jump').onclick=()=>{jump();canvas.focus({preventScroll:true});};
-// Panels own the fingers while open. Do not leave a movement gesture running behind them.
-const touchPanels=['#guardian-panel','#paola-dialog','#answer-console','#boss-panel','#rocket-console','#extra-help-panel'];
+// Input panels own touch gestures; nonblocking guide dialogue keeps movement available.
+const touchPanels=['#guardian-panel','#answer-console','#boss-panel','#rocket-console','#extra-help-panel'];
 const canTouchPlay=()=>canPlay()&&!cannon.isOpen&&!touchPanels.some(id=>{const p=document.querySelector(id);return p&&!p.hidden;});
 touch=new TouchControls(canvas,{canUse:canTouchPlay,jump,interact,releaseCamera:()=>camera.release()});
 controlTutorial=new ControlTutorial({isTouch:()=>touch.enabled,onDone:({saved})=>beginFirstChallenge(saved)});

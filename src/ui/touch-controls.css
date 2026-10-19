@@ -42,3 +42,9 @@
 .touch-mode .adventure-timer>span,.touch-mode .adventure-timer small{display:none}
 .touch-mode .adventure-timer strong{font-size:22px;line-height:1.1}
 :is(html:fullscreen,html.expanded-game).touch-mode .topbar{padding-right:98px}
+
+/* Help remains readable above the live joystick and action buttons. */
+.touch-mode .scene-view:not(:has(.cannon-console:not([hidden]))) #paola-dialog {
+ top:12px;bottom:auto;max-height:calc(100% - 180px);
+}
+.touch-mode .scene-view:has(#paola-dialog:not([hidden])) #game{min-height:0}

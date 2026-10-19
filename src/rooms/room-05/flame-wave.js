@@ -1,8 +1,8 @@
 /* A swept plane: collision depends on relative crossing and jump height, not FPS. */
 window.EricFlameWave = class {
   static config = {
-    first: 15 * 1.2,
-    interval: 19 * 1.2,
+    first: 15 * 1.2 / 1.1,
+    interval: 19 * 1.2 / 1.1,
     warning: 2.2,
     speed: 4,
     startX: 16.6,

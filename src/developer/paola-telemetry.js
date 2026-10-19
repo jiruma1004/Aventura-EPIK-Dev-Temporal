@@ -154,9 +154,9 @@
  const Original=window.IgnitiaMission;
  window.IgnitiaMission=class extends Original{
   constructor(...args){super(...args);this.telemetry=new PaolaTelemetry(this);const canRun=this.simulator.canRun;this.simulator.canRun=()=>!this.telemetry.pending&&canRun();}
-  speak(text,speaker='jose'){return super.speak(text.replace('Aquí José Luis. Camisa de rayas, cohete listo: solo falta tu trayectoria.','¡Aquí José Luis, el de la camisa de rayas! El cohete está listo; solo falta calcular la trayectoria.'),speaker);}
+  speak(text,speaker='jose'){return super.speak(text.replace('Aquí José Luis. Camisa de rayas, cohete listo: solo falta tu trayectoria.','¡Aquí José Luis, líder de Ignitia! El cohete está listo; solo falta calcular la trayectoria.'),speaker);}
   get blocking(){return super.blocking||!!this.telemetry?.visible;}
-  reset(room,options={}){super.reset(room,options);this.telemetry.reset(room,options.preserveTelemetry);if(room.rocket&&!this.telemetry.done)this.speak('¡Aquí José Luis, el de la camisa de rayas! El cohete está listo. Antes de usar la consola, habla con Paola: te espera a un lado para revisar tres ejercicios de movimiento en su tablet. Cuando termines, podrás programar la trayectoria.');}
+  reset(room,options={}){super.reset(room,options);this.telemetry.reset(room,options.preserveTelemetry);if(room.rocket&&!this.telemetry.done)this.speak('¡Aquí José Luis, líder de Ignitia! El cohete está listo. Antes de usar la consola, habla con Paola: te espera a un lado para revisar tres ejercicios de movimiento en su tablet. Cuando termines, podrás programar la trayectoria.');}
   open(p){if(this.telemetry.pending){if(this.blocking)return false;if(this.telemetry.near(p)){this.telemetry.open();return true;}if(super.near(p)){this.speak('Primero habla con Paola. Está a un lado de la consola y necesita revisar contigo los registros del vuelo.');return true;}return false;}return super.open(p);}
   startLaunch(){if(this.telemetry.pending)return;super.startLaunch();}
   closeConsole(){super.closeConsole();this.telemetry?.close();}

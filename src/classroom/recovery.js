@@ -8,7 +8,7 @@ window.EpikRecovery = class {
   static version = 1;
   constructor({capture, restore, reset, now = () => Date.now(), storage}) {
     this.capture = capture; this.restore = restore; this.reset = reset; this.now = now;
-    try { this.storage = storage ?? sessionStorage; } catch { this.storage = null; }
+    try { this.storage = storage ?? (window.EpikGroupAccess?.teacher ? sessionStorage : sessionStorage); } catch { this.storage = null; }
     this.pending = null; this.enabled = false; this.busy = false;
     document.body.insertAdjacentHTML('beforeend', '<dialog id="recovery-dialog"><h2 id="recovery-title"></h2><p id="recovery-detail"></p><p id="recovery-status" role="status"></p><div class="recovery-actions"><button id="recovery-yes" class="primary"></button><button id="recovery-no"></button></div></dialog>');
     this.dialog = document.querySelector('#recovery-dialog');
@@ -27,6 +27,7 @@ window.EpikRecovery = class {
   }
   remove() { try { this.storage?.removeItem(EpikRecovery.key); } catch {} }
   valid(data) {
+    if(window.EpikGroupAccess?.teacher)return false;
     const age = this.now() - data?.savedAt;
     return (data?.group??null)===(window.EpikGroupAccess?.group??null) && data?.version === EpikRecovery.version && Number.isFinite(age)
       && age >= 0 && age < EpikRecovery.ttl && data.world && data.session

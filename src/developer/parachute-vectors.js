@@ -128,10 +128,12 @@ window.ParachuteVectors=class {
   const image=this.lib.images[key];if(!image?.naturalWidth)return;
   const [sx,sy,sw,sh]=rect,width=height*sw/sh;ctx.drawImage(image,sx,sy,sw,sh,x-width/2,feet-height,width,height);
  }
- angelicaSprite(frame,x,feet,height,ctx=this.ctx){
+ angelicaSprite(frame,x,feet,height,ctx=this.ctx,mirror=false){
   const image=this.lib.images.vectorAngelica;if(!image?.naturalWidth)return;
   const anchors=[[400,494],[1050,494],[310,986],[1060,992]],k=height/490,sx=(frame%2)*768,sy=Math.floor(frame/2)*512;
-  ctx.drawImage(image,sx,sy,768,512,x+(sx-anchors[frame][0])*k,feet+(sy-anchors[frame][1])*k,768*k,512*k);
+  // Reflect around her foot anchor so every pose keeps its position.
+  ctx.save();ctx.translate(x,0);if(mirror)ctx.scale(-1,1);
+  ctx.drawImage(image,sx,sy,768,512,(sx-anchors[frame][0])*k,feet+(sy-anchors[frame][1])*k,768*k,512*k);ctx.restore();
  }
  ericSprite(frame,x,feet,height){
   const rects=[[60,0,450,545],[560,0,465,545],[1045,150,490,400],[35,550,515,455],[545,545,519,460],[1065,545,471,470]];
@@ -191,8 +193,8 @@ window.ParachuteVectors=class {
   }
   if(this.phase==='capture'){
    const frame=this.elapsed<.7?1:this.elapsed<3.8?2:3;
-   this.angelicaSprite(frame,115,458,220);
-   this.wind({x:165,y:320},pos,this.elapsed*1.5,'#c2f7ff');this.text('Angélica · magia de viento',205,595,'#ffe7b7',22);
+   this.angelicaSprite(frame,650,458,220,this.ctx,true);
+   this.wind({x:600,y:320},pos,this.elapsed*1.5,'#c2f7ff');this.text('Angélica · magia de viento',570,595,'#ffe7b7',22);
   }
 this.scene.currentTime=22+this.elapsed;this.scene.parachute(pos.x,pos.y-4,40,1);
   c.strokeStyle='#c2aa6c';c.lineWidth=3;c.strokeRect(3,3,w-6,h-6);

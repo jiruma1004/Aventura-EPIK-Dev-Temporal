@@ -429,6 +429,7 @@ window.addEventListener('astralia:language',()=>{
 
 // Public toolbar: development navigation is never inserted into the shipped UI.
 const controls=document.querySelector('.controls');controls.append(document.querySelector('.audio-controls'),document.querySelector('.language-corner'));
+EpikGroupAccess.mountTeacherControls();
 for(const el of controls.querySelectorAll('button,summary,input'))el.addEventListener('pointerdown',()=>camera.release());
 if(!development){for(const id of ['story-skip','cinematics-open','cinema-skip','cinema-replay','cinema-close'])document.getElementById(id)?.remove();document.querySelector('[data-arrival-skip]')?.remove();}
 if(development){const getters={player:()=>player,index:()=>index,opened:()=>opened,death:()=>death,trial:()=>trial,maze:()=>maze,boss:()=>boss,corridor:()=>corridor,last:()=>last,completed:()=>completed};for(const [k,get] of Object.entries(getters))Object.defineProperty(window,k,{get,configurable:true});Object.assign(window,{rooms,lab,roulette,companions,cinematics,ignitia,mission,camera,cannon,touch,controlTutorial,keys,renderer,prologue,arrival,classroom,recovery,tick,jump,shoot,interact,die,respawn,canPlay,load:(i)=>load(i,'preview'),advanceRoom:(i)=>load(i),newClassroomGame:()=>{StoryRoute.reset();companions.chaseAnnounced=false;classroom.newSession();load(rooms.findIndex(r=>r.trial),'new');mission.restart();classroom.session.start();}});}

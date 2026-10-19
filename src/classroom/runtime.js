@@ -16,12 +16,13 @@ window.EpikClassroom = class {
     const studentName = this.session?.studentName || '';
     let storage = null;
     try {
-      storage = localStorage;
+      storage = window.EpikGroupAccess?.teacher ? sessionStorage : localStorage;
     } catch {}
     this.session = new EpikSession(this.rooms, {
       storage
     });
     this.session.studentName = studentName;
+    if(window.EpikGroupAccess?.teacher)this.session.preview=true;
     if (this.aid) {
       this.aid.session = this.session;
       this.session.onChange = () => this.aid.update();

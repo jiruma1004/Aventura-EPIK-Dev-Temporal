@@ -39,3 +39,5 @@
 #parachute-vectors .vector-angelica canvas{width:95px;height:112px;flex:0 0 95px;object-fit:contain}
 #parachute-vectors .vector-angelica h3{font-size:22px;margin:0}
 #parachute-vectors .vector-angelica p{font-size:15px;color:#e7d7a7;margin:6px 0}
+
+#parachute-vectors .vector-data{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:15px;background:#122a3466}#parachute-vectors .vector-data caption{text-align:left;color:#d5c89e;font-size:14px;padding:0 0 6px}#parachute-vectors .vector-data th,#parachute-vectors .vector-data td{padding:7px 9px;border-bottom:1px solid #62766e55}#parachute-vectors .vector-data th{text-align:left;font-weight:400}#parachute-vectors .vector-data td{text-align:right;color:#ffe2a6;white-space:nowrap;font-variant-numeric:tabular-nums}

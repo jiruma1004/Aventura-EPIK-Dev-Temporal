@@ -308,7 +308,7 @@ function captureRecovery() {
   passed:[...maze.passed],openDoors:[...maze.openDoors],usedFreezeButtons:[...maze.usedFreezeButtons]};
  if(boss)world.boss={support:boss.puzzle.support.id,cuts:boss.puzzle.cuts,stun:boss.stun.snapshot(),escapeTime:ignitia.ignited?ignitia.simulator.missionTime:null};
  if(room.rocket)world.rocket={intercepting:cinematics.active&&cinematics.story&&cinematics.item?.id==='ignitia-intercepcion',vectors:cinematics.vectors.snapshot(),telemetry:ignitia.telemetry.snapshot(),...pick(ignitia.simulator,['params','missionTime','attempts','launchEpoch','ready']),ending:classroom.session.finished!==null};
- return {group:EpikGroupAccess.group,world,session:classroom.session.recoverySnapshot(),remaining:mission.remaining,
+ return {group:EpikGroupAccess.group,studentId:EpikGroupAccess.studentId,world,session:classroom.session.recoverySnapshot(),remaining:mission.remaining,
   clockComplete:mission.state==='complete',language:I18n.lang};
 }
 function restoreRecovery(saved,away) {

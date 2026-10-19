@@ -275,9 +275,11 @@ window.EpikSession = class {
   }
   persist() {
     try {
-      this.storage?.setItem('epik.metrics.v1.latest', JSON.stringify({
+      this.storage?.setItem('epik.metrics.v1.latest'+(this.studentId?':'+this.studentId:''), JSON.stringify({
         schema: 1,
         session: this.id,
+        group: this.group || null,
+        studentId: this.studentId || null,
         complete: this.finished !== null,
         preview: this.preview,
         events: this.events,

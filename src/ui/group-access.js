@@ -1,15 +1,46 @@
-/* Classroom entry gate; group codes are checked locally, not server authentication. */
+/* Membership checks for the supplied class lists. Not server authentication. */
 (()=>{'use strict';
-const hashes={"501": "62ab4127f72e622e51ffea11d8184895a2ac4f9456c36dbe79a2911663bd0c2f", "502": "19f917d66695e9bb65df688e794c96f21006081c7ce403a5a678d7e1de230949", "503": "5223ac5647c28b078803fa7b5482493c14313d4a87d0a81b5b22dde9da3faed3", "504": "2ef4f511a79ae2bf275628b24f4fbf331ad2ab9f21b9768ea02db06ad9bcef6e", "505": "103bdf944bd7fbcdf6d61ea40587c5f11ccc6892f93dd4061224d59df3c80696", "506": "0b0fe22aa6f33c7d3de0348982e2e7be37aa480fae494f4784680ff092e6fd93", "507": "ba3b2789ae4eb1646e0bd12e666ce84f1e7c158c6f4be2688023985c8c3ada76", "508": "da905b3f95c6f634fc0cac843e134927ae8970f578c55bcde68ef36a09600971", "509": "31750f6905e810c819782e34d4abd83e80aa1f6f10fb991c740aff022a4ca34a", "510": "be0d820501f3e87cf837840d206ed108217bcf7f8e9ecd133f270cd1fd180be3", "511": "ed083a2c8cd162264ceff99e22e74769d7aa3f16a5f964d064d7aa2244a255f5", "512": "08fdeb03a5bc8bd3e05be5b0c55f1c428167e8a76f3d77185d5d4dfbd61a8991", "513": "469de568e5ffa3734aca9d788029120e49eeeeadb2c3e51f8231fbee9f73a89f", "514": "5276bfcecd00c057b02983ef66309441ccbbb805345d23771c8d92ed0139eabe", "515": "b4b4812821fac77063a1786814ce807c7002e7a2687af03e62842069faa7babf", "516": "35b033031ed580212fe4bbaddc2797026661d50f4b08dd33b640dcc801b048db", "517": "b7691ece32ce384b2bc8e7de7d100deaa4ad395a6c11e07a73d98f00247fc1b4"},salt="epik-groups-oct2026-v1",key='epik.group.access.v1';
+const key='epik.enrollment.access.v1';
 const masterHash='ec9f8ee21e32525fded7c6035697249ceefafeee3110674248208f008f769851';
-const digest=async(group,password)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(`${salt}:${group}:${password.normalize('NFKC').trim().toLowerCase()}`))),b=>b.toString(16).padStart(2,'0')).join('');
-window.EpikGroupAccess={group:null,teacher:false,
- mountTeacherControls(){if(!this.teacher)return;const button=document.createElement('button');button.type='button';button.id='teacher-sign-out';button.textContent='Docente · Cerrar acceso';button.onclick=()=>{sessionStorage.removeItem(key);location.reload();};document.querySelector('.controls').append(button);const intro=button.cloneNode(true);intro.id='teacher-sign-out-intro';intro.onclick=button.onclick;document.querySelector('#adventure-intro').append(intro);},
+const sha=async text=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
+const member=(group,hash)=>window.EpikStudentRoster?.groups[group]?.includes(hash)===true;
+window.EpikGroupAccess={group:null,studentId:null,teacher:false,
+ mountTeacherControls(){
+  if(!this.teacher&&!this.studentId)return;
+  const button=document.createElement('button');button.type='button';button.id='teacher-sign-out';
+  button.textContent=this.teacher?'Docente · Cerrar acceso':`Grupo ${this.group} · Cambiar acceso`;
+  button.onclick=()=>{sessionStorage.removeItem(key);location.reload();};
+  document.querySelector('.controls').append(button);
+  const intro=button.cloneNode(true);intro.id='teacher-sign-out-intro';intro.onclick=button.onclick;document.querySelector('#adventure-intro').append(intro);
+ },
  async enter(){
- try{const saved=JSON.parse(sessionStorage.getItem(key));if(saved?.teacher===masterHash){this.teacher=true;return;}if(saved&&hashes[saved.group]===saved.hash){this.group=saved.group;return;}}catch{}
- const panel=document.createElement('dialog');panel.id='group-access';panel.setAttribute('aria-labelledby','group-access-title');
- panel.innerHTML=`<form><span>✦ REINO DE EPITHEA</span><h1 id="group-access-title">Tu aventura comienza aquí</h1><p>Selecciona tu grupo e introduce la clave que te compartió tu profesor.</p><label>Grupo<select name="group" required><option value="">Elige tu grupo</option>${Object.keys(hashes).map(g=>`<option>${g}</option>`).join('')}<option value="teacher">Docente · clave maestra</option></select></label><label>Contraseña<input name="password" type="password" autocomplete="off" required></label><small>Las mayúsculas no importan.</small><p role="status" id="group-access-status"></p><button class="primary">Entrar a la aventura</button></form>`;
- document.body.append(panel);panel.addEventListener('cancel',e=>e.preventDefault());panel.showModal();
- await new Promise(resolve=>{panel.querySelector('form').onsubmit=async e=>{e.preventDefault();const form=e.currentTarget,button=form.querySelector('button'),status=panel.querySelector('[role=status]');button.disabled=true;try{const group=form.elements.group.value,hash=await digest(group,form.elements.password.value);if(hash!==(group==='teacher'?masterHash:hashes[group])){status.textContent='La clave no corresponde al grupo. Revísala e intenta otra vez.';form.elements.password.focus();return;}this.teacher=group==='teacher';this.group=this.teacher?null:group;try{sessionStorage.setItem(key,JSON.stringify(this.teacher?{teacher:masterHash}:{group,hash}));}catch{}form.elements.password.value='';panel.close();panel.remove();resolve();}catch{status.textContent='No se pudo verificar la clave. Abre el juego con HTTPS o en localhost.';}finally{button.disabled=false;}};});
-}};
+  try{const saved=JSON.parse(sessionStorage.getItem(key));
+   if(saved?.teacher===masterHash){this.teacher=true;return;}
+   if(saved&&member(saved.group,saved.studentId)){this.group=saved.group;this.studentId=saved.studentId;return;}
+   sessionStorage.removeItem(key);sessionStorage.removeItem('epik.group.access.v1');
+  }catch{}
+  const panel=document.createElement('dialog');panel.id='group-access';panel.setAttribute('aria-labelledby','group-access-title');
+  const options=Array.from({length:17},(_,i)=>String(501+i)).map(group=>`<option value="${group}" ${window.EpikStudentRoster?.groups[group]?'':'disabled'}>${group}${window.EpikStudentRoster?.groups[group]?'':' · Lista pendiente'}</option>`).join('');
+  panel.innerHTML=`<form><span>✦ REINO DE EPITHEA</span><h1 id="group-access-title">Tu aventura comienza aquí</h1><p>Elige tu grupo y escribe tu matrícula para entrar.</p><label>Grupo<select name="group" required><option value="">Elige tu grupo</option>${options}<option value="teacher">Docente · clave maestra</option></select></label><label><span id="access-field-label">Matrícula</span><input name="credential" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="64" required placeholder="A01234567" aria-describedby="access-note group-access-status"></label><small id="access-note">Incluye la letra A y los ocho números de tu matrícula.</small><p role="status" id="group-access-status"></p><button class="primary">Entrar a la aventura</button></form>`;
+  document.body.append(panel);panel.addEventListener('cancel',e=>e.preventDefault());panel.showModal();
+  const form=panel.querySelector('form'),input=form.elements.credential,status=panel.querySelector('[role=status]');
+  form.elements.group.onchange=()=>{
+   const teacher=form.elements.group.value==='teacher';input.value='';input.type=teacher?'password':'text';input.placeholder=teacher?'Clave maestra':'A01234567';
+   panel.querySelector('#access-field-label').textContent=teacher?'Clave maestra':'Matrícula';
+   panel.querySelector('#access-note').textContent=teacher?'Acceso docente para realizar partidas de prueba.':'Incluye la letra A y los ocho números de tu matrícula.';status.textContent='';
+  };
+  await new Promise(resolve=>{form.onsubmit=async e=>{
+   e.preventDefault();const button=form.querySelector('button');button.disabled=true;status.textContent='';
+   try{
+    const group=form.elements.group.value,teacher=group==='teacher',value=input.value.normalize('NFKC').trim();
+    if(!teacher&&!/^A\d{8}$/i.test(value)){status.textContent='Escribe tu matrícula completa: letra A y ocho números.';input.focus();return;}
+    const hash=await sha(teacher?`epik-groups-oct2026-v1:teacher:${value.toLowerCase()}`:`${EpikStudentRoster.salt}:${group}:${value.toUpperCase()}`);
+    if(teacher?hash!==masterHash:!member(group,hash)){status.textContent=teacher?'La clave docente no es correcta.':'La matrícula no está registrada en este grupo. Revisa ambos datos o consulta a tu profesor.';input.focus();return;}
+    this.teacher=teacher;this.group=teacher?null:group;this.studentId=teacher?null:hash;
+    try{sessionStorage.setItem(key,JSON.stringify(teacher?{teacher:masterHash}:{group,studentId:hash}));}catch{}
+    input.value='';panel.close();panel.remove();resolve();
+   }catch{status.textContent='No se pudo verificar el acceso. Abre el juego con HTTPS o en localhost.';}finally{button.disabled=false;}
+  };});
+ }
+};
 })();

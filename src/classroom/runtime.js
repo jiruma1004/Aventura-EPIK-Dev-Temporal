@@ -22,6 +22,8 @@ window.EpikClassroom = class {
       storage
     });
     this.session.studentName = studentName;
+    this.session.group = window.EpikGroupAccess?.group || null;
+    this.session.studentId = window.EpikGroupAccess?.studentId || null;
     if(window.EpikGroupAccess?.teacher)this.session.preview=true;
     if (this.aid) {
       this.aid.session = this.session;

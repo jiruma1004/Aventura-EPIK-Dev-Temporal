@@ -58,6 +58,7 @@ function beginFirstChallenge(saved){
 }
 const arrival=new CartArrival(saved=>{Object.assign(player,saved);keys.clear();controlTutorial.offer(player);});
 function enterAdventure(skipArrival=false){
+ if(trial)trial.tiles=null;
  classroom.session.studentName=prologue.studentName||'';classroom.session.difficulty=EpikDifficulty.mode;companions.showRoomNotice(rooms[index]);companions.updateTrial();if(recovery)recovery.enabled=true;
  const intro=document.querySelector('#adventure-intro');if(intro.open)intro.close();keys.clear();if(skipArrival)beginFirstChallenge(player);else arrival.start(player);canvas.focus({preventScroll:true});canvas.scrollIntoView({block:'center'});
 }
@@ -383,6 +384,17 @@ recovery=new EpikRecovery({capture:captureRecovery,restore:restoreRecovery,reset
  document.querySelector('#story-name-box').hidden=false;document.querySelector('#story-student-name').value='';
  load(rooms.findIndex(r=>r.trial),'new');prologue.renderPage();mission.notify();
 }});recovery.offer();
+window.addEventListener('epik:play-again',()=>{
+ if(ignitia.mode!=='ending'||!ignitia.farewell?.active)return;
+ camera.release();keys.clear();touch?.reset();
+ recovery.enabled=false;recovery.pending=null;recovery.remove();recovery.dialog.close();
+ gravityFalls=0;potionDeaths=0;
+ recovery.reset();
+ for(const input of document.querySelectorAll('input[name=experience]'))input.checked=false;
+ document.querySelector('#adventure-intro').showModal();
+ document.querySelector('#story-student-name').focus({preventScroll:true});
+});
+
 
 window.addEventListener('astralia:language',()=>{
  if(rooms[index].physics)lab.targetReadout();

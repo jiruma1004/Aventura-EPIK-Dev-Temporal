@@ -20,3 +20,13 @@
 /* The guide button uses the same shoulder-up portrait as the help window. */
 #ask-paola #helper-face{width:42px;height:42px;float:left;margin-right:9px;image-rendering:pixelated;border-radius:50%;background:#17213f;}
 #ask-paola small{margin-left:51px;}
+
+/* Keep the guide alongside the cannon; stack the panels on narrow screens. */
+.scene-view:has(.cannon-console:not([hidden])) .paola-dialog{left:auto;right:17px;top:16px;bottom:auto;width:calc(48% - 40px);max-width:560px;max-height:calc(100% - 120px);gap:10px;flex-wrap:wrap}
+.scene-view:has(.cannon-console:not([hidden])) #paola-portrait{width:76px;height:76px}
+.scene-view:has(.cannon-console:not([hidden])) .paola-words{flex-basis:220px}
+@media(max-width:750px){
+ .scene-view:has(.cannon-console:not([hidden])):has(.paola-dialog:not([hidden])) #station.cannon-console{max-height:43%}
+ .scene-view:has(.cannon-console:not([hidden])) .paola-dialog{right:10px;top:47%;bottom:100px;width:calc(100% - 20px);max-height:none;flex-wrap:nowrap}
+ .scene-view:has(.cannon-console:not([hidden])) #paola-portrait{width:48px;height:48px}
+}

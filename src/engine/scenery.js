@@ -51,6 +51,7 @@ window.makeScenery=()=>{
   // Fondo transparente: la pintura queda directamente sobre los ladrillos.
   const equations=[
    ['x = v₀ cos(θ)t',70,110,-.008,72,'#d5e6ed'],
+   ['t = x / (v₀ cos(θ))',850,110,.008,62,'#d9e9d1'],
    ['y = y₀ + v₀ sen(θ)t − ½gt²',70,260,.008,70,'#d5e6ed'],
    ['y − y₀ = x tan(θ) − gx²/(2v₀² cos²θ)',70,420,-.008,62,'#d9e9d1']
   ];

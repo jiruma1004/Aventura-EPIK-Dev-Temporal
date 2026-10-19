@@ -45,15 +45,17 @@ window.EricPotions=class {
 /* One delayed, blinding spectacle with a synchronized flame wave per attempt. Game time pauses with play.
    A smooth bloom replaces flashing; reduced-motion disables screen shake. */
 window.EricSupernova=class {
- static triggerAt=121.5; // Acento local de final-stand.mp3, alrededor de 2:01.
- constructor(enabled){this.enabled=enabled;this.reset();}
- reset(){this.elapsed=0;this.age=-1;this.used=false;this.canvas?.style.removeProperty('transform');this.canvas?.parentElement?.classList.remove('nova-blind');}
+ static minTrigger=120;
+ static maxTrigger=180;
+ constructor(enabled,random=Math.random){this.enabled=enabled;this.random=random;this.reset();}
+ reset(){this.triggerAt=EricSupernova.minTrigger+this.random()*(EricSupernova.maxTrigger-EricSupernova.minTrigger);this.elapsed=0;this.age=-1;this.used=false;this.canvas?.style.removeProperty('transform');this.canvas?.parentElement?.classList.remove('nova-blind');}
  get blind(){return this.age>=2&&this.age<5;}
  get active(){return this.age>=0&&this.age<6;}
- tick(dt){
+ tick(dt,stunned=false,attackDt=dt){
+  // The deadline advances even while stunned; effects use active attack time.
   this.elapsed+=dt;
-  if(this.active)this.age+=dt;
-  if(this.enabled&&!this.used&&this.elapsed>=EricSupernova.triggerAt){this.used=true;this.age=0;return true;}
+  if(this.active&&!stunned)this.age+=attackDt;
+  if(this.enabled&&!stunned&&!this.used&&this.elapsed>=this.triggerAt){this.used=true;this.age=0;return true;}
   return false;
  }
  draw(renderer,player,actors){
@@ -98,12 +100,12 @@ window.EricEncounter=class {
   // Clear attacks already on screen; keep the encounter's supernova deadline.
   this.potions.bottles=[];this.potions.pools=[];this.potions.history=[];this.potions.bursts=[];this.potions.caught=false;
   this.potions.nextThrow=this.potions.time+Math.max(2,this.potions.config.potionFirst);
-  this.lastPotionAt=-Infinity;this.wave.reset();this.supernova.age=-1;this.novaWaveLaunched=false;
+  this.lastPotionAt=-Infinity;this.wave.reset();if(this.supernova.active)this.supernova.used=false;this.supernova.age=-1;this.novaWaveLaunched=false;
   this.say('¡Mi propia máquina! ¡Esto es una descarga de traición!',false);this.tauntClock=20;
   Sound.arcaneStun();
   this.onEvent('stun');
  }
- tick(dt,player,renderer,room,opened){if(document.hidden)return;const attackDt=!this.puzzle.solved&&!this.attacksStopped?this.stun.tick(dt,player):0;if(!this.puzzle.solved&&!this.attacksStopped&&attackDt>0){if(this.supernova.tick(attackDt)){this.close();this.potions.reset();this.wave.reset();this.novaWaveLaunched=false;this.say('¡Dos minutos! Contempla mi SUPERNOVA.',false);Sound.arcaneNovaCharge();this.tauntClock=10;}if(this.supernova.active){if(this.supernova.blind&&!this.novaWaveLaunched){this.novaWaveLaunched=true;this.wave.phase='wave';this.wave.x=EricFlameWave.config.startX;this.wave.previousPlayer=null;Sound.arcaneNovaImpact();}if(this.novaWaveLaunched)this.wave.tick(attackDt,player,true);}else{this.wave.tick(attackDt,player,!this.potions.bottles.length&&!this.potions.pools.length);if(!this.wave.caught&&!this.attacksStopped)this.potions.tick(attackDt,player,!this.wave.blocksPotions);}} this.elapsed+=dt;this.speechLeft=Math.max(0,this.speechLeft-dt);this.tauntClock-=dt;
+ tick(dt,player,renderer,room,opened){if(document.hidden)return;const fighting=!this.puzzle.solved&&!this.attacksStopped;const attackDt=fighting?this.stun.tick(dt,player):0;if(fighting){if(this.supernova.tick(dt,this.stun.active,attackDt)){this.close();this.potions.reset();this.wave.reset();this.novaWaveLaunched=false;this.say('¡Se acabó la espera! Contempla mi SUPERNOVA.',false);Sound.arcaneNovaCharge();this.tauntClock=10;}if(attackDt>0){if(this.supernova.active){if(this.supernova.blind&&!this.novaWaveLaunched){this.novaWaveLaunched=true;this.wave.phase='wave';this.wave.x=EricFlameWave.config.startX;this.wave.previousPlayer=null;Sound.arcaneNovaImpact();}if(this.novaWaveLaunched)this.wave.tick(attackDt,player,true);}else{this.wave.tick(attackDt,player,!this.potions.bottles.length&&!this.potions.pools.length);if(!this.wave.caught&&!this.attacksStopped)this.potions.tick(attackDt,player,!this.wave.blocksPotions);}}} this.elapsed+=dt;this.speechLeft=Math.max(0,this.speechLeft-dt);this.tauntClock-=dt;
   if(!this.puzzle.solved&&!this.stun.active&&this.tauntClock<=0){const lines=['¡Ja, ja, ja! Mi parábola sostiene el futuro.','¿Encontraste x? No olvides calcular también y.','Dos curvas, dos cortes… ¡demuéstralo!','¡Al menos ponle título a esa gráfica!'];this.say(lines[this.tauntIndex++%lines.length],false);this.tauntClock=18;}
  if(this.puzzle.solved)this.fall=Math.min(2,this.fall+dt);if(this.active>=0&&this.near(player,renderer,room,opened)!==this.active)this.close();
   if(this.approachLatch>=0&&Math.hypot(player.x-this.lasers[this.approachLatch].x,player.y-this.lasers[this.approachLatch].y)>2.6)this.approachLatch=-1;

@@ -1218,7 +1218,7 @@ Object.assign(window.ENGLISH, {
   "Primer sello · El instante inmóvil": "First seal · The still instant",
   "Una esfera tiene velocidad cero en un instante. Sin más datos sobre su movimiento, ¿qué afirmación está justificada?": "A sphere has zero velocity at one instant. Without further information about its motion, which statement is justified?",
   "La del guardián del libro": "The book guardian’s statement",
-  "La de Rodrigo": "Rodrigo’s statement",
+  "La del guardián del pergamino": "The scroll guardian’s statement",
   "Escucha con cuidado lo que cada uno da por hecho.": "Listen carefully to what each one takes for granted.",
   "La velocidad describe cómo cambia la posición; la aceleración, cómo cambia la velocidad. ¿Conocer un valor en un solo instante permite saber cómo está cambiando?": "Velocity describes how position changes; acceleration describes how velocity changes. Does knowing a value at a single instant tell you how it is changing?",
   "La quietud de un instante no demuestra que la aceleración haya cesado.": "Stillness at one instant does not prove that acceleration has ceased.",
@@ -1287,3 +1287,5 @@ Object.assign(window.ENGLISH, {
 });
 
 Object.assign(window.ENGLISH,{'Descarga tu certificado en PDF y súbelo a la actividad junto con los procedimientos de tus ejercicios.':'Download your certificate as a PDF and submit it with your worked solutions.'});
+
+Object.assign(window.ENGLISH,{'¡Se acabó la espera! Contempla mi SUPERNOVA.':'The wait is over! Behold my SUPERNOVA.'});

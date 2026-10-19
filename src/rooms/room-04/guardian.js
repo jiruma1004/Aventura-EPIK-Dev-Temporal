@@ -34,6 +34,7 @@ window.GUARDIAN_GARDEN={start:49,checkpoint:{x:50,y:4.5,angle:0},fountain:{x:56,
    retained for checkpoint compatibility, never a permanent role. */
 window.GardenGuardian=class {
  constructor(onEvent){
+  this.reaction=null;this.replyCounts={book:0,rodrigo:0};
   this.onEvent=onEvent;this.arrived=false;this.solved=false;this.stage=0;this.truthful=Math.random()<.5?'book':'rodrigo';
   this.voiceOrder=Array.from({length:2},()=>Math.random()<.5?'book':'rodrigo');
   this.calculationId=GUARDIAN_QUESTIONS[Math.floor(Math.random()*GUARDIAN_QUESTIONS.length)].id;
@@ -51,7 +52,7 @@ window.GardenGuardian=class {
   document.querySelector('#guardian-form').onsubmit=e=>{e.preventDefault();this.submit();};
  }
  get baseQuestion(){
-  if(this.stage===0)return {id:'identity',title:'Primer sello · El instante inmóvil',text:'Una esfera tiene velocidad cero en un instante. Sin más datos sobre su movimiento, ¿qué afirmación está justificada?',choices:[['book','La del guardián del libro'],['rodrigo','La de Rodrigo']],answer:this.truthful,hint:'Escucha con cuidado lo que cada uno da por hecho.',setup:'La velocidad describe cómo cambia la posición; la aceleración, cómo cambia la velocidad. ¿Conocer un valor en un solo instante permite saber cómo está cambiando?',trueLine:'La quietud de un instante no demuestra que la aceleración haya cesado.',falseLine:'Si en ese instante no avanza, tampoco cambia su velocidad: su aceleración debe ser cero.'};
+  if(this.stage===0)return {id:'identity',title:'Primer sello · El instante inmóvil',text:'Una esfera tiene velocidad cero en un instante. Sin más datos sobre su movimiento, ¿qué afirmación está justificada?',choices:[['book','La del guardián del libro'],['rodrigo','La del guardián del pergamino']],answer:this.truthful,hint:'Escucha con cuidado lo que cada uno da por hecho.',setup:'La velocidad describe cómo cambia la posición; la aceleración, cómo cambia la velocidad. ¿Conocer un valor en un solo instante permite saber cómo está cambiando?',trueLine:'La quietud de un instante no demuestra que la aceleración haya cesado.',falseLine:'Si en ese instante no avanza, tampoco cambia su velocidad: su aceleración debe ser cero.'};
   const q=GUARDIAN_QUESTIONS.find(q=>q.id===this.calculationId);
   const lines={circle:['La velocidad se obtiene derivando la posición respecto al tiempo.','La velocidad se obtiene sumando la posición y el tiempo.'],position:['La velocidad media se calcula restando las posiciones y dividiendo entre el tiempo transcurrido.','La velocidad media se calcula sumando las posiciones y dividiendo entre el tiempo transcurrido.'],drone:['En este problema, la aceleración vertical es negativa. Conserva ese signo.','En este problema, la aceleración vertical es positiva. Cambia ese signo.']}[q.id];
   const followup=this.stage>=2,exercise=(followup?GUARDIAN_FOLLOWUPS:GUARDIAN_CALCULATIONS)[q.id];
@@ -76,6 +77,8 @@ window.GardenGuardian=class {
  blocks(x,y){return Math.hypot(x-56,y-4.5)<1.22||[GUARDIAN_GARDEN.statue,GUARDIAN_GARDEN.rodrigo].some(p=>Math.hypot(x-p.x,y-p.y)<.48);}
  enter(){if(this.arrived)return;this.arrived=true;this.onEvent('garden');}
  tick(dt,player){
+  if(this.reaction){this.reaction.remaining-=dt;if(this.reaction.remaining<=0&&!this.pendingNext){this.reaction=null;if(!this.panel.hidden)this.renderVoices();else this.hideVoices();}}
+
   if(this.solved&&!this.gateOpened){this.gateProgress=Math.min(1,this.gateProgress+dt/2.8);if(this.gateProgress===1){this.gateOpened=true;Sound.tone(520,.25,'sine',.07);this.onEvent('guardian-gate-open');}}
   const onTile=this.near(player);
   if(onTile&&!this.onTile&&!this.solved&&this.canUse?.()){this.onTile=true;this.onEvent('guardian-speaking');this.open(player);}
@@ -84,6 +87,7 @@ window.GardenGuardian=class {
  }
  open(player){if(!this.near(player)||!this.canUse?.()||this.solved)return false;this.onTile=true;this.panel.hidden=false;document.querySelector('#world-toast').hidden=true;this.renderQuestion();window.dispatchEvent(new Event('astralia:ui-open'));return true;}
  renderQuestion(){
+  this.reaction=null;
   const q=this.question;this.renderedId=q.id;
   document.querySelector('#guardian-progress').textContent=`${this.stage} / 3 sellos`;
   document.querySelector('#guardian-title').textContent=I18n.t(q.title);document.querySelector('#guardian-question').textContent=I18n.t(q.text);
@@ -93,8 +97,34 @@ window.GardenGuardian=class {
   else for(const [id,label] of q.fields){const l=document.createElement('label'),i=document.createElement('input');l.textContent=I18n.t(label);i.name=id;i.type='number';i.step='any';i.inputMode='decimal';i.required=true;i.value=this.draft[id]??'';i.oninput=()=>{this.draft[id]=i.value;};l.append(i);fields.append(l);}
   document.querySelector('#guardian-feedback').textContent='';document.querySelector('#guardian-form').hidden=this.pendingNext;document.querySelector('#guardian-next').hidden=!this.pendingNext;
   if(this.pendingNext)document.querySelector('#guardian-feedback').textContent=I18n.t('Un sello se ha encendido. Escucha la siguiente prueba.');
-  for(const who of ['book','rodrigo']){const voice=document.querySelector('#guardian-voice-'+who);voice.querySelector('p').textContent=I18n.t(who===(this.stage===0?this.truthful:this.voiceOrder[Math.min(this.stage,2)-1])?q.trueLine:q.falseLine);voice.hidden=false;}
+  this.renderVoices();
   this.updateAid();
+ }
+ renderVoices(){
+  const q=this.question;
+  for(const who of ['book','rodrigo']){
+   const voice=document.querySelector('#guardian-voice-'+who);
+   voice.querySelector('p').textContent=I18n.t(who===(this.stage===0?this.truthful:this.voiceOrder[Math.min(this.stage,2)-1])?q.trueLine:q.falseLine);voice.hidden=false;
+  }
+ }
+ reply(ok){
+  const who=ok?'rodrigo':'book',en=I18n.lang==='en';
+  const lines=ok?[
+   ['Es correcto, viajero. Tu razonamiento ha despertado este sello.','Correct, traveler. Your reasoning has awakened this seal.'],
+   ['Bien hallado. Esta vez, tus pasos y la verdad marchan juntos.','Well found. This time, your steps and truth walk together.'],
+   ['Has acertado. Hasta la piedra reconoce una idea bien pensada.','You are right. Even stone recognizes a well-reasoned idea.'],
+   ['Es correcto. Que se abra el camino ante quien sabe observar.','Correct. Let the path open for one who knows how to observe.']
+  ]:[
+   ['Te has equivocado, viajero. La confianza llegó primero; el razonamiento aún viene en camino.','You are mistaken, traveler. Confidence arrived first; reasoning is still on its way.'],
+   ['No es esa la respuesta. Hasta un sabio cuenta dos veces… sobre todo si la primera contó mal.','That is not the answer. Even a sage counts twice… especially after counting wrong the first time.'],
+   ['Ah, un error vestido de certeza. Vuelve a mirar: la verdad no se deja impresionar.','Ah, an error dressed as certainty. Look again: truth is not easily impressed.'],
+   ['Te has equivocado. No temas: hasta la piedra aprende… aunque se toma sus siglos.','You are mistaken. Fear not: even stone learns… though it takes a few centuries.']
+  ];
+  const line=lines[this.replyCounts[who]++%lines.length][en?1:0];
+  this.reaction={who,line,remaining:6,solo:ok};if(ok)this.hideVoices();
+  const voice=document.querySelector('#guardian-voice-'+who);voice.querySelector('p').textContent=ok?line:line+'\n\n'+voice.querySelector('p').textContent;voice.hidden=false;
+  const note=ok?(en?'A seal has lit up.':'Un sello se ha encendido.'):(en?'A new question awaits; you keep your earned seals.':'El sello propone otra pregunta; conservas tus sellos.');
+  document.querySelector('#guardian-feedback').textContent=`${ok?'Rodrigo':'Luis'}: «${line}» ${note}`;
  }
  static check(q,values){if(q.choices)return values.choice===q.answer;return q.fields.every(([id,,answer])=>typeof values[id]==='number'&&Number.isFinite(values[id])&&Math.abs(values[id]-answer)<=Math.max(.02,Math.abs(answer)*.01));}
  submit(){
@@ -108,10 +138,11 @@ window.GardenGuardian=class {
    if(this.stage===3){this.solved=true;this.close();Sound.tone(95,.7,'triangle',.06);this.onEvent('guardian-solved');}
    else {this.pendingNext=true;document.querySelector('#guardian-form').hidden=true;document.querySelector('#guardian-next').hidden=false;document.querySelector('#guardian-feedback').textContent=I18n.t('Un sello se ha encendido. Escucha la siguiente prueba.');document.querySelector('#guardian-progress').textContent=`${this.stage} / 3 sellos`;this.onEvent('guardian-progress');this.updateAid();}
   }else{this.nextQuestion();document.querySelector('#guardian-feedback').textContent=I18n.t('Respuesta incorrecta. El sello propone otra pregunta; conservas los sellos anteriores.');Sound.tone(170,.15,'triangle',.07);this.updateAid();this.onEvent('guardian-answer');}
+  this.reply(ok);
  }
  updateAid(){document.querySelector('#guardian-palma').hidden=this.pendingNext||!this.canPalma?.();}
  hideVoices(){for(const who of ['book','rodrigo']){const e=document.querySelector('#guardian-voice-'+who);if(e)e.hidden=true;}}
- close(){this.hideVoices();if(!this.panel.hidden){this.panel.hidden=true;document.querySelector('#game').focus({preventScroll:true});}}
+ close(){this.reaction=null;this.hideVoices();if(!this.panel.hidden){this.panel.hidden=true;document.querySelector('#game').focus({preventScroll:true});}}
  snapshot(){return {version:5,conceptVariants:[...this.conceptVariants],questionBags:this.questionBags.map(b=>[...b]),voiceOrder:[...this.voiceOrder],arrived:this.arrived,solved:this.solved,stage:this.stage,truthful:this.truthful,calculationId:this.calculationId,draft:{...this.draft},gateProgress:this.gateProgress};}
  restore(data){
   if(typeof data?.arrived!=='boolean'||typeof data.solved!=='boolean')throw Error('Invalid guardian checkpoint');
@@ -159,7 +190,7 @@ window.GardenGuardian=class {
   for(const p of props)if(p.image.width&&p.image.complete!==false){if(p.plinth)this.drawPlinth(r,player,actors,p);WorldBillboard(r,player,actors,p.image,p.x,p.y,p.z||0,p.w,p.h);}
   const c=r.ctx;for(let i=0;i<7;i++){const a=i*.89,t=(time*.00045+i*.17)%1,p=actors.project(r,player,56+Math.cos(a)*.5,4.5+Math.sin(a)*.5,1.05+.25*Math.sin(t*Math.PI));if(!p||p.depth<.1||p.depth>(r.depths[Math.floor(p.x/3)*3]??Infinity)+.05)continue;c.fillStyle='#b9f8ee';c.globalAlpha=.35+.4*Math.sin(t*Math.PI);c.fillRect(p.x,p.y,Math.max(1,p.scale*.015),Math.max(2,p.scale*.035));}c.globalAlpha=1;
   // Projected UI remains anchored to each statue; responsive bounds prevent clipping.
-  for(const [who,pos] of [['book',GUARDIAN_GARDEN.statue],['rodrigo',GUARDIAN_GARDEN.rodrigo]]){const e=document.querySelector('#guardian-voice-'+who),p=actors.project(r,player,pos.x,pos.y,3.61);if(this.panel.hidden||!p||p.depth<.1){e.hidden=true;continue;}e.hidden=false;const view=r.canvas.getBoundingClientRect(),vw=r.canvas.clientWidth,vh=r.canvas.clientHeight,ew=e.offsetWidth,eh=e.offsetHeight;const px=p.x/r.canvas.width*vw,py=p.y/r.canvas.height*vh;const minX=who==='book'?8:vw/2+4,maxX=who==='book'?vw/2-ew-4:vw-ew-8;e.style.left=Math.max(minX,Math.min(maxX,px-ew/2))+'px';e.style.top=Math.max(8,Math.min(vh*.40-eh,py-eh-12))+'px';e.style.setProperty('--tail',Math.max(12,Math.min(ew-12,px-parseFloat(e.style.left)))+'px');}
+  for(const [who,pos] of [['book',GUARDIAN_GARDEN.statue],['rodrigo',GUARDIAN_GARDEN.rodrigo]]){const e=document.querySelector('#guardian-voice-'+who),p=actors.project(r,player,pos.x,pos.y,3.61);if((this.panel.hidden&&!this.reaction)||(this.reaction?.solo&&this.reaction.who!==who)||!p||p.depth<.1){e.hidden=true;continue;}e.hidden=false;const view=r.canvas.getBoundingClientRect(),vw=r.canvas.clientWidth,vh=r.canvas.clientHeight,ew=e.offsetWidth,eh=e.offsetHeight;const px=p.x/r.canvas.width*vw,py=p.y/r.canvas.height*vh;const minX=who==='book'?8:vw/2+4,maxX=who==='book'?vw/2-ew-4:vw-ew-8;e.style.left=Math.max(minX,Math.min(maxX,px-ew/2))+'px';e.style.top=Math.max(8,Math.min(vh*.40-eh,py-eh-12))+'px';e.style.setProperty('--tail',Math.max(12,Math.min(ew-12,px-parseFloat(e.style.left)))+'px');}
   const t=GUARDIAN_GARDEN.tile;
   for(let i=0;i<3;i++){const p=actors.project(r,player,t.x-.4+i*.4,t.y,.025);if(!p||p.depth<.1)continue;c.fillStyle=i<this.stage?'#ffdc7d':'#323b46';c.beginPath();c.arc(p.x,p.y,Math.max(2,p.scale*.07),0,7);c.fill();}
   if(this.arrived&&!this.onTile&&!this.solved){const p=actors.project(r,player,t.x,t.y,.25);if(p&&p.depth>.5&&p.depth<12){c.save();c.textAlign='center';c.font='16px Georgia';c.fillStyle='#102030d9';c.fillRect(p.x-160,p.y-28,320,35);c.fillStyle='#ffe2a4';c.fillText(I18n.t('Pisa la baldosa · Escucha a los guardianes'),p.x,p.y-5,300);c.restore();}}

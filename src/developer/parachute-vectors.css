@@ -25,3 +25,17 @@
 #parachute-vectors[data-phase=capture] #vector-feedback{background:#2d624a77;border-color:#a3e5b1}
 #parachute-vectors[data-phase=gameover] #vector-result-title{color:#f2a49b;font-size:32px}
 @media(max-width:760px){#parachute-vectors{padding:14px}#parachute-vectors .vector-layout{grid-template-columns:1fr;gap:12px}#parachute-vectors h2{font-size:26px}#parachute-vectors canvas{max-height:43dvh;object-fit:contain}#parachute-vectors .vector-help-buttons button{flex:1}}
+#parachute-vectors .vector-sequence{display:flex;gap:8px;flex-wrap:wrap;padding:0;margin:15px 0 0;list-style:none;text-align:left}
+#parachute-vectors .vector-sequence li{flex:1;min-width:145px;padding:7px 10px;font-size:14px;border:1px solid #62766e;background:#0a1a2466;color:#b6c5bc;border-radius:4px}
+#parachute-vectors .vector-sequence [data-active=true]{border-color:#e7c987;background:#46635466;color:#ffe7a9}
+#parachute-vectors #vector-urgency{padding:10px 13px;border:1px solid #88ac9c;border-radius:5px;background:linear-gradient(105deg,#33574b99,#19304477);margin-bottom:15px;text-align:left}
+#parachute-vectors #vector-time{float:right;font:24px/1.1 var(--calculation-lettering,Georgia);color:#c1f4d5;font-variant-numeric:tabular-nums}
+#parachute-vectors .vector-timer-track{height:5px;background:#05131f;margin-top:12px;clear:both}
+#parachute-vectors #vector-timer-bar{height:100%;width:100%;background:#b4e6bd;transition:width .2s linear}
+#parachute-vectors #vector-urgency[data-urgent=true]{border-color:#f49783;background:linear-gradient(105deg,#913f4588,#4c283577)}
+#parachute-vectors [data-urgent=true] #vector-time{color:#ffb59c}#parachute-vectors [data-urgent=true] #vector-timer-bar{background:#f29a87}
+#parachute-vectors input:disabled{opacity:.55}
+#parachute-vectors .vector-angelica{display:flex;align-items:center;gap:10px;text-align:left}
+#parachute-vectors .vector-angelica canvas{width:95px;height:112px;flex:0 0 95px;object-fit:contain}
+#parachute-vectors .vector-angelica h3{font-size:22px;margin:0}
+#parachute-vectors .vector-angelica p{font-size:15px;color:#e7d7a7;margin:6px 0}

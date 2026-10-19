@@ -67,7 +67,13 @@ document.querySelector('#adventure-expired').addEventListener('cancel',e=>e.prev
 document.querySelector('#adventure-restart').onclick=()=>{recovery?.remove();gravityFalls=0;potionDeaths=0;document.querySelector('#adventure-expired').close();StoryRoute.reset();companions.chaseAnnounced=false;classroom.newSession();load(rooms.findIndex(r=>r.trial),'new');mission.restart();classroom.session.start();canvas.focus({preventScroll:true});};
 document.addEventListener('visibilitychange',()=>{keys.clear();classroom?.session.clock(false);mission.tick();});
 setInterval(()=>mission.tick(),250);
-new ResizeObserver(entries=>{const r=entries[0].contentRect;if(r.width&&r.height){canvas.width=960;canvas.height=Math.round(960*r.height/r.width);}}).observe(canvas);
+new ResizeObserver(entries=>{
+ const r=entries[0].contentRect;if(!r.width||!r.height)return;
+ // Keep landscape detail while bounding the work on tall tablet/phone screens.
+ const scale=Math.min(960/r.width,Math.sqrt(576000/(r.width*r.height)));
+ const width=Math.max(6,Math.floor(r.width*scale/6)*6),height=Math.max(1,Math.round(width*r.height/r.width));
+ if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;}
+}).observe(canvas);
 const roulette=new ProblemRoulette(()=>{if(!rooms[index].roulette)return;opened=rooms[index].canUnlock({problemSolved:true});classroom?.solve();companions.closeConsole();document.querySelector('#door-status').textContent='SELLO ABIERTO';message.textContent='¡Sello roto! Rodea la mesa y atraviesa el portal luminoso.';});
 roulette.canAnswer=()=>canPlay()&&rooms[index].roulette&&companions.consoleOpen&&companions.facing(player,rooms[index].answerSeal,renderer,opened);
 
@@ -246,6 +252,20 @@ ignitia.canLaunch=()=>canPlay()&&ignitia.near(player);
 ignitia.canPursue=()=>mission.state==='running'&&!death&&!cinematics.active;
 ignitia.simulator.canAdvance=()=>!ignitia.telemetry.pending&&!ignitia.telemetry.visible&&mission.state==='running'&&!death&&rooms[index].rocket&&ignitia.mode==='idle'&&!cinematics.active;
 measurement.canSubmit=()=>mission.state==='running'&&!death&&rooms[index].measurement&&measurement.near(player);
+const interactionHint=document.querySelector('#interaction-hint');
+function updateInteractionHint(){
+ const room=rooms[index],playing=canPlay();let text=companions.interactionText||'',visible=companions.interactionVisible;
+ if(room.physics){visible=playing&&!cannon.isOpen;text=cannon.near(player,renderer,opened)?'Clic o E · Usar el cañón':'Acércate al cañón para configurar el disparo';}
+ if(room.rocket){visible=playing&&document.querySelector('#rocket-console').hidden;text=ignitia.telemetry.pending?(ignitia.telemetry.near(player)?'Clic o E · Hablar con Paola':'Habla con Paola antes de usar la consola'):ignitia.near(player)?'Clic o E · Programar el cohete':'Acércate a la consola de operaciones de Ignitia';}
+ if(room.measurement){visible=playing;text=opened?'Cruza la puerta real para continuar.':'Clic o E junto a la puerta · Medir';}
+ if(room.measurementEntrance&&opened){visible=playing;text='Puerta lateral al norte · Sala 1.5 opcional';}
+ if(boss)text=boss.near(player,renderer,room,opened)>=0?'Clic o E · Programar láser':'Busca los láseres a ambos lados';
+ if(trial){visible=playing;text='Salta a tu respuesta · Shift corre · Espacio salta · H pista';}
+ text=I18n.t(text);
+ if(touch.enabled){const en=I18n.lang==='en';text=text.replace(/Clic o E|Click or E/g,en?'Use':'Usar').replace(/Shift corre|Shift to sprint/g,en?'Run':'Correr').replace(/Espacio salta|Space to jump/g,en?'Jump':'Saltar');}
+ if(interactionHint.hidden===!!visible)interactionHint.hidden=!visible;
+ if(interactionHint.textContent!==text)interactionHint.textContent=text;
+}
 function tick(time){const simulationActive=ignitia.simulator.running&&ignitia.simulator.canAdvance();classroom.tick(Math.min((time-last)/1000,.04),mission.state==='running'&&(canPlay()||ignitia.telemetry.visible||cinematics.vectors.visible||simulationActive||!!trial?.zipline?.active)&&!document.hidden&&mission.pausedAt===null);const dt=Math.min((time-last)/1000,.04);last=time;flash=Math.max(0,flash-dt);Sound.mix(dt);prologue.tick(dt);arrival.tick(dt,player);mission.tick();ignitia.tick(dt);
  if(trial?.zipline?.active&&!death&&!document.hidden&&mission.state==='running'&&mission.pausedAt===null)trial.tickZipline(dt,player);
  touch.sync();
@@ -262,15 +282,9 @@ function tick(time){const simulationActive=ignitia.simulator.running&&ignitia.si
  if(canPlay()&&corridor)corridor.tick(dt,player);
  if((canPlay()||ignitia.mode==='escape')&&boss)boss.tick(dt,player,renderer,rooms[index],opened);
  advancePrompt.update({opened,maze,playing:canPlay()});
- companions.tick(dt,player,renderer,opened,canPlay());cannon.tick(player,renderer,opened,canPlay());
- if(rooms[index].physics){const hint=document.querySelector('#interaction-hint');hint.hidden=!canPlay()||cannon.isOpen;hint.textContent=cannon.near(player,renderer,opened)?'Clic o E · Usar el cañón':'Acércate al cañón para configurar el disparo';}
+ companions.tick(dt,player,renderer,opened,canPlay());updateInteractionHint();cannon.tick(player,renderer,opened,canPlay());
  if(maze)document.querySelector('#chase-indicator').classList.toggle('frozen',maze.freezeLeft>0);
- if(rooms[index].rocket){const hint=document.querySelector('#interaction-hint');hint.hidden=!canPlay()||!document.querySelector('#rocket-console').hidden;hint.textContent=ignitia.telemetry.pending?(ignitia.telemetry.near(player)?'Clic o E · Hablar con Paola':'Habla con Paola antes de usar la consola'):ignitia.near(player)?'Clic o E · Programar el cohete':'Acércate a la consola de operaciones de Ignitia';if(!ignitia.near(player)&&!document.querySelector('#rocket-console').hidden)ignitia.closeConsole();}
- if(rooms[index].measurement){const h=document.querySelector('#interaction-hint');h.hidden=!canPlay();h.textContent=opened?'Cruza la puerta real para continuar.':'Clic o E junto a la puerta · Medir';}
- if(rooms[index].measurementEntrance&&opened){const h=document.querySelector('#interaction-hint');h.hidden=!canPlay();h.textContent='Puerta lateral al norte · Sala 1.5 opcional';}
- if(boss)document.querySelector('#interaction-hint').textContent=boss.near(player,renderer,rooms[index],opened)>=0?'Clic o E · Programar láser':'Busca los láseres a ambos lados';
- if(trial){const h=document.querySelector('#interaction-hint');h.hidden=!canPlay();h.textContent='Salta a tu respuesta · Shift corre · Espacio salta · H pista';}
- if(touch.enabled){const h=document.querySelector('#interaction-hint'),en=I18n.lang==='en';h.textContent=I18n.t(h.textContent).replace(/Clic o E|Click or E/g,en?'Use':'Usar').replace(/Shift corre|Shift to sprint/g,en?'Run':'Correr').replace(/Espacio salta|Space to jump/g,en?'Jump':'Saltar');}
+ if(rooms[index].rocket&&!ignitia.near(player)&&!document.querySelector('#rocket-console').hidden)ignitia.closeConsole();
  if(canPlay()&&rooms[index].physics)lab.tick(dt);if(canPlay()&&rooms[index].roulette)roulette.tick(dt);
  ignitia.updateCamera(player);renderer.draw(rooms[index],player,opened,flash,time,rooms[index].physics?lab:null,rooms[index].roulette?roulette:null);InteriorAtmosphere.draw(renderer,rooms[index],player,time);actors.draw(renderer,rooms[index],player,opened,time,maze);if(trial){drawArrivalCart(renderer,rooms[index],player);trial.draw(renderer,player,actors);}if(corridor)corridor.draw(renderer,player,actors);if(boss)boss.draw(renderer,player,actors);if(rooms[index].environment.kind==='courtyard')renderer.outdoor.draw(renderer,rooms[index],player,actors,time);ignitia.draw(renderer,player,actors);animateDeath(dt);cinematics.tick(dt);requestAnimationFrame(tick);
 }

@@ -21,9 +21,13 @@ window.RPGCast={
  },
  action(c,image,frame,x,feet,height,options={}){return this.draw(c,image,'idle',0,x,feet,height,{...options,frame,cell:this.actionCell});},
  portrait(canvas,image,speaking,time=0){
-  const c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;c.clearRect(0,0,w,h);
-  if(!image?.complete||!image.naturalWidth)return;
+  const c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
+  if(!image?.complete||!image.naturalWidth){this.portraitFrames?.delete(canvas);c.clearRect(0,0,w,h);return;}
   const frame=speaking?this.frame('talk',time):this.frame('idle',time),fw=image.naturalWidth/4;
+  // Prologue may resize a canvas to clear it; opt out there (see drawFace).
+  const previous=this.portraitFrames?.get(canvas);
+  if(previous&&previous.image===image&&previous.source===image.currentSrc&&previous.frame===frame&&previous.speaking===!!speaking&&previous.w===w&&previous.h===h)return;
+  this.portraitFrames??=new WeakMap();this.portraitFrames.set(canvas,{image,source:image.currentSrc,frame,speaking:!!speaking,w,h});c.clearRect(0,0,w,h);
   canvas.dataset.frame=String(frame);canvas.dataset.speaking=String(!!speaking);
   c.imageSmoothingEnabled=false;c.drawImage(image,frame*fw,0,fw,image.naturalHeight,0,0,w,h);
  },

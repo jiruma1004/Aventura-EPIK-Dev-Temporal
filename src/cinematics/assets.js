@@ -7,7 +7,7 @@ for(const [key,id] of Object.entries({radioPaola:'paola-b-v1',radioJose:'jose-me
 CINEMA_ASSETS.paolaCeremony='assets/cast/paola-ceremony-matched-v2.png';
 window.CINEMA_SCENE_ASSETS={
  'aplausos-finales':['applauseSky','castEric','castIvan','castKarla','castPaola','castAngelica','castJose'],
- 'ignitia-launch':['ivanAction','ivanWalk','castIvan','radioPaola','radioJose','radioIvan'],
+ 'ignitia-launch':['ignitiaRocket','ivanAction','ivanWalk','castIvan','radioPaola','radioJose','radioIvan'],
  'ignitia-intercepcion':['ivanAction','ivanWalk','spaceAtlas','prisonAtlas','burst','ignitiaRocket','ericRocket','ericAir','castEric','castIvan','radioPaola','radioJose','radioIvan','radioEric'],
  'intercepcion-espacial':['spaceAtlas','prisonAtlas','burst','ignitiaRocket','ericRocket','ericAir','castEric','castIvan','radioPaola','radioJose','radioIvan','radioEric'],
  'ceremonia-ignitia':['ceremonyHall','castAngelica','paolaCeremony'],

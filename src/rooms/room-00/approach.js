@@ -42,7 +42,7 @@ window.ApproachTrial=class {
  }
  get question(){return APPROACH_QUESTIONS[Math.min(this.stage,4)];}
  platforms(){const scale=EpikDifficulty.easy?1.05:.9;return this.tiles??=APPROACH_QUESTIONS.flatMap((q,stage)=>[true,false].map((answer,lane)=>({stage,answer,x:5+stage*2.3+1.5*(1-scale)/2,y:(lane?4.05:2.25)+1.4*(1-scale)/2,w:1.5*scale,h:1.4*scale,key:stage+':'+answer})));}
- platformAt(x,y){return this.platforms().find(p=>x>=p.x&&x<=p.x+p.w&&y>=p.y&&y<=p.y+p.h);}
+ platformAt(x,y){const tiles=this.platforms(),first=tiles[0],last=tiles[tiles.length-1];if(x<first.x||x>last.x+last.w||y<first.y||y>last.y+last.h)return;return tiles.find(p=>x>=p.x&&x<=p.x+p.w&&y>=p.y&&y<=p.y+p.h);}
  supports(x,y){if(x<4.2||x>=16.7)return true;const p=this.platformAt(x,y);return !!p&&!this.broken.has(p.key);}
  land(player){if(this.finished||player.jumpHeight>0)return;const p=this.platformAt(player.x,player.y);if(!p||p.stage<this.stage)return;
   if(this.broken.has(p.key))return;
@@ -62,7 +62,7 @@ window.ApproachTrial=class {
    const tall=1.7+(Math.sin(i*13)*.5+.5)*1.1;c.fillStyle=i%2?'#253e30':'#304b36';c.beginPath();c.moveTo(p.x-p.scale*.45,p.y);c.lineTo(p.x,p.y-p.scale*tall);c.lineTo(p.x+p.scale*.45,p.y);c.fill();}
  }
  color(x,y){
-  const noise=Math.sin(Math.floor(x*20)*13+Math.floor(y*20)*37),p=this.platformAt(x,y);
+  const p=this.platformAt(x,y);
   if(p&&!this.broken.has(p.key)){
    const u=x-p.x,v=y-p.y,board=Math.floor(u/.25),seam=u% .25<.028;
    if(seam)return '#251a15';
@@ -70,7 +70,8 @@ window.ApproachTrial=class {
    const grain=Math.sin(y*83+board*7)*Math.sin(y*17+board);
    return grain>.68?'#392a20':grain<-.6?'#a48459':board%2?'#795738':'#896643';
   }
-  const rim=Math.pow(Math.abs((x-10.45)/6.6),8)+Math.pow(Math.abs((y-3.85)/5.5),4);
+  const noise=Math.sin(Math.floor(x*20)*13+Math.floor(y*20)*37);
+  const rim=x>=4.2&&x<16.7?Math.pow(Math.abs((x-10.45)/6.6),8)+Math.pow(Math.abs((y-3.85)/5.5),4):Infinity;
   if(x>=4.2&&x<16.7&&rim<1.1){const band=Math.floor(rim*9);return noise>.8?'#706150':rim>.86?'#a1855e':rim>.6?(band%2?'#76624d':'#8b7357'):rim>.3?(band%2?'#574b40':'#665746'):'#3b342f';}
   if(y<1.7||y>6.1)return noise>.25?'#6d784b':noise<-.4?'#52653d':'#627044';
   return noise>.3?'#9c815b':noise<-.4?'#806546':'#8b7250';

@@ -57,12 +57,19 @@ window.EscapeRenderer = class {
     if(room.environment?.kind==='interior')this.drawCeiling(room,player,horizon,eye);
     if(room.trial||room.physics||room.environment?.kind==='interior'||room.environment?.kind==='courtyard'){
       // Proyección del suelo: el abismo y el puente ocupan las mismas casillas que las colisiones.
-      for(let sy=Math.max(0,horizon+2);sy<h;sy+=4){const depth=(h*eye)/(sy-horizon);let runX=0,runColor=null;
+      // The same 6 x 4 samples are rasterized once instead of issuing thousands
+      // of tiny fillRect calls. Reuse the pixel buffer across moving frames.
+      const floorStart=Math.max(0,horizon+2),cols=Math.ceil(w/6),rows=Math.max(1,Math.ceil((h-floorStart)/4));
+      this.floorCanvas??=document.createElement('canvas');
+      this.floorContext??=this.floorCanvas.getContext('2d');this.floorPalette??=new Map();
+      if(this.floorCanvas.width!==cols||this.floorCanvas.height!==rows){this.floorCanvas.width=cols;this.floorCanvas.height=rows;this.floorImage=this.floorContext.createImageData(cols,rows);}
+      const pixels=this.floorImage.data;let pixel=0;
+      for(let sy=floorStart;sy<h;sy+=4){const depth=(h*eye)/(sy-horizon);
         for(let sx=0;sx<w;sx+=6){const lateral=(sx/w*2-1)*.66;
           const rayX=cosAngle-sinAngle*lateral,rayY=sinAngle+cosAngle*lateral;
           const wx=player.x+depth*rayX,wy=player.y+depth*rayY;
           let floorColor;
-          const tile=room.floorTile?room.floorTile(wx,wy):room.map[Math.floor(wy)]?.[Math.floor(wx)];
+          const tile=room.trial?null:room.floorTile?room.floorTile(wx,wy):room.map[Math.floor(wy)]?.[Math.floor(wx)];
           if(room.trial){floorColor=room.approach.color(wx,wy);}
           else if(room.lava?.contains(wx,wy)){floorColor=room.lava.rayColor(player,rayX,rayY,depth,eye,time);}
           else if(tile===3&&room.boss){floorColor=EricArena.pitColor(player,rayX,rayY,depth,eye,time,opened);}
@@ -74,15 +81,13 @@ window.EscapeRenderer = class {
           else if(room.guardian&&wx>=GUARDIAN_GARDEN.start)floorColor=room.guardian.floor(wx,wy);
           else if(room.environment?.kind==='courtyard'){const center=room.corridor?4.5:7.5,onPath=Math.abs(wy-center)<1.05,seam=((wx%0.55)+.55)%.55<.04||((wy%0.45)+.45)%.45<.035;floorColor=onPath?(seam?'#776445':'#b19b75'):(seam?'#29313b':'#495052');}
           else {const seam=wx%1<.035||wy%1<.035;floorColor=seam?'#151b25':(Math.floor(wx)+Math.floor(wy))%2?'#3b3c40':'#303339';}
-          // Adjacent samples with the same color share a draw call. This is
-          // pixel-identical to the individual 6px rectangles, including depth.
-          if(floorColor!==runColor){
-            if(runColor!==null){c.fillStyle=runColor;c.fillRect(runX,sy,sx-runX,4);}
-            runX=sx;runColor=floorColor;
-          }
+          let rgb=this.floorPalette.get(floorColor);
+          if(rgb===undefined){rgb=parseInt(floorColor.slice(1),16);this.floorPalette.set(floorColor,rgb);}
+          pixels[pixel++]=(rgb>>16)&255;pixels[pixel++]=(rgb>>8)&255;pixels[pixel++]=rgb&255;pixels[pixel++]=255;
         }
-        if(runColor!==null){c.fillStyle=runColor;c.fillRect(runX,sy,w-runX,4);}
       }
+      this.floorContext.putImageData(this.floorImage,0,0);
+      c.save();c.imageSmoothingEnabled=false;c.drawImage(this.floorCanvas,0,floorStart,cols*6,rows*4);c.restore();
     }
     if(room.trial)room.approach.drawCrater(this,player);
     if(room.lava)room.lava.drawSupports(this,player);
@@ -181,8 +186,9 @@ window.EscapeRenderer = class {
   drawCeiling(room,player,horizon,eye){
     const c=this.ctx,w=this.canvas.width,h=this.canvas.height;
     c.fillStyle='#151922';c.fillRect(0,0,w,horizon);
+    const cos=Math.cos(player.angle),sin=Math.sin(player.angle);
     for(let sy=0;sy<horizon-1;sy+=5){const depth=h*((room.environment.ceilingHeight||1)-eye)/(horizon-sy);
-      for(let sx=0;sx<w;sx+=7){const lateral=(sx/w*2-1)*.66,wx=player.x+depth*(Math.cos(player.angle)-Math.sin(player.angle)*lateral),wy=player.y+depth*(Math.sin(player.angle)+Math.cos(player.angle)*lateral);
+      for(let sx=0;sx<w;sx+=7){const lateral=(sx/w*2-1)*.66,wx=player.x+depth*(cos-sin*lateral),wy=player.y+depth*(sin+cos*lateral);
         const beam=((wx%2)+2)%2<.16||((wy%2)+2)%2<.12;
         c.fillStyle=beam?'#161b23':(Math.floor(wx*2)+Math.floor(wy*2))%2?'#30333c':'#2a2c34';c.fillRect(sx,sy,7,5);
       }

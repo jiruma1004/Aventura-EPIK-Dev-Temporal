@@ -1,4 +1,4 @@
-/* Developer-only prototype. Loaded before main.js; never included in the student build.
+/* Rocket tablet challenge. Loaded before main.js.
  * One continuous VERTICAL training flight, independent of Eric's live cruise radar.
  * Net acceleration +5 m/s² for 0–4 s, then free fall under g=9.81 m/s².
  */
@@ -50,6 +50,9 @@
     <footer class="telemetry-actions"><button type="button" id="telemetry-hint">Pista de Paola</button><button type="button" id="telemetry-palma">Palma IA · 3 errores</button><button type="button" id="telemetry-check" class="primary">Comprobar respuestas</button><button type="button" id="telemetry-next" class="primary" hidden>Siguiente ejercicio</button></footer>
    </section>`);
    this.panel=document.querySelector('#paola-tablet');
+   this.praise=document.createElement('aside');this.praise.id='paola-encouragement';this.praise.hidden=true;this.praise.setAttribute('role','status');this.praise.setAttribute('aria-live','polite');
+   this.praise.innerHTML='<img src="assets/cast/paola-b-v1-portrait.webp" alt=""><p></p>';document.querySelector('.scene-view').append(this.praise);
+
    this.panel.querySelector('#telemetry-close').onclick=()=>this.close();
    this.panel.querySelector('#telemetry-check').onclick=()=>this.submit();
    this.panel.querySelector('#telemetry-next').onclick=()=>this.next();
@@ -63,7 +66,7 @@
   }
   get visible(){return !this.panel.hidden;}
   get pending(){return this.enabled&&!this.done;}
-  reset(room,preserve=false){const saved=preserve?this.snapshot():null;this.close();this.enabled=!!room.rocket;this.stage=0;this.done=false;this.passed=false;this.failures=[0,0,0];this.answers=[{},{},{}];this.points=[0,4];this.seek=0;if(saved)this.restore(saved);}
+  reset(room,preserve=false){clearTimeout(this.praiseTimer);if(this.praise)this.praise.hidden=true;const saved=preserve?this.snapshot():null;this.close();this.enabled=!!room.rocket;this.stage=0;this.done=false;this.passed=false;this.failures=[0,0,0];this.answers=[{},{},{}];this.points=[0,4];this.seek=0;if(saved)this.restore(saved);}
   snapshot(){return {version:1,stage:this.stage,done:this.done,passed:this.passed,failures:[...this.failures],answers:JSON.parse(JSON.stringify(this.answers)),points:[...this.points],seek:this.seek};}
   restore(s){if(!s||s.version!==1)return;this.stage=Math.max(0,Math.min(2,Math.trunc(s.stage)||0));this.done=s.done===true;this.passed=s.passed===true;this.failures=[0,1,2].map(i=>Math.max(0,Math.min(1000,Number(s.failures?.[i])||0)));this.answers=[0,1,2].map(i=>s.answers?.[i]&&typeof s.answers[i]==='object'?{...s.answers[i]}:{});this.points=Array.isArray(s.points)?[...new Set(s.points.filter(t=>[0,2,4].includes(t)))].slice(-2):[0,4];this.seek=Math.max(0,Math.min(M.impact,Number(s.seek)||0));if(this.passed&&!this.done){if(this.stage===2)this.done=true;else{this.stage++;this.passed=false;this.seek=0;}}}
   near(p){return this.enabled&&Math.hypot(p.x-7.4,p.y-7.3)<2.7&&Math.cos(Math.atan2(7.3-p.y,7.4-p.x)-p.angle)>.65;}
@@ -107,10 +110,15 @@
    if(e.target.id==='telemetry-play'){if(this.seek>=M.impact)this.seek=0;this.playing=!this.playing;this.updateTime();}
    if(e.target.matches('canvas[data-plot=velocity]')&&this.stage===0){const r=e.target.getBoundingClientRect(),t=(e.clientX-r.left-56)/(r.width-74)*4;const nearest=[0,2,4].reduce((a,b)=>Math.abs(b-t)<Math.abs(a-t)?b:a);this.panel.querySelector(`[data-point="${nearest}"]`).click();}
   }
-  submit(){if(this.done||this.passed)return;const output=this.panel.querySelector('#telemetry-feedback');if(this.stage===0&&this.points.length!==2){output.textContent='Selecciona primero dos puntos de la gráfica.';output.dataset.ok='false';return;}
+  submit(){if(this.done||this.passed)return;clearTimeout(this.praiseTimer);this.praise.hidden=true;const output=this.panel.querySelector('#telemetry-feedback');if(this.stage===0&&this.points.length!==2){output.textContent='Selecciona primero dos puntos de la gráfica.';output.dataset.ok='false';return;}
    const answer={...this.answers[this.stage]},errors=M.issues(this.stage,answer);this.onAttempt?.(this.stage,answer,!errors.length);this.markErrors(errors);
    if(errors.length){this.failures[this.stage]++;output.textContent=errors.length===1?'Paola: «Revisa el inciso marcado en rojo. Tu otra información se conserva».':`Paola: «Revisa los ${errors.length} incisos marcados en rojo. Debajo de cada uno encontrarás qué debes revisar».`;output.dataset.ok='false';}else{this.passed=true;this.playing=false;output.textContent=success[this.stage];output.dataset.ok='true';Sound.click();}
-   if(this.passed){this.next();return;}
+   if(this.passed){
+    const words=['¡Felicidades, está todo correcto! Ya sabes interpretar la pendiente. ¡Vamos por el siguiente reto!','¡Felicidades, está todo correcto! Has conectado las gráficas con muy buen razonamiento. ¡Sigue así!','¡Felicidades, está todo correcto! Tu razonamiento nos acerca a Eric. ¡Confía en lo que has aprendido!'];
+    this.praise.querySelector('p').textContent='Paola: «'+words[this.stage]+'»';this.praise.hidden=false;
+    clearTimeout(this.praiseTimer);this.praiseTimer=setTimeout(()=>{this.praise.hidden=true;},6500);
+    this.next();return;
+   }
    this.syncControls();this.onProgress?.();const first=this.panel.querySelector('.telemetry-invalid');if(first){first.scrollIntoView({block:'nearest'});first.querySelector('input,select,button')?.focus({preventScroll:true});}else output.scrollIntoView({block:'nearest'});
   }
   markErrors(errors){

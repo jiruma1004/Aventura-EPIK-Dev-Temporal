@@ -28,7 +28,7 @@ window.EpikRecovery = class {
   remove() { try { this.storage?.removeItem(EpikRecovery.key); } catch {} }
   valid(data) {
     const age = this.now() - data?.savedAt;
-    return data?.version === EpikRecovery.version && Number.isFinite(age)
+    return (data?.group??null)===(window.EpikGroupAccess?.group??null) && data?.version === EpikRecovery.version && Number.isFinite(age)
       && age >= 0 && age < EpikRecovery.ttl && data.world && data.session
       && typeof data.session.id === 'string' && Array.isArray(data.session.states)
       && Array.isArray(data.session.events) && Number.isFinite(data.session.at)

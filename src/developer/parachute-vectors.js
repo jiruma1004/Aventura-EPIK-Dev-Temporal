@@ -1,4 +1,4 @@
-/* Experimental developer-only interlude. Coordinates are horizontal map positions,
+/* Parachute challenge. Coordinates are horizontal map positions,
    not altitude. The cinematic clock is held until the wind challenge is solved. */
 (()=>{
 'use strict';
@@ -6,7 +6,7 @@ Object.assign(CINEMA_ASSETS,{vectorBoat:'assets/developer/luxury-launch-atlas-v1
 for(const id of ['ignitia-intercepcion','intercepcion-espacial'])CINEMA_SCENE_ASSETS[id].push('vectorBoat','vectorEric','vectorAngelica','vectorDrone');
 
 const M=window.ParachuteVectorModel=Object.freeze({
- limitSeconds:90,windDuration:6,
+ limitSeconds:300,windDuration:6,
  origin:Object.freeze({x:0,y:0}),a:Object.freeze({x:40,y:20}),b:Object.freeze({x:30,y:-10}),
  boat:Object.freeze({x:70,y:10}),prison:Object.freeze({x:20,y:50}),
  add:(p,q)=>({x:p.x+q.x,y:p.y+q.y}),
@@ -21,9 +21,9 @@ window.ParachuteVectors=class {
   this.lib=library;this.visible=false;this.done=false;this.failures=0;this.deadline=null;
   this.panel=document.createElement('dialog');this.panel.id='parachute-vectors';this.panel.dataset.noTranslate='';
   this.panel.setAttribute('aria-labelledby','vector-title');
-  this.panel.innerHTML=`<header><span class="vector-kicker">RETO EXTRA · DESARROLLADOR</span><h2 id="vector-title">El último viento de Angélica</h2><p id="vector-story">¡Eric ha saltado del cohete! Sus drones con ventiladores lo empujan primero en una dirección y luego en otra, hasta dejarlo sobre su lancha. Angélica puede desviarlo a la prisión con su magia de viento, pero necesita que calcules el vector. Tendrás 90 segundos después del segundo desplazamiento.</p><ol class="vector-sequence" aria-label="Secuencia de los vientos"><li id="vector-step-a">1 · Primer dron: vector A</li><li id="vector-step-b">2 · Segundo dron: vector B → lancha</li><li id="vector-step-c">3 · Angélica: vector C → prisión</li></ol></header>
+  this.panel.innerHTML=`<header><span class="vector-kicker">RETO VIII · VIENTOS MÁGICOS</span><h2 id="vector-title">El último viento de Angélica</h2><p id="vector-story">¡Eric ha saltado del cohete! Sus drones con ventiladores lo empujan primero en una dirección y luego en otra, hasta dejarlo sobre su lancha. Angélica puede desviarlo a la prisión con su magia de viento, pero necesita que calcules el vector. Tendrás 5 minutos después del segundo desplazamiento.</p><ol class="vector-sequence" aria-label="Secuencia de los vientos"><li id="vector-step-a">1 · Primer dron: vector A</li><li id="vector-step-b">2 · Segundo dron: vector B → lancha</li><li id="vector-step-c">3 · Angélica: vector C → prisión</li></ol></header>
    <div class="vector-layout"><figure><canvas id="vector-map" width="800" height="620" role="img" aria-label="Mapa visto desde arriba: inicio (0, 0); primer desplazamiento (40, 20) metros; segundo (30, −10) metros; lancha (70, 10); prisión (20, 50)."></canvas><figcaption id="vector-caption" aria-live="polite">Vista desde arriba · x hacia el este; y hacia el norte. No representa la altura.</figcaption></figure>
-   <section class="vector-task"><div id="vector-urgency"><span id="vector-timer-label">Observa las dos ráfagas</span><output id="vector-time" role="timer" aria-live="off">01:30</output><div class="vector-timer-track"><div id="vector-timer-bar"></div></div><small id="vector-timer-note">El contador comienza después del segundo viento.</small></div><div id="vector-exercise"><div class="vector-angelica"><canvas id="vector-guide" width="150" height="175" aria-label="Angélica prepara su magia de viento"></canvas><div><h3>Angélica necesita tu cálculo</h3><p>«Puedo cambiar su rumbo. Dime cuánto debo desplazarlo en cada dirección».</p></div></div><p>Eric parte de <b>P₀ = (0, 0) m</b>. El primer dron produce <b>A = (40, 20) m</b>. Desde esa nueva posición, el segundo dron produce <b>B = (30, −10) m</b> y lo deja justo sobre la lancha.</p><p>La prisión está en <b>R = (20, 50) m</b>. ¿Qué <b>vector de desplazamiento C</b> debe invocar Angélica después de A y B para que Eric llegue a R?</p><p class="vector-equation">P₀ + A + B + C = R</p><form id="vector-form" novalidate><div class="vector-components"><label for="vector-x">Cₓ (m)<input id="vector-x" name="x" type="text" inputmode="decimal" autocomplete="off" placeholder="Componente en x" aria-describedby="vector-feedback"></label><label for="vector-y">Cᵧ (m)<input id="vector-y" name="y" type="text" inputmode="decimal" autocomplete="off" placeholder="Componente en y" aria-describedby="vector-feedback"></label></div><small>Incluye el signo: este y norte (+); oeste y sur (−).</small><button class="primary" id="vector-cast" type="submit">Dar el vector a Angélica</button></form><div class="vector-help-buttons"><button id="vector-paola" type="button">Ayuda de Paola</button><button id="vector-palma" type="button" disabled>Palma IA · tras 3 intentos</button></div><p id="vector-help" hidden></p></div><p id="vector-feedback" role="status"></p><div id="vector-outcome" hidden><h3 id="vector-result-title"></h3><p id="vector-result-body"></p><button id="vector-retry" class="primary" hidden>Reintentar desde el paracaídas</button></div></section></div>`;
+   <section class="vector-task"><div id="vector-urgency"><span id="vector-timer-label">Observa las dos ráfagas</span><output id="vector-time" role="timer" aria-live="off">05:00</output><div class="vector-timer-track"><div id="vector-timer-bar"></div></div><small id="vector-timer-note">El contador comienza después del segundo viento.</small></div><div id="vector-exercise"><div class="vector-angelica"><canvas id="vector-guide" width="150" height="175" aria-label="Angélica prepara su magia de viento"></canvas><div><h3>Angélica necesita tu cálculo</h3><p>«Puedo cambiar su rumbo. Dime cuánto debo desplazarlo en cada dirección».</p></div></div><p>Eric parte de <b>P₀ = (0, 0) m</b>. El primer dron produce <b>A = (40, 20) m</b>. Desde esa nueva posición, el segundo dron produce <b>B = (30, −10) m</b> y lo deja justo sobre la lancha.</p><p>La prisión está en <b>R = (20, 50) m</b>. ¿Qué <b>vector de desplazamiento C</b> debe invocar Angélica después de A y B para que Eric llegue a R?</p><p class="vector-equation">P₀ + A + B + C = R</p><form id="vector-form" novalidate><div class="vector-components"><label for="vector-x">Cₓ (m)<input id="vector-x" name="x" type="text" inputmode="decimal" autocomplete="off" placeholder="Componente en x" aria-describedby="vector-feedback"></label><label for="vector-y">Cᵧ (m)<input id="vector-y" name="y" type="text" inputmode="decimal" autocomplete="off" placeholder="Componente en y" aria-describedby="vector-feedback"></label></div><small>Incluye el signo: este y norte (+); oeste y sur (−).</small><button class="primary" id="vector-cast" type="submit">Dar el vector a Angélica</button></form><div class="vector-help-buttons"><button id="vector-paola" type="button">Ayuda de Paola</button><button id="vector-palma" type="button" disabled>Palma IA · tras 3 intentos</button></div><p id="vector-help" hidden></p></div><p id="vector-feedback" role="status"></p><div id="vector-outcome" hidden><h3 id="vector-result-title"></h3><p id="vector-result-body"></p><button id="vector-retry" class="primary" hidden>Reintentar desde el paracaídas</button></div></section></div>`;
   document.querySelector('.scene-view').append(this.panel);this.canvas=this.panel.querySelector('canvas');this.ctx=this.canvas.getContext('2d');
   this.panel.addEventListener('cancel',e=>e.preventDefault());
   this.panel.querySelector('form').onsubmit=e=>{e.preventDefault();this.submit();};
@@ -32,6 +32,26 @@ window.ParachuteVectors=class {
   this.panel.querySelector('#vector-retry').onclick=()=>this.retry();
  }
  q(s){return this.panel.querySelector(s);}
+ snapshot(){return {done:this.done,failures:this.failures,phase:this.phase,elapsed:this.elapsed||0,deadline:this.deadline,answer:this.answer};}
+ restore(saved){
+  if(!saved)return;
+  this.failures=Math.max(0,Number(saved.failures)||0);
+  if(saved.done){this.phase='capture';this.elapsed=4.69;this.tick(.02);return;}
+  if(['ready','winds','capture','miss','escape','gameover'].includes(saved.phase)){
+   this.phase=saved.phase;this.elapsed=Number(saved.elapsed)||0;this.deadline=saved.deadline;this.answer=saved.answer;
+   if(this.phase==='ready'){
+    for(const el of this.panel.querySelectorAll('input'))el.disabled=false;
+    this.q('#vector-cast').disabled=false;
+   }
+   this.q('#vector-palma').disabled=this.failures<3;
+   if(['capture','miss','escape','gameover'].includes(this.phase)){
+    this.q('#vector-exercise').hidden=true;this.q('#vector-urgency').hidden=true;this.q('#vector-outcome').hidden=false;
+    this.q('#vector-result-title').textContent=this.phase==='capture'?'¡Angélica invoca el viento!':'Eric intenta escapar…';
+    if(this.phase==='gameover'){this.phase='escape';this.elapsed=7.5;}
+   }
+   this.tick(0);
+  }
+ }
  reset(){this.hide();this.done=false;this.failures=0;this.answer=null;this.phase='idle';this.deadline=null;}
  open(){
   if(this.visible||this.done)return;this.visible=true;this.phase='winds';this.elapsed=0;this.answer=null;this.deadline=null;
@@ -76,7 +96,7 @@ window.ParachuteVectors=class {
  }
  tick(dt){
   if(!this.visible||document.hidden)return;this.elapsed+=dt;
-  if(this.phase==='winds'&&this.elapsed>=M.windDuration){this.phase='ready';this.deadline=Date.now()+M.limitSeconds*1000;this.q('#vector-cast').disabled=false;for(const el of this.panel.querySelectorAll('input'))el.disabled=false;this.q('#vector-x').focus({preventScroll:true});this.q('#vector-caption').textContent='Los dos drones ya lo llevaron hasta la lancha. Angélica espera tu vector C: ¡90 segundos para desviarlo!';}
+  if(this.phase==='winds'&&this.elapsed>=M.windDuration){this.phase='ready';this.deadline=Date.now()+M.limitSeconds*1000;this.q('#vector-cast').disabled=false;for(const el of this.panel.querySelectorAll('input'))el.disabled=false;this.q('#vector-x').focus({preventScroll:true});this.q('#vector-caption').textContent='Los dos drones ya lo llevaron hasta la lancha. Angélica espera tu vector C: ¡5 minutos para desviarlo!';}
   if(this.phase==='ready'&&Date.now()>=this.deadline)this.timeout();
   this.updateClock();
   if(this.phase==='capture'&&this.elapsed>=4.7){this.done=true;this.hide();this.lib.paused=false;this.lib.refresh();this.lib.draw();return;}
@@ -97,7 +117,7 @@ window.ParachuteVectors=class {
  timeout(){
   if(this.phase!=='ready')return;this.failures++;this.onAttempt?.({timeout:true},false);this.deadline=null;this.phase='escape';this.elapsed=0;this.answer=null;
   this.q('#vector-exercise').hidden=true;this.q('#vector-urgency').hidden=true;this.q('#vector-outcome').hidden=false;
-  this.q('#vector-feedback').textContent='Se agotaron los 90 segundos. No se invocó el viento a tiempo.';
+  this.q('#vector-feedback').textContent='Se agotaron los 5 minutos. No se invocó el viento a tiempo.';
   this.q('#vector-result-title').textContent='¡Demasiado tarde!';this.q('#vector-result-body').textContent='Los drones dejaron a Eric sobre su lancha. Angélica no recibió el vector a tiempo: Eric aterriza y enciende sus motores arcanos.';
   this.q('#vector-caption').textContent='Eric: «¡La puntualidad también es parte del plan!»';this.panel.dataset.phase=this.phase;this.draw();
  }

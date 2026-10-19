@@ -1,5 +1,7 @@
-(()=>{
+(async()=>{
 'use strict';
+const development=true;
+if(!development)await EpikGroupAccess.enter();
 const canvas=document.querySelector('#game'),renderer=new EscapeRenderer(canvas),keys=new Set(),rooms=window.ESCAPE_ROOMS,lab=new ProjectileLab();
 let index=0,player,opened=false,flash=0,last=0,completed=false,death=null,checkpoint=null;
 let gravityFalls=0,potionDeaths=0;
@@ -15,7 +17,7 @@ let classroom;
 let recovery;
 let touch=null;
 let controlTutorial=null;
-const development=true;
+
 const mission=new AdventureClock({onChange:updateCountdown,onExpire:expireAdventure});
 const ignitia=new IgnitiaMission(ignitiaEvent);
 ignitia.telemetry.onProgress=()=>recovery?.save();
@@ -290,8 +292,8 @@ function captureRecovery() {
  if(maze)world.maze={...pick(maze,mazeRecoveryFields),map:room.map,environment:room.environment,doors:maze.doors,
   passed:[...maze.passed],openDoors:[...maze.openDoors],usedFreezeButtons:[...maze.usedFreezeButtons]};
  if(boss)world.boss={support:boss.puzzle.support.id,cuts:boss.puzzle.cuts,stun:boss.stun.snapshot(),escapeTime:ignitia.ignited?ignitia.simulator.missionTime:null};
- if(room.rocket)world.rocket={telemetry:ignitia.telemetry.snapshot(),...pick(ignitia.simulator,['params','missionTime','attempts','launchEpoch','ready']),ending:classroom.session.finished!==null};
- return {world,session:classroom.session.recoverySnapshot(),remaining:mission.remaining,
+ if(room.rocket)world.rocket={intercepting:cinematics.active&&cinematics.story&&cinematics.item?.id==='ignitia-intercepcion',vectors:cinematics.vectors.snapshot(),telemetry:ignitia.telemetry.snapshot(),...pick(ignitia.simulator,['params','missionTime','attempts','launchEpoch','ready']),ending:classroom.session.finished!==null};
+ return {group:EpikGroupAccess.group,world,session:classroom.session.recoverySnapshot(),remaining:mission.remaining,
   clockComplete:mission.state==='complete',language:I18n.lang};
 }
 function restoreRecovery(saved,away) {
@@ -346,7 +348,7 @@ function restoreRecovery(saved,away) {
  if(rooms[i].rocket&&w.rocket){
   Object.assign(ignitia.simulator,pick(w.rocket,['params','missionTime','attempts','launchEpoch','ready']));
   ignitia.telemetry.restore(w.rocket.telemetry);
-  if(!w.rocket.ending&&!ignitia.telemetry.pending)ignitia.simulator.missionTime+=away/1000;
+  if(!w.rocket.ending&&!w.rocket.intercepting&&!ignitia.telemetry.pending)ignitia.simulator.missionTime+=away/1000;
   ignitia.simulator.sync();ignitia.simulator.draw();
  }
  mission.pausedAt=null;mission.remaining=Math.max(0,saved.remaining-(saved.clockComplete?0:Math.ceil(away/1000)));
@@ -358,6 +360,13 @@ function restoreRecovery(saved,away) {
   // The completed assessment is preserved even if power failed during the ending.
   // Resume at the ceremony so the student can retrieve the named diploma and CSV.
   ignitia.mode='sequence';ignitia.beginCeremony();
+ }else if(w.rocket?.intercepting){
+  mission.tick();
+  if(mission.state==='running'){
+   ignitia.mode='sequence';
+   cinematics.play('ignitia-intercepcion',{story:true,onComplete:()=>ignitia.beginCeremony()});
+   cinematics.ready.then(()=>{if(!cinematics.active)return;cinematics.finish();cinematics.vectors.restore(w.rocket.vectors);});
+  }
  }else{
   mission.tick();
   if(mission.state==='running'&&rooms[i].rocket&&ignitia.simulator.missionTime>=InterceptionPhysics.moonTime)die('moon');

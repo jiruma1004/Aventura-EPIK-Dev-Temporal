@@ -302,6 +302,7 @@ function restoreRecovery(saved,away) {
  if(rooms[i].physics&&w.cannon){
   Object.assign(rooms[i].physics,w.cannon.physics);Object.assign(lab.target,w.cannon.target);
   [lab.v.value,lab.a.value,lab.az.value]=w.cannon.values;
+  if(!CANNON_ANGLES.includes(Number(lab.a.value)))lab.a.value='45';
   Object.assign(lab,{history:w.cannon.history,loaded:w.cannon.loaded,selected:w.cannon.selected,shot:w.cannon.shot});
   lab.renderHistory();lab.update();
  }
@@ -362,6 +363,7 @@ recovery=new EpikRecovery({capture:captureRecovery,restore:restoreRecovery,reset
 }});recovery.offer();
 
 window.addEventListener('astralia:language',()=>{
+ if(rooms[index].physics)lab.targetReadout();
  Object.assign(renderer.art,makeWallArt(),makeScenery());boss?.art.clear();actors.doorArt.clear();
  if(!prologue.done)prologue.renderPage();
  if(companions.dialogue){const d=companions.dialogue;d.text=I18n.t(d.source);d.chars=[...d.text];companions.finishDialogue();}

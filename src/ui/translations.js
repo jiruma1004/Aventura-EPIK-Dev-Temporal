@@ -1278,3 +1278,10 @@ Object.assign(window.ENGLISH,{
  '¡Descarga! Eric queda aturdido durante 15 segundos. Aprovecha los láseres.':'Discharge! Eric is stunned for 15 seconds. Use the lasers.',
  'La máquina suelta chispas cada 20–40 segundos. Recoge una para aturdir a Eric 15 segundos; otra reinicia ese tiempo.':'The machine drops sparks every 20–40 seconds. Collect one to stun Eric for 15 seconds; another resets that timer.'
 });
+
+Object.assign(window.ENGLISH, {
+ 'Identifica los datos del sello, elige 30°, 45° o 60° y calcula la rapidez inicial.':'Identify the seal data, choose 30°, 45° or 60°, and calculate the initial speed.',
+ 'Usa x = v₀ cos(θ)t e y = y₀ + v₀ sen(θ)t − ½gt². Elimina el tiempo para calcular la rapidez inicial.':'Use x = v₀ cos(θ)t and y = y₀ + v₀ sin(θ)t − ½gt². Eliminate time to calculate the initial speed.',
+ 'Escribe una rapidez entre 1 y 30 m/s y elige 30°, 45° o 60°.':'Enter a speed between 1 and 30 m/s and choose 30°, 45° or 60°.',
+ 'Acércate al cañón y pulsa E. Elige y carga una bala; elige 30°, 45° o 60° y calcula la rapidez con los datos del panel. Al acertar el botón se abrirá la verja y aparecerá el puente. H: pista.':'Approach the cannon and press E. Choose and load an orb; select 30°, 45° or 60° and calculate the speed using the panel data. Hitting the button opens the gate and reveals the bridge. H: hint.'
+});

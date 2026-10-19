@@ -65,9 +65,9 @@ window.EpikSolutions = {
     if (room.trial) return say('La respuesta es ', 'The answer is ') + (trial.question.answer ? say('Verdadero.', 'True.') : say('Falso.', 'False.')) + ' ' + I18n.t(trial.question.hint) + say(' Salta tú a esa plataforma.', ' Jump onto that platform yourself.');
     if (room.physics) {
       const p=lab.room.physics,D=(p.targetX-p.originX)*p.metersPerCell,dy=p.targetHeight-p.height;
-      return say(`Elige y fija tú un ángulo θ. La rapidez inicial queda despejada así:
+      return say(`Elige y fija tú un ángulo θ (30°, 45° o 60°). La rapidez inicial queda despejada así:
 v₀ = √[(${p.gravity}·${D}²) / (2·cos²(θ)·(${D}·tan(θ) − (${dy})))]
-Usa grados en tu calculadora.`, `Choose and fix an angle θ yourself. The initial speed is isolated as follows:
+Usa grados en tu calculadora.`, `Choose and fix an angle θ yourself (30°, 45° or 60°). The initial speed is isolated as follows:
 v₀ = √[(${p.gravity}·${D}²) / (2·cos²(θ)·(${D}·tan(θ) − (${dy})))]
 Set your calculator to degrees.`);
     }

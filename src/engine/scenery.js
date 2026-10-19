@@ -50,14 +50,10 @@ window.makeScenery=()=>{
  const chalkWall=make(1600,500,c=>{
   // Fondo transparente: la pintura queda directamente sobre los ladrillos.
   const equations=[
-   ['y = y₀ + x tan(θ) − gx²/(2v₀² cos²θ)',40,80,-.008,64,'#d9e9d1'],
-   ['v₀ = √(2E/m)',60,195,-.015,64,'#e7dcad'],
-   ['x = v₀ cos(θ)t',830,195,.015,62,'#d5e6ed'],
-   ['y = y₀ + v₀ sen(θ)t − ½gt²',60,320,-.008,62,'#d5e6ed'],
-   ['vᵧ = v₀ sen(θ) − gt',50,455,-.010,52,'#e7dcad'],
-   ['yₘáx = y₀ + v₀² sen²(θ)/(2g)',770,455,.008,50,'#d9e9d1']
+   ['x = v₀ cos(θ)t',70,110,-.008,72,'#d5e6ed'],
+   ['y = y₀ + v₀ sen(θ)t − ½gt²',70,260,.008,70,'#d5e6ed'],
+   ['y − y₀ = x tan(θ) − gx²/(2v₀² cos²θ)',70,420,-.008,62,'#d9e9d1']
   ];
-  c.fillStyle='#d9e9d1';c.font='italic 30px Georgia';c.fillText('φ = 0°',1410,140);
   for(const [eq,x,y,angle,size,color] of equations){c.save();c.translate(x,y);c.rotate(angle);c.fillStyle=color;c.globalAlpha=.93;c.font=`italic ${size}px Georgia`;c.fillText(eq,0,0);c.restore();}
   // Desgaste en los trazos, sin añadir una placa ni un recuadro opaco.
   c.globalCompositeOperation='destination-out';

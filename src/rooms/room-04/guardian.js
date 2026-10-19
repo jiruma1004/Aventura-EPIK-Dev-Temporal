@@ -44,6 +44,9 @@ window.GardenGuardian=class {
   this.statue=load('luis-monument.webp');this.rodrigo=load('rodrigo-monument.webp');this.fountain=load('fountain.webp');this.frame=load('gate-frame.webp');this.leaves=load('gate-leaves.webp');
   let panel=document.querySelector('#guardian-panel');
   if(!panel){document.querySelector('.scene-view').insertAdjacentHTML('beforeend',`<section id="guardian-panel" class="world-console" hidden aria-label="Acertijos de los guardianes"><button id="guardian-close" class="bubble-fold" aria-label="Cerrar acertijo">×</button><p class="eyebrow">LOS GUARDIANES DE EPITHEA · <span id="guardian-progress"></span></p><h2 id="guardian-title"></h2><p id="guardian-rule">Inscripción de la baldosa: ni el libro ni el pergamino garantizan sabiduría. Juzga cada afirmación; una voz acertada puede extraviarte en el siguiente sello.</p><p id="guardian-question"></p><form id="guardian-form"><div id="guardian-fields"></div><p id="guardian-note" class="guardian-note"></p><button class="primary" type="submit">Presentar mi respuesta</button></form><p id="guardian-feedback" role="status"></p><button id="guardian-next" class="primary" type="button" hidden>Escuchar la siguiente pregunta</button><div class="guardian-help"><button id="guardian-paola" type="button">Pedir una pista a Paola</button><button id="guardian-palma" type="button" hidden>Palma IA · Máximo 1 estrella</button></div></section><aside id="guardian-voice-book" class="guardian-voice" hidden><strong>Luis · Guardián del libro</strong><p></p></aside><aside id="guardian-voice-rodrigo" class="guardian-voice" hidden><strong>Rodrigo · Guardián del pergamino</strong><p></p></aside>`);panel=document.querySelector('#guardian-panel');}
+  if(!document.querySelector('#guardian-reply'))document.querySelector('.scene-view').insertAdjacentHTML('beforeend',`<aside id="guardian-reply" hidden role="dialog" aria-labelledby="guardian-reply-speaker" aria-describedby="guardian-reply-line"><p id="guardian-reply-speaker" class="eyebrow"></p><p id="guardian-reply-line"></p><p id="guardian-reply-note"></p><button id="guardian-reply-next" type="button">Continuar</button></aside>`);
+  this.replyPanel=document.querySelector('#guardian-reply');this.replyPanel.hidden=true;
+  document.querySelector('#guardian-reply-next').onclick=()=>this.dismissReply();
   this.panel=panel;this.panel.hidden=true;this.hideVoices();
   document.querySelector('#guardian-close').onclick=()=>this.close();
   document.querySelector('#guardian-paola').onclick=()=>{this.close();this.onPaola?.();};
@@ -77,7 +80,7 @@ window.GardenGuardian=class {
  blocks(x,y){return Math.hypot(x-56,y-4.5)<1.22||[GUARDIAN_GARDEN.statue,GUARDIAN_GARDEN.rodrigo].some(p=>Math.hypot(x-p.x,y-p.y)<.48);}
  enter(){if(this.arrived)return;this.arrived=true;this.onEvent('garden');}
  tick(dt,player){
-  if(this.reaction){this.reaction.remaining-=dt;if(this.reaction.remaining<=0&&!this.pendingNext){this.reaction=null;if(!this.panel.hidden)this.renderVoices();else this.hideVoices();}}
+  // Keep the reply readable until the player continues or leaves the tile.
 
   if(this.solved&&!this.gateOpened){this.gateProgress=Math.min(1,this.gateProgress+dt/2.8);if(this.gateProgress===1){this.gateOpened=true;Sound.tone(520,.25,'sine',.07);this.onEvent('guardian-gate-open');}}
   const onTile=this.near(player);
@@ -85,9 +88,9 @@ window.GardenGuardian=class {
   if(!onTile){this.onTile=false;this.close();}
   this.updateAid();
  }
- open(player){if(!this.near(player)||!this.canUse?.()||this.solved)return false;this.onTile=true;this.panel.hidden=false;document.querySelector('#world-toast').hidden=true;this.renderQuestion();window.dispatchEvent(new Event('astralia:ui-open'));return true;}
+ open(player){if(this.reaction)return true;if(!this.near(player)||!this.canUse?.()||this.solved)return false;this.onTile=true;this.panel.hidden=false;document.querySelector('#world-toast').hidden=true;this.renderQuestion();window.dispatchEvent(new Event('astralia:ui-open'));return true;}
  renderQuestion(){
-  this.reaction=null;
+  this.reaction=null;this.replyPanel.hidden=true;
   const q=this.question;this.renderedId=q.id;
   document.querySelector('#guardian-progress').textContent=`${this.stage} / 3 sellos`;
   document.querySelector('#guardian-title').textContent=I18n.t(q.title);document.querySelector('#guardian-question').textContent=I18n.t(q.text);
@@ -121,10 +124,20 @@ window.GardenGuardian=class {
    ['Te has equivocado. No temas: hasta la piedra aprende… aunque se toma sus siglos.','You are mistaken. Fear not: even stone learns… though it takes a few centuries.']
   ];
   const line=lines[this.replyCounts[who]++%lines.length][en?1:0];
-  this.reaction={who,line,remaining:6,solo:ok};if(ok)this.hideVoices();
-  const voice=document.querySelector('#guardian-voice-'+who);voice.querySelector('p').textContent=ok?line:line+'\n\n'+voice.querySelector('p').textContent;voice.hidden=false;
-  const note=ok?(en?'A seal has lit up.':'Un sello se ha encendido.'):(en?'A new question awaits; you keep your earned seals.':'El sello propone otra pregunta; conservas tus sellos.');
-  document.querySelector('#guardian-feedback').textContent=`${ok?'Rodrigo':'Luis'}: «${line}» ${note}`;
+  this.reaction={who,line,ok};this.hideVoices();this.panel.hidden=true;
+  const note=ok?(this.solved?(en?'The three seals are lit. The gate opens.':'Los tres sellos están encendidos. La puerta se abre.'):(en?'A seal has lit up.':'Un sello se ha encendido.')):(en?'A new question awaits; you keep your earned seals.':'El sello propone otra pregunta; conservas tus sellos.');
+  document.querySelector('#guardian-reply-speaker').textContent=ok?(en?'Rodrigo · Guardian of the scroll':'Rodrigo · Guardián del pergamino'):(en?'Luis · Guardian of the book':'Luis · Guardián del libro');
+  document.querySelector('#guardian-reply-line').textContent=line;
+  document.querySelector('#guardian-reply-note').textContent=note;
+  document.querySelector('#guardian-reply-next').textContent=this.solved?(en?'Go ahead':'Adelante'):(en?'Continue':'Continuar');
+  this.replyPanel.dataset.result=ok?'correct':'incorrect';this.replyPanel.hidden=false;
+  document.querySelector('#guardian-feedback').textContent='';
+  document.querySelector('#guardian-reply-next').focus({preventScroll:true});
+ }
+ dismissReply(){
+  if(!this.reaction)return;this.reaction=null;this.replyPanel.hidden=true;
+  if(this.solved){document.querySelector('#game').focus({preventScroll:true});return;}
+  this.pendingNext=false;this.panel.hidden=false;this.renderQuestion();document.querySelector('#guardian-fields input')?.focus({preventScroll:true});
  }
  static check(q,values){if(q.choices)return values.choice===q.answer;return q.fields.every(([id,,answer])=>typeof values[id]==='number'&&Number.isFinite(values[id])&&Math.abs(values[id]-answer)<=Math.max(.02,Math.abs(answer)*.01));}
  submit(){
@@ -142,7 +155,7 @@ window.GardenGuardian=class {
  }
  updateAid(){document.querySelector('#guardian-palma').hidden=this.pendingNext||!this.canPalma?.();}
  hideVoices(){for(const who of ['book','rodrigo']){const e=document.querySelector('#guardian-voice-'+who);if(e)e.hidden=true;}}
- close(){this.reaction=null;this.hideVoices();if(!this.panel.hidden){this.panel.hidden=true;document.querySelector('#game').focus({preventScroll:true});}}
+ close(){this.reaction=null;if(this.replyPanel.contains(document.activeElement))document.querySelector("#game").focus({preventScroll:true});this.replyPanel.hidden=true;this.hideVoices();if(!this.panel.hidden){this.panel.hidden=true;document.querySelector('#game').focus({preventScroll:true});}}
  snapshot(){return {version:5,conceptVariants:[...this.conceptVariants],questionBags:this.questionBags.map(b=>[...b]),voiceOrder:[...this.voiceOrder],arrived:this.arrived,solved:this.solved,stage:this.stage,truthful:this.truthful,calculationId:this.calculationId,draft:{...this.draft},gateProgress:this.gateProgress};}
  restore(data){
   if(typeof data?.arrived!=='boolean'||typeof data.solved!=='boolean')throw Error('Invalid guardian checkpoint');
@@ -190,7 +203,7 @@ window.GardenGuardian=class {
   for(const p of props)if(p.image.width&&p.image.complete!==false){if(p.plinth)this.drawPlinth(r,player,actors,p);WorldBillboard(r,player,actors,p.image,p.x,p.y,p.z||0,p.w,p.h);}
   const c=r.ctx;for(let i=0;i<7;i++){const a=i*.89,t=(time*.00045+i*.17)%1,p=actors.project(r,player,56+Math.cos(a)*.5,4.5+Math.sin(a)*.5,1.05+.25*Math.sin(t*Math.PI));if(!p||p.depth<.1||p.depth>(r.depths[Math.floor(p.x/3)*3]??Infinity)+.05)continue;c.fillStyle='#b9f8ee';c.globalAlpha=.35+.4*Math.sin(t*Math.PI);c.fillRect(p.x,p.y,Math.max(1,p.scale*.015),Math.max(2,p.scale*.035));}c.globalAlpha=1;
   // Projected UI remains anchored to each statue; responsive bounds prevent clipping.
-  for(const [who,pos] of [['book',GUARDIAN_GARDEN.statue],['rodrigo',GUARDIAN_GARDEN.rodrigo]]){const e=document.querySelector('#guardian-voice-'+who),p=actors.project(r,player,pos.x,pos.y,3.61);if((this.panel.hidden&&!this.reaction)||(this.reaction?.solo&&this.reaction.who!==who)||!p||p.depth<.1){e.hidden=true;continue;}e.hidden=false;const view=r.canvas.getBoundingClientRect(),vw=r.canvas.clientWidth,vh=r.canvas.clientHeight,ew=e.offsetWidth,eh=e.offsetHeight;const px=p.x/r.canvas.width*vw,py=p.y/r.canvas.height*vh;const minX=who==='book'?8:vw/2+4,maxX=who==='book'?vw/2-ew-4:vw-ew-8;e.style.left=Math.max(minX,Math.min(maxX,px-ew/2))+'px';e.style.top=Math.max(8,Math.min(vh*.40-eh,py-eh-12))+'px';e.style.setProperty('--tail',Math.max(12,Math.min(ew-12,px-parseFloat(e.style.left)))+'px');}
+  for(const [who,pos] of [['book',GUARDIAN_GARDEN.statue],['rodrigo',GUARDIAN_GARDEN.rodrigo]]){const e=document.querySelector('#guardian-voice-'+who),p=actors.project(r,player,pos.x,pos.y,3.61);if(this.panel.hidden||this.reaction||!p||p.depth<.1){e.hidden=true;continue;}e.hidden=false;const view=r.canvas.getBoundingClientRect(),vw=r.canvas.clientWidth,vh=r.canvas.clientHeight,ew=e.offsetWidth,eh=e.offsetHeight;const px=p.x/r.canvas.width*vw,py=p.y/r.canvas.height*vh;const minX=who==='book'?8:vw/2+4,maxX=who==='book'?vw/2-ew-4:vw-ew-8;e.style.left=Math.max(minX,Math.min(maxX,px-ew/2))+'px';e.style.top=Math.max(8,Math.min(vh*.40-eh,py-eh-12))+'px';e.style.setProperty('--tail',Math.max(12,Math.min(ew-12,px-parseFloat(e.style.left)))+'px');}
   const t=GUARDIAN_GARDEN.tile;
   for(let i=0;i<3;i++){const p=actors.project(r,player,t.x-.4+i*.4,t.y,.025);if(!p||p.depth<.1)continue;c.fillStyle=i<this.stage?'#ffdc7d':'#323b46';c.beginPath();c.arc(p.x,p.y,Math.max(2,p.scale*.07),0,7);c.fill();}
   if(this.arrived&&!this.onTile&&!this.solved){const p=actors.project(r,player,t.x,t.y,.25);if(p&&p.depth>.5&&p.depth<12){c.save();c.textAlign='center';c.font='16px Georgia';c.fillStyle='#102030d9';c.fillRect(p.x-160,p.y-28,320,35);c.fillStyle='#ffe2a4';c.fillText(I18n.t('Pisa la baldosa · Escucha a los guardianes'),p.x,p.y-5,300);c.restore();}}

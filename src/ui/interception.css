@@ -10,3 +10,7 @@
 @media(max-width:600px){#rocket-console{width:calc(100% - 16px);max-height:calc(100% - 48px);left:50%;top:8px}.intercept-workspace{grid-template-columns:1fr;gap:12px}#intercept-canvas{height:240px}#intercept-sliders{grid-template-columns:1fr 1fr;gap:12px}#intercept-sliders label{grid-template-columns:1fr}#intercept-sliders output{grid-row:2}.intercept-equations{grid-template-columns:1fr}.intercept-map-top{font-size:10px}#rocket-console h2{font-size:23px}#rocket-console .intercept-intro{font-size:14px}}
 
 #intercept-clock.urgent{color:#ffad8f;font-weight:bold}
+
+#intercept-headstart{color:#ffe2a6;font-size:16px;line-height:1.4;margin:6px 0 12px;font-variant-numeric:tabular-nums}
+#eric-headstart{position:absolute;left:50%;top:48px;transform:translateX(-50%);z-index:5;max-width:calc(100% - 24px);box-sizing:border-box;padding:9px 14px;border:1px solid #bfa56b;border-radius:6px;background:#132733dd;color:#ffe5af;text-align:center;font-size:16px;font-variant-numeric:tabular-nums;pointer-events:none}
+#eric-headstart[hidden]{display:none}@media(max-width:600px){#eric-headstart{width:calc(100% - 24px);font-size:13px}#intercept-headstart{font-size:14px}}

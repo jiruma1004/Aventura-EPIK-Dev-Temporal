@@ -73,7 +73,7 @@ function load(i,reason='transition'){
  if(classroom)classroom.session.interrupt('room_reload');
  if(reason==='preview')classroom.session.preview=true;
 const gardenState=index===i&&reason==='transition'?corridor?.guardian.snapshot():null;corridor?.guardian.close();
-if(arrival.active)arrival.finish();cinematics.close();measurement.reset(rooms[i]);ignitia.reset(rooms[i]);document.querySelector('.scene-view').classList.toggle('has-rocket',!!rooms[i].rocket);document.querySelector('.scene-view').classList.toggle('has-measurement',!!rooms[i].measurement);Sound.stop('laugh');boss?.supernova.reset();boss?.close();for(const id of ['boss-mission','boss-panel'])if(document.getElementById(id))document.getElementById(id).hidden=true;document.querySelector('#eric-ready').close();clearDeath();Sound.selectBackground(rooms[i].trial?'grassland':rooms[i].roulette?'seal':rooms[i].conceptual?'maze':rooms[i].corridor?'corridor':rooms[i].boss?'stand':rooms[i].rocket?'phase':'music');Sound.recover(true);index=i;player=spawnPlayer(rooms[i]);opened=false;advancePrompt.update({opened:false,maze:null,playing:false});completed=false;keys.clear();flash=0;const room=rooms[i];cinematics.assets.prepare(room);document.querySelector('#fire-shortcut').hidden=!!(room.rocket||room.measurement||room.trial);document.querySelector('#station-fire').disabled=!!(room.rocket||room.measurement||room.trial);
+if(arrival.active)arrival.finish();cinematics.close();measurement.reset(rooms[i]);ignitia.reset(rooms[i],{preservePursuit:reason==='transition'&&!!rooms[index]?.boss&&!!rooms[i].rocket});document.querySelector('.scene-view').classList.toggle('has-rocket',!!rooms[i].rocket);document.querySelector('.scene-view').classList.toggle('has-measurement',!!rooms[i].measurement);Sound.stop('laugh');boss?.supernova.reset();boss?.close();for(const id of ['boss-mission','boss-panel'])if(document.getElementById(id))document.getElementById(id).hidden=true;document.querySelector('#eric-ready').close();clearDeath();Sound.selectBackground(rooms[i].trial?'grassland':rooms[i].roulette?'seal':rooms[i].conceptual?'maze':rooms[i].corridor?'corridor':rooms[i].boss?'stand':rooms[i].rocket?'phase':'music');Sound.recover(true);index=i;player=spawnPlayer(rooms[i]);opened=false;advancePrompt.update({opened:false,maze:null,playing:false});completed=false;keys.clear();flash=0;const room=rooms[i];cinematics.assets.prepare(room);document.querySelector('#fire-shortcut').hidden=!!(room.rocket||room.measurement||room.trial);document.querySelector('#station-fire').disabled=!!(room.rocket||room.measurement||room.trial);
  document.querySelector('#room-title').textContent=`UMBRAL ${room.label||['I','II','III','IV','V','VI'][i]} / ${room.name.toUpperCase()}`;
  document.querySelector('#door-status').textContent=room.trial?'SALTO 1 / 5':room.measurement?'SELLO DE MEDICIÓN':room.physics?'PUENTE DESACTIVADO':room.roulette?'SELLO CERRADO':room.conceptual?'LABERINTO · 1 / 4':room.corridor?'CAMINO A LA SALA PRINCIPAL':'PUERTA BLOQUEADA';
  message.textContent=room.trial?'Lee la afirmación y salta a Verdadero o Falso. Shift corre · Espacio salta. Cada acierto guarda tu avance.':room.measurement?'Mide la abertura de la puerta real. Acércate y pulsa E para examinar las reglas.':room.physics?'Mira el cañón y pulsa E o haz clic para preparar tu disparo.':room.roulette?'Gira la rueda. Responde interactuando con el sello de la puerta.':room.conceptual?'Explora las puertas: clic o E cerca de ellas. Las puertas equivocadas esconden portales al calabozo.':room.corridor?'Esquiva los símbolos. En el tramo central, salta entre las plataformas sobre la lava. Shift corre · Espacio salta.':room.boss?'Calcula los dos puntos de corte y programa los láseres laterales.':'Acércate a la puerta y ábrela con clic o E.';
@@ -188,7 +188,7 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape'){corridor?.guardian.cl
 document.querySelector('#station-fire').onclick=()=>shoot();
 document.querySelector('#jump').onclick=()=>{jump();canvas.focus({preventScroll:true});};
 // Input panels own touch gestures; nonblocking guide dialogue keeps movement available.
-const touchPanels=['#guardian-panel','#answer-console','#boss-panel','#rocket-console','#extra-help-panel'];
+const touchPanels=['#guardian-panel','#guardian-reply','#answer-console','#boss-panel','#rocket-console','#extra-help-panel'];
 const canTouchPlay=()=>canPlay()&&!cannon.isOpen&&!touchPanels.some(id=>{const p=document.querySelector(id);return p&&!p.hidden;});
 touch=new TouchControls(canvas,{canUse:canTouchPlay,jump,interact,releaseCamera:()=>camera.release()});
 controlTutorial=new ControlTutorial({isTouch:()=>touch.enabled,onDone:({saved})=>beginFirstChallenge(saved)});
@@ -231,6 +231,7 @@ document.querySelector('#death-dialog').addEventListener('cancel',e=>{e.preventD
 companions.canHelp=()=>canPlay();
 window.addEventListener('astralia:help-open',()=>{classroom.session.event('normal_help',classroom.context());if(rooms[index].rocket){ignitia.speaking=false;document.querySelector('#ignitia-dialog').hidden=true;ignitia.closeConsole();}});
 ignitia.canLaunch=()=>canPlay()&&ignitia.near(player);
+ignitia.canPursue=()=>mission.state==='running'&&!death&&!cinematics.active;
 ignitia.simulator.canAdvance=()=>mission.state==='running'&&!death&&rooms[index].rocket&&ignitia.mode==='idle'&&!cinematics.active;
 measurement.canSubmit=()=>mission.state==='running'&&!death&&rooms[index].measurement&&measurement.near(player);
 function tick(time){const simulationActive=ignitia.simulator.running&&ignitia.simulator.canAdvance();classroom.tick(Math.min((time-last)/1000,.04),mission.state==='running'&&(canPlay()||simulationActive||!!trial?.zipline?.active)&&!document.hidden&&mission.pausedAt===null);const dt=Math.min((time-last)/1000,.04);last=time;flash=Math.max(0,flash-dt);Sound.mix(dt);prologue.tick(dt);arrival.tick(dt,player);mission.tick();ignitia.tick(dt);
@@ -279,7 +280,7 @@ function captureRecovery() {
  if(room.roulette)world.roulette={current:roulette.current?.id,selected:roulette.selected,remaining:roulette.remaining,solved:[...roulette.solved],angle:roulette.angle};
  if(maze)world.maze={...pick(maze,mazeRecoveryFields),map:room.map,environment:room.environment,doors:maze.doors,
   passed:[...maze.passed],openDoors:[...maze.openDoors],usedFreezeButtons:[...maze.usedFreezeButtons]};
- if(boss)world.boss={support:boss.puzzle.support.id,cuts:boss.puzzle.cuts,stun:boss.stun.snapshot()};
+ if(boss)world.boss={support:boss.puzzle.support.id,cuts:boss.puzzle.cuts,stun:boss.stun.snapshot(),escapeTime:ignitia.ignited?ignitia.simulator.missionTime:null};
  if(room.rocket)world.rocket={...pick(ignitia.simulator,['params','missionTime','attempts','launchEpoch','ready']),ending:classroom.session.finished!==null};
  return {world,session:classroom.session.recoverySnapshot(),remaining:mission.remaining,
   clockComplete:mission.state==='complete',language:I18n.lang};
@@ -331,7 +332,7 @@ function restoreRecovery(saved,away) {
   document.querySelector('#boss-line').textContent='y = '+support.lineText;
   document.querySelector('#boss-equality').textContent=support.parabolaText+' = '+support.lineText;
   document.querySelector('#boss-progress').textContent=w.boss.cuts.filter(Boolean).length+' / 2 cortes';
-  if(boss.puzzle.solved){boss.fall=2;opened=true;}
+  if(boss.puzzle.solved){boss.fall=2;opened=true;ignitia.ignited=true;ignitia.simulator.missionTime=Math.min(InterceptionPhysics.moonTime,Math.max(0,Number.isFinite(w.boss.escapeTime)?w.boss.escapeTime:0)+away/1000);}
  }
  if(rooms[i].rocket&&w.rocket){
   Object.assign(ignitia.simulator,pick(w.rocket,['params','missionTime','attempts','launchEpoch','ready']));

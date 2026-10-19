@@ -25,7 +25,7 @@ window.InterceptionConsole = class {
   this.panel=panel;this.ericArt=ericArt;this.rocketArt=rocketArt;this.onReady=onReady;
   panel.innerHTML=`<button id="rocket-close" class="bubble-fold" aria-label="Cerrar panel">×</button>
    <header><p class="eyebrow">IGNITIA · RUMBO A LA LUNA</p><h2>A por Eric</h2><p class="intercept-intro">Eric no piensa esperarnos. Alcanza su cohete antes de que llegue a la Luna.</p></header>
-   <div class="intercept-workspace"><div class="intercept-map">
+   <p id="intercept-headstart" data-no-translate aria-live="off"></p><div class="intercept-workspace"><div class="intercept-map">
     <div class="intercept-map-top"><span>RADAR · EN DIRECTO</span><output id="intercept-clock" aria-label="Tiempo hasta la llegada lunar" aria-live="off">${Math.ceil(InterceptionPhysics.moonTime)} s</output></div>
     <canvas id="intercept-canvas" width="1000" height="480" aria-label="Trayectorias de Ignitia y Eric. Arrastra el punto verde para ajustar rapidez y ángulo; también puedes usar los controles deslizantes."></canvas>
     <div class="intercept-legend"><span class="ours-key">Ignitia</span><span class="eric-key">Eric</span><span class="future-key">Posición prevista al encuentro</span></div>
@@ -106,7 +106,9 @@ window.InterceptionConsole = class {
  point(e){const r=this.canvas.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};}
  project(p){const b=this.bounds;return {x:48+p.x/b.x*(this.width-70),y:this.height-32-p.y/b.y*(this.height-57)};}
  unproject(p){return {x:(p.x-48)/(this.width-70)*this.bounds.x,y:(this.height-32-p.y)/(this.height-57)*this.bounds.y};}
+ pursuitLabel(){const t=Math.max(0,this.missionTime||0),clock=String(Math.floor(t/60)).padStart(2,'0')+':'+String(Math.floor(t%60)).padStart(2,'0'),distance=(t*InterceptionPhysics.ericSpeed).toFixed(1);return I18n.lang==='en'?`Since Eric escaped: ${clock} · Advanced ${distance} km`:`Desde la fuga de Eric: ${clock} · Ha avanzado ${distance} km`;}
  draw(){
+  const headstart=this.panel.querySelector('#intercept-headstart'),label=this.pursuitLabel();if(headstart.textContent!==label)headstart.textContent=label;
   if(this.panel.hidden)return;const r=this.canvas.getBoundingClientRect();if(r.width<1)return;
   this.width=r.width;this.height=r.height;const dpr=Math.min(2,window.devicePixelRatio||1),w=Math.round(r.width*dpr),h=Math.round(r.height*dpr);
   if(this.canvas.width!==w||this.canvas.height!==h){this.canvas.width=w;this.canvas.height=h;}

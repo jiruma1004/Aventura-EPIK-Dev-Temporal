@@ -12,3 +12,8 @@
 @media(max-width:600px){#guardian-panel{bottom:8px;width:calc(100% - 16px);padding:10px 12px;max-height:58%}#guardian-panel h2{font-size:18px}#guardian-question{font-size:13px}.guardian-voice{width:45%;padding:7px 8px;font-size:15px;line-height:1.35}.guardian-voice strong{font-size:12px}#guardian-rule{font-size:11px}}
 
 @media(max-width:600px){#guardian-fields.choices:not(.calculation){grid-template-columns:1fr}#guardian-fields.choices label{min-height:42px}#guardian-panel .guardian-help button{padding:6px}}
+
+/* A separate RPG dialogue keeps reactions apart from the next puzzle. */
+#guardian-reply{position:absolute;box-sizing:border-box;left:50%;bottom:24px;transform:translateX(-50%);width:min(680px,calc(100% - 24px));max-height:70%;overflow:auto;z-index:22;padding:20px 24px;border:2px solid #d3bd87;border-radius:7px;background:linear-gradient(130deg,#172939ed,#101c2af2);box-shadow:0 0 0 3px #192135,0 12px 32px #0008;color:#fff2d9;font-family:var(--adventure-lettering,Georgia,serif)}
+#guardian-reply[hidden]{display:none}#guardian-reply-speaker{font-size:15px;color:#ecd49b;margin:0 0 10px}#guardian-reply-line{font-size:23px;line-height:1.45;margin:0 0 12px}#guardian-reply-note{font-size:14px;line-height:1.4;color:#c5d2da;margin:0 0 12px}#guardian-reply-next{float:right;border:1px solid #b7c8d6;background:#294253;color:#fff3d5;padding:8px 20px}#guardian-reply[data-result=correct]{border-color:#c1b1db}
+@media(max-width:600px){#guardian-reply{bottom:16px;padding:16px}#guardian-reply-line{font-size:19px}}

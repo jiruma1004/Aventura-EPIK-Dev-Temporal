@@ -1,0 +1,28 @@
+/* Classroom layout. Keep the world, controls and inputs in the same viewport. */
+body>header{padding:8px 16px;min-height:0;justify-content:center;border:0}body>header .brand{font-size:22px;margin:0}main{max-width:none;padding:0 12px 12px}.layout{display:block;margin:0}.viewport{width:100%}.topbar{padding:8px 12px}.controls{position:relative;display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;padding:7px 10px;font-size:13px;z-index:42}.controls>span{font-size:12px}.controls button,.controls summary{font-size:13px;padding:7px 10px}.controls .audio-controls{margin-left:auto;position:relative;z-index:50;display:flex}.controls .language-corner{position:static;display:block;transform:none;margin:0}.controls .mixer{z-index:60;top:calc(100% + 4px);max-height:72vh;overflow:auto}.scene-view{height:calc(100dvh - 170px);min-height:400px;max-height:none;aspect-ratio:auto}.scene-view #game{height:100%;width:100%;display:block}.scene-layout{display:block}#extra-help{color:#ffe2a2;border-color:#d7bc6d}#extra-help-panel{left:12px;right:auto;top:12px;bottom:auto;width:min(410px,calc(100% - 24px));max-height:72%;overflow:auto;z-index:34}#extra-help-answer{white-space:pre-wrap;font:inherit;line-height:1.5}#extra-help-copy{line-height:1.45}#certificate-results{font-size:15px!important;font-weight:bold}#certificate-csv{font-size:15px;padding:8px 14px}#ceremony-certificate{overflow:auto}#solution-details{display:none!important}
+@media(max-width:750px){.controls{gap:6px}.controls>span{display:none}.controls .audio-controls{margin-left:0}.scene-view{height:calc(100dvh - 185px);min-height:360px}body>header .brand{font-size:18px}.controls .language-corner button{font-size:12px}.controls .audio-controls label{display:block}.controls .audio-controls .mixer label{display:block}}
+
+/* A visible single-click penalty, restricted to calculation challenges. */
+/* The mascot belongs exclusively to the help button; the penalty stays readable. */
+.controls #extra-help{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:5px 15px 5px 8px;min-width:190px;background:linear-gradient(#bf393b,#821d29);color:#fff5df;border:3px solid #d5ad60;border-radius:8px;box-shadow:inset 0 0 0 2px #713b28,inset 0 3px 0 #f9d38855,0 3px 0 #4b231c,0 0 12px #df394933;font-size:22px;line-height:1.15;text-shadow:0 2px 1px #451520}
+#extra-help img{display:block;flex:0 0 52px;width:52px;height:52px;object-fit:contain;image-rendering:pixelated;pointer-events:none}
+#extra-help b,#extra-help small{display:block}
+#extra-help b{white-space:nowrap}
+#extra-help small{font:12px/1.5 sans-serif;color:#fff2cc}
+.controls #extra-help:hover{background:linear-gradient(#db4d4c,#a42a36);border-color:#ffe09b}
+#extra-help:focus-visible{outline:3px solid #ffdf72;outline-offset:3px}
+.controls #extra-help:active{transform:translateY(1px)}
+#extra-help-panel{box-sizing:border-box;left:auto;right:12px;top:auto;bottom:16px;width:min(400px,calc(100% - 24px));height:auto;min-width:min(240px,calc(100% - 24px));min-height:170px;max-width:calc(100% - 16px);max-height:65%;resize:both;padding:12px 16px;border:2px solid #f4a18a;background:linear-gradient(135deg,#492535f7,#211d35fa)}
+#extra-help-handle{display:block;min-height:0;position:sticky;top:-12px;z-index:1;margin:-12px -16px 10px;padding:12px 44px 10px 16px;background:#4b2439;cursor:move;touch-action:none;user-select:none;border-bottom:1px solid #d89081}
+#extra-help-handle strong,#extra-help-handle small{display:block}#extra-help-handle strong{font-size:19px;color:#ffe2ba}#extra-help-handle small{font:11px/1.6 sans-serif;color:#e6c7d0}#extra-help-close{z-index:2}#extra-help-copy{font-size:12px;color:#ffd49e}#extra-help-answer{font-size:17px}#certificate-results:empty{display:none}
+
+#story-name-box{display:grid;gap:8px;margin:12px 0;text-align:left}
+#story-name-box input{box-sizing:border-box;width:100%;padding:10px 12px;font:inherit;border:1px solid #d5ad60;border-radius:6px;background:#101c35;color:#fff}
+#story-name-box small{font:13px/1.4 sans-serif;color:#d5dcef}
+#ceremony-certificate #certificate-student{font-size:clamp(21px,4vw,30px);font-weight:bold;overflow-wrap:anywhere;color:#183456;margin:10px 0}
+#certificate-student:empty{display:none}
+#recovery-dialog{max-width:520px;width:calc(100% - 48px);box-sizing:border-box;border:2px solid #d5ad60;border-radius:12px;background:linear-gradient(135deg,#152e55,#15172c);color:#fff4df;padding:24px}
+#recovery-dialog::backdrop{background:#050c1ccc}
+#recovery-dialog p{line-height:1.5}
+.recovery-actions{display:flex;gap:12px;flex-wrap:wrap}
+#recovery-status{color:#ffda84}

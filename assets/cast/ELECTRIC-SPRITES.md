@@ -1,0 +1,11 @@
+# Sprites eléctricos — 17 octubre 2026
+
+Generados con imagegen integrado (no CLI). Fuentes originales en ../eric-electricity-2026-10-17/source respecto a la raíz del juego. Normalización reproducible: scripts/build-electric-sprites.cjs.
+
+## Eric
+
+Use case: identity-preserve. Asset type: transparent RPG sprite sheet for Aventura EPIK. Use the supplied reference only for Dr Eric's identity and established pixel/anime RPG style: stocky adult male villain, orange-brown swept hair, rectangular black glasses, white long coat with gold embroidery, navy waistcoat and trousers, black boots, green potion at belt. Create FOUR new full-body electric-stun animation poses arranged in an exact 2 by 2 grid, one complete separate figure centered inside each equal cell with generous transparent margins and identical scale/baseline. Top left: startled, elbows bent outward, clenched hands, teeth gritted. Top right: stiff recoiling posture, hair slightly bristled, eyes squeezed shut. Bottom left: trembling, angry shocked expression and raised shoulders. Bottom right: recovering but still rigid, annoyed open eyes. Small cyan-white electrical arcs hugging each body, non-gory comedic electrocution, no skeleton exposure. Feet fully visible, consistent proportions and clothes. True transparent background, no shadows extending outside cells, NO labels, NO scenery, NO neighboring fragments. Fine crisp pixel-art edges matching the reference. Do not include the reference's original poses.
+
+## Chispa
+
+Use case: stylized-concept. Asset type: transparent 2x2 animation sprite sheet of a collectible magical electrical spark for a medieval science RPG. Four frames of the SAME small cyan-white electrical mote, bright diamond-shaped core with jagged turquoise and pale gold lightning wisps. Top left compact charging, top right stretching with two arcs, bottom left full radiant pulse, bottom right contracting. Crisp detailed pixel art, not vector, readable when reduced to 64px. Exact 2 by 2 grid, each spark centered in its own equal square, generous transparent padding, no cell borders, no text, no character, no scenery. True transparent background. Each mote should occupy about half the cell, with all tiny disconnected spark flecks staying inside its own cell.

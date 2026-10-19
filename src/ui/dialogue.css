@@ -1,0 +1,22 @@
+/* Retratos animados y globos de ayuda. El texto permanece como HTML legible. */
+#game{cursor:crosshair}
+#ask-paola.paola-bubble{position:absolute;left:17px;bottom:28px;z-index:5;border:1px solid #c9b4ec;border-radius:17px 17px 17px 3px;background:linear-gradient(135deg,#4c3967ed,#262643ed);color:#f5eaff;padding:9px 17px;box-shadow:0 5px 22px #07051680;text-align:left;font-size:15px;line-height:1.1}
+.paola-bubble>span{font-size:25px;letter-spacing:2px;vertical-align:middle;margin-right:6px}.paola-bubble small{display:block;color:#cbb9df;font-size:11px;margin-top:4px;margin-left:34px}
+.paola-dialog{left:17px;bottom:95px;width:calc(100% - 34px);max-width:650px;align-items:flex-start;gap:19px;border:2px solid #cabbdf;border-radius:8px;background:#141a2bf7;padding:20px 34px 18px 16px;max-height:70%;overflow:auto;box-shadow:0 0 0 4px #171b30,0 12px 28px #0008}
+#paola-portrait{width:120px;height:120px;flex:none;image-rendering:pixelated;background:#3a304938;border-radius:5px;border:1px solid #7e739555}
+.paola-words{min-width:0;flex:1}.paola-dialog #paola-text{min-height:80px;font-size:17px;line-height:1.55;color:#f1e9dc;white-space:pre-wrap;margin:10px 0;cursor:pointer}.paola-dialog .eyebrow{color:#d9baf4;letter-spacing:1.4px;font-size:11px;margin:0}.paola-dialog #paola-skip{font-size:12px;border:0;background:transparent;color:#aab7d5;padding:5px 0;box-shadow:none}
+#camera-hint{position:absolute;bottom:5px;right:15px;color:#c4d0e5;font-size:10px;background:#152238c9;padding:3px 7px;border-radius:4px;pointer-events:none}
+.world-toast{bottom:113px}
+.interaction-hint{position:absolute;left:50%;bottom:33px;transform:translateX(-50%);max-width:56%;z-index:3;background:#15273de8;border:1px solid #acb9c961;border-radius:9px;padding:7px 12px;margin:0;color:#eeddbb;font-size:13px;text-align:center;pointer-events:none}
+#death-dialog{background:radial-gradient(ellipse at top,#482e49,#171c32 65%);border-color:#c29aab}#death-kind{color:#f6b0bd;letter-spacing:2px}#death-dialog #respawn{font-size:15px}
+@media(max-width:750px){
+ .scene-view:has(#paola-dialog:not([hidden])) #game{min-height:510px;aspect-ratio:auto}.world-console{bottom:100px}
+ #ask-paola.paola-bubble{left:10px;bottom:30px;padding:8px 12px;font-size:13px}.paola-bubble small{font-size:10px;margin-left:0}.paola-bubble>span{font-size:20px}
+ .paola-dialog{left:10px;bottom:111px;width:calc(100% - 20px);max-height:65%;padding:15px 26px 12px 10px;gap:10px;flex-wrap:wrap}#paola-portrait{width:82px;height:82px}.paola-words{flex-basis:170px}.paola-dialog #paola-text{font-size:15px;line-height:1.45}.paola-dialog .eyebrow{font-size:10px}
+ .interaction-hint{left:auto;right:10px;bottom:31px;transform:none;max-width:51%;font-size:11px;padding:8px}#camera-hint{font-size:9px;right:7px;bottom:3px}
+}
+@media(pointer:coarse){#camera-hint{display:none}}
+
+/* The guide button uses the same shoulder-up portrait as the help window. */
+#ask-paola #helper-face{width:42px;height:42px;float:left;margin-right:9px;image-rendering:pixelated;border-radius:50%;background:#17213f;}
+#ask-paola small{margin-left:51px;}

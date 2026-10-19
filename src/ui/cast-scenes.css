@@ -1,0 +1,3 @@
+#cast-radio{position:absolute;left:4%;bottom:5%;width:min(670px,92%);display:flex;gap:12px;align-items:center;padding:10px 15px;border:1px solid #c0ad79;border-radius:4px;background:linear-gradient(130deg,#26333ef5,#101a27f5);box-shadow:0 6px 22px #0006;pointer-events:none;color:#f0e6cf}
+#cast-radio[hidden]{display:none}#cast-radio canvas{width:86px;height:86px;flex:none;image-rendering:pixelated}#cast-radio strong{font:20px Georgia,serif;color:#ebce90}#cast-radio p{font:18px/1.35 var(--rpg-font,Georgia);margin:5px 0;min-height:2.7em}#cinema-caption.cast-radio-active{visibility:hidden}
+@media(max-width:600px){#cast-radio{bottom:3%;gap:7px;padding:8px}#cast-radio canvas{width:58px;height:58px}#cast-radio strong{font-size:17px}#cast-radio p{font-size:15px}}

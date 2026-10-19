@@ -1,0 +1,7 @@
+#measurement-panel{inset:12px;width:auto;max-height:calc(100% - 24px);transform:none;padding:22px;overflow:auto;z-index:18;background:linear-gradient(130deg,#142544fa,#15162bfc)}
+#measurement-panel h2{margin:4px 0 12px;font-size:28px}#measurement-panel p{font-size:17px;line-height:1.55}#measurement-panel summary{cursor:pointer;font-size:19px;color:#f2d391;padding:10px 0}
+.measurement-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(250px,1fr);gap:26px}.measurement-layout svg{width:100%;height:auto;display:block}#measurement-door{max-width:410px;margin:auto}.measurement-rulers{display:grid;grid-template-columns:1fr 1.8fr;gap:12px;align-items:center}
+#measurement-form{display:grid;gap:12px;margin-top:16px}#measurement-form label{font-size:17px}#measurement-form input{display:block;width:100%;font:22px sans-serif;color:#fff;background:#09182e;border:1px solid #9cb2d4;border-radius:5px;padding:10px;margin-top:5px}#measurement-feedback{color:#f5ce8a}#measurement-return{margin-top:8px}
+@media(max-width:700px){.measurement-layout{grid-template-columns:1fr}#measurement-panel{padding:16px}#measurement-door{max-width:270px}}
+.measurement-rulers{display:block}.measurement-rulers>div:first-child{max-width:280px;margin:12px auto}.measurement-rulers>div:last-child{margin:16px 0}
+.scene-view.has-measurement #game{height:760px;aspect-ratio:auto}

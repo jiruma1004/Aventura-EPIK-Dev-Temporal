@@ -1,0 +1,9 @@
+html:fullscreen,html.expanded-game{overflow:hidden;background:#080e20}
+:is(html:fullscreen,html.expanded-game) .viewport{position:fixed;inset:0;z-index:16;width:100%;height:100dvh;margin:0;border:0;border-radius:0;display:flex;flex-direction:column;background:#080e20;overflow:hidden}
+:is(html:fullscreen,html.expanded-game) .viewport>.topbar,:is(html:fullscreen,html.expanded-game) .viewport>.controls,:is(html:fullscreen,html.expanded-game) .viewport>.touch{flex-shrink:0}
+:is(html:fullscreen,html.expanded-game) .scene-layout{display:block;flex:1;min-height:0;height:auto;overflow:hidden}
+:is(html:fullscreen,html.expanded-game) .scene-view{height:100%;width:100%;min-height:0}
+:is(html:fullscreen,html.expanded-game) #game{display:block;width:100%!important;height:100%!important;min-height:0!important;aspect-ratio:auto!important}
+#fullscreen-toggle{margin-left:auto;white-space:nowrap}
+@media(max-width:750px){:is(html:fullscreen,html.expanded-game) .touch button{font-size:15px;padding:8px 3px;min-width:0}}
+@media(max-width:750px){:is(html:fullscreen,html.expanded-game) .controls>span{display:none}:is(html:fullscreen,html.expanded-game) .controls{padding:6px 10px;gap:6px}:is(html:fullscreen,html.expanded-game) .controls button{padding:7px;font-size:14px}}

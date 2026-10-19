@@ -1,0 +1,182 @@
+/* Menús de aventura: texto cómodo, bordes suaves y espacio para jugar. */
+:root{font-family:"Trebuchet MS","Segoe UI",Arial,sans-serif;font-size:16px;--muted:#b3c2de}
+body{line-height:1.5}
+button,input,select{font:inherit}
+button{border-radius:9px;padding:11px 14px;box-shadow:inset 0 1px 0 #cbdfff17}
+header{min-height:82px}
+.brand{font-size:28px;letter-spacing:4px;font-weight:600}
+.brand span{font-size:11px;letter-spacing:1.3px;font-weight:400}
+main{padding:30px 3vw;max-width:1720px}
+.intro h1{font-size:clamp(30px,3vw,46px);line-height:1.16;letter-spacing:-1.3px;font-weight:500;margin:14px 0}
+.intro h1 em{font-style:normal;color:#c2d8f5}
+.intro:after{font-size:130px;top:-16px;right:12%}
+.intro>p:last-child{font-size:17px;margin-bottom:0}
+.eyebrow{font-size:12px;letter-spacing:1.3px}
+.layout{grid-template-columns:190px minmax(0,1fr);gap:22px;margin-top:30px}
+nav{gap:9px;margin-top:16px}
+nav button{padding:15px 12px;gap:12px}
+nav span{font-size:16px;line-height:1.4}
+nav b{font-family:Georgia,serif;font-size:24px}
+nav small{display:none}
+nav button.active{position:relative;box-shadow:inset 3px 0 0 #e3cea0,0 0 24px #9dc8ff14}
+.viewport{border-radius:15px}
+.topbar{font-size:13px;letter-spacing:.35px;padding:17px 22px;flex-wrap:wrap}
+.scene-layout.has-station{grid-template-columns:minmax(0,1fr) 300px}
+.has-station #game{aspect-ratio:1/1}
+#game{cursor:grab;touch-action:none}
+#game.looking{cursor:grabbing}
+.station{display:block;padding:20px}
+.station .eyebrow{font-size:11px;margin-bottom:5px}
+.station h2{font-size:26px;font-weight:500;letter-spacing:-.5px}
+.station-hint,.bearing{font-size:13px;line-height:1.55}
+.station label{font-size:15px}
+.station select{font-size:14px;padding:8px}
+.sliders{gap:15px;margin:18px 0}
+.sliders input{height:20px;margin-top:6px}
+.numeric-settings input[type=number]{height:44px;padding:9px 12px;border:1px solid #869abd;border-radius:7px;background:#0e1b32;color:#ecf2ff;font-size:18px}
+.numeric-settings input:invalid:not(:placeholder-shown){border-color:#e8b279}
+.calculation-hint,#input-feedback{font-size:13px;line-height:1.5;color:#bcd0e8}
+.calculation-hint{border-left:2px solid #d8c395;padding-left:12px}
+.ammo-shelf{margin-top:18px;padding-top:12px}
+.ammo b{font-size:11px}
+.ammo small{font-size:13px}
+.orb{width:30px;height:30px}
+.load-ammo,#station-fire{font-size:16px}
+#loaded-status,#mass-readout,.station #energy-warning{font-size:13px;line-height:1.55}
+.capacity-note{font-size:12px;line-height:1.55}
+.station-guide{margin:8px 0 0;font-size:13px}
+.station-guide summary{padding:4px 0}
+.station-guide p:first-of-type{margin-top:8px}
+.hud{gap:15px;padding:17px 22px}
+.hud>div{display:none}
+.hud>span{font-size:16px}
+.hud button{font-size:15px}
+.viewport:has(.has-station) .hud #fire{display:none}
+.lab{padding:22px}
+.lab-heading .eyebrow{display:none}
+.lab h2{font-size:26px;font-weight:500;line-height:1.25;margin:0}
+.lab p{font-size:16px;line-height:1.7}
+.lab-heading button,#reset-roulette{font-size:13px}
+details{font-size:15px;margin:16px 0}
+summary{padding:8px 0}
+.physics-notebook{border:1px solid #7893b24d;border-radius:10px;padding:8px 16px;background:#0b183355}
+.physics-notebook summary{color:#e0d3b2;font-size:17px}
+.physics-notebook summary span{font-size:13px;color:var(--muted);margin-left:10px}
+.experiment{grid-template-columns:minmax(0,1fr) 240px;margin-top:16px}
+.graph-title,.graph-title label{font-size:13px}
+.readings p{font-size:14px}
+.readings small{font-size:13px}
+.controls{align-items:center;gap:10px 22px;font-size:13px;letter-spacing:0;padding:15px 22px}
+kbd{font:inherit;color:#e0d7bd}
+#jump{font-size:14px;padding:7px 13px;margin-left:auto}
+#trajectory-toggle{font-size:14px;padding:7px 13px;color:#aeefc5}
+.trajectory-hologram{position:absolute;top:18px;left:18px;width:46%;max-width:400px;z-index:2;padding:10px 13px 8px;border:1px solid #82ffb480;border-radius:15px;background:linear-gradient(145deg,#093a2deb,#062c28e8);box-shadow:inset 0 0 24px #54ff9720,0 0 20px #54ff9715;backdrop-filter:blur(5px);color:#caffde;cursor:default}
+.hologram-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.2}
+.hologram-heading strong{font-weight:500;font-size:15px}
+.hologram-heading button{padding:0;width:27px;height:27px;font-size:23px;line-height:1;border:0;background:transparent;box-shadow:none;color:#baffd2}
+.hologram-predict{display:flex;align-items:center;gap:5px;font-size:12px;color:#aeebc5;margin:3px 0 6px}
+.hologram-predict input{accent-color:#74efa1;margin:0}
+#hologram-graph{width:100%;aspect-ratio:13/7}
+#hologram-readout{font-size:12px;line-height:1.4;margin:7px 0 2px;color:#b8edca}
+@media(max-width:750px){
+ .trajectory-hologram{top:10px;left:auto;right:10px;width:48%;padding:6px 8px;border-radius:10px}
+ .hologram-heading strong{font-size:12px}
+ .hologram-heading button{width:23px;height:23px}
+ .hologram-predict,#hologram-readout{font-size:10px;line-height:1.25}
+ #hologram-readout{margin:3px 0}
+ #trajectory-toggle{font-size:13px}
+}
+.touch{justify-content:center;gap:8px}
+.touch button{flex:1;min-width:0;max-width:70px;font-size:20px}
+.audio-controls,.audio-controls summary,.audio-controls button{font-size:14px}
+.mixer p,.audio-controls .mixer .mute{font-size:13px}
+.table-interact{font-size:16px}
+.roulette-panel h3{font-size:27px}
+.badge,#answer-fields label{font-size:14px}
+.source-note{font-size:13px!important}
+footer{font-size:12px;letter-spacing:.5px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.adventure-timer{position:fixed;right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:20;pointer-events:none;min-width:148px;padding:10px 15px;border:1px solid currentColor;border-radius:12px;background:#0a1824f2;box-shadow:0 8px 30px #0006,inset 0 0 20px #85ffa90c;color:#91f6af;text-align:center}
+.adventure-timer>span{display:block;font-size:10px;letter-spacing:1.2px}
+.adventure-timer strong{display:block;font-size:32px;font-weight:500;line-height:1.15;font-variant-numeric:tabular-nums;letter-spacing:1px;text-shadow:0 0 14px currentColor}
+.adventure-timer small{display:block;font-size:11px;margin-top:4px}
+.adventure-timer[data-phase=warning]{color:#ffc078;background:#281c14f2}
+.adventure-timer[data-phase=danger],.adventure-timer[data-phase=expired]{color:#ff9094;background:#2c101bf2}
+.adventure-timer[data-phase=danger]{animation:timer-glow 2s ease-in-out infinite}
+@keyframes timer-glow{50%{box-shadow:0 0 23px #fa506744,inset 0 0 16px #f6526822}}
+.adventure-dialog{width:590px;max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);padding:28px 38px;border-color:#c4ab7c;background:radial-gradient(ellipse at 50% 0,#39424c,#172237 55%,#111b2c);text-align:left}
+.adventure-dialog .castle-sigil{text-align:center;font-size:48px;line-height:1;color:#d9c18f;text-shadow:0 0 24px #d4c8a733}
+.adventure-dialog .eyebrow{text-align:center;font-size:11px;margin:16px 0 8px}
+.adventure-dialog h2{font-size:30px;text-align:center;line-height:1.2;margin:12px 0 22px}
+.adventure-dialog p{font-size:16px;line-height:1.65;color:#c5d2e5}
+.adventure-dialog strong{color:#f0dcaf}
+.adventure-dialog em{font-style:normal;color:#96eeb5}
+.adventure-dialog .adventure-time{border-top:1px solid #c4ab7c44;padding-top:15px;text-align:center;color:#d5e5d9}
+.adventure-time small{font-size:13px;color:#aabdd3}
+.adventure-dialog button{display:block;width:100%;font-size:16px;margin-top:18px}
+@media(max-width:750px){
+ .adventure-timer{right:12px;bottom:12px;min-width:126px;padding:7px 10px}
+ .adventure-timer strong{font-size:26px}
+ .adventure-timer small{font-size:10px}
+ .adventure-dialog{padding:22px}
+ .adventure-dialog h2{font-size:27px;margin-bottom:18px}
+ .adventure-dialog p{font-size:15px}
+ .adventure-dialog .castle-sigil{font-size:36px}
+}
+@media(prefers-reduced-motion:reduce){.adventure-timer[data-phase=danger]{animation:none}}
+@media(min-width:1550px){.has-station #game{aspect-ratio:1/1}}
+@media(max-width:1200px){
+ .layout{grid-template-columns:160px minmax(0,1fr);gap:16px}
+ .scene-layout.has-station{grid-template-columns:1fr}
+ .has-station #game{aspect-ratio:16/10}
+ .station{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;border-left:0;border-top:1px solid #566784}
+ .station>.eyebrow,.station h2,.station-hint{grid-column:1/-1;grid-row:auto}
+ .station>label{grid-column:1;grid-row:4}
+ .station .sliders{grid-column:1;grid-row:5/9}
+ .station-guide{grid-column:1/-1;grid-row:10}
+ .station .ammo-shelf{grid-column:2;grid-row:4/6;margin-top:0}
+ .station .load-ammo{grid-column:2;grid-row:6}
+ .station #loaded-status{grid-column:2;grid-row:7}
+ .station #station-fire{grid-column:2;grid-row:8}
+ .station #mass-readout{grid-column:2;grid-row:9}
+ .station #energy-warning,.station .capacity-note{grid-column:1/-1;grid-row:auto}
+ .experiment{grid-template-columns:1fr}
+ .readings{display:block}
+}
+@media(max-width:750px){
+ header{padding:18px 5vw;flex-wrap:wrap;gap:14px}
+ .brand{font-size:25px}
+ .brand span{font-size:10px}
+ .audio-controls{justify-content:flex-start;gap:8px;width:100%}
+ .audio-controls button,.audio-controls summary{font-size:13px}
+ .mixer{left:0;right:auto}
+ main{padding:24px 5vw}
+ .intro h1{font-size:32px}
+ .intro:after{font-size:90px;right:0}
+ .intro>p:last-child{font-size:16px;max-width:100%}
+ .layout{grid-template-columns:1fr;margin-top:24px}
+ nav{grid-template-columns:repeat(3,minmax(0,1fr));margin:12px 0 4px}
+ nav button{display:block;padding:10px 7px;text-align:center}
+ nav b{display:block;font-size:21px}
+ nav span{font-size:13px}
+ .topbar{font-size:12px;padding:14px}
+ .station{display:block;padding:20px}
+ .station .ammo-shelf{margin-top:18px}
+ .station .ammo b{font-size:13px}
+ .station .sliders{margin:20px 0}
+ .station label{font-size:16px}
+ .ammo-shelf .eyebrow{font-size:12px}
+ .has-station #game{aspect-ratio:4/3}
+ .lab{padding:18px}
+ .lab h2{font-size:23px}
+ .lab-heading button{font-size:12px;padding:9px}
+ .lab p{font-size:16px}
+ .physics-notebook{padding:7px 12px}
+ .physics-notebook summary span{display:block;margin:4px 0 0 20px}
+ .graph-title{flex-wrap:wrap}
+ .hud{padding:16px}
+ .controls{padding:14px;gap:10px 16px}
+ .touch{display:flex}
+ .table-interact{font-size:13px;bottom:13px}
+ footer{font-size:11px}
+}

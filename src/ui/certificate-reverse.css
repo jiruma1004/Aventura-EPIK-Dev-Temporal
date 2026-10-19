@@ -1,0 +1,43 @@
+#certificate-front{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+#certificate-front[hidden],#certificate-back[hidden]{display:none}
+#ceremony-certificate{justify-content:flex-start!important}
+#certificate-front{margin:auto 0}
+.certificate-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;width:100%;padding-top:8px;flex-shrink:0}
+#ceremony-certificate .certificate-actions button{font:15px 'Trebuchet MS',sans-serif;margin:0;padding:9px 12px}
+#certificate-flip{background:#293b58;color:#fff1cd;border:1px solid #a58a54}
+#certificate-back{width:100%;text-align:left}
+#certificate-back h2,#certificate-back>.rank-caption,#certificate-back>.rank-total,#certificate-back>.rank-eyebrow{text-align:center;display:block}
+.rank-eyebrow{font:11px 'Trebuchet MS',sans-serif;letter-spacing:2px;margin:4px 0 8px;color:#69532c}
+#certificate-back .rank-total{font:bold 24px Georgia,serif;color:#79521a;margin:9px 0 4px}
+#certificate-back .rank-caption{font:13px/1.4 'Trebuchet MS',sans-serif;margin-bottom:12px}
+.rank-list{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0;margin:0;list-style:none}
+.rank-card{display:grid;grid-template-columns:1fr auto;gap:4px 8px;padding:11px 12px;background:#fffaf0;border:1px solid #b89b68;border-radius:6px;box-shadow:0 2px 0 #b89b6829;min-width:0}
+.rank-room{grid-column:1/-1;font:12px/1.3 'Trebuchet MS',sans-serif;color:#685333}
+.rank-stars{color:#866020;font-size:21px;letter-spacing:2px;grid-column:1/-1}
+.rank-title{font:16px/1.25 Georgia,serif;color:#21364f;overflow-wrap:anywhere}
+.rank-score{font:bold 13px 'Trebuchet MS',sans-serif;align-self:center;white-space:nowrap}
+#certificate-back .rank-metrics{grid-column:1/-1;font:12px/1.4 'Trebuchet MS',sans-serif;color:#4c5055}
+.rank-rules{margin:12px 0 4px;font:13px/1.5 'Trebuchet MS',sans-serif}
+.rank-rules summary{cursor:pointer;font-weight:bold;padding:8px 0}
+#certificate-back .rank-rules p{font:13px/1.5 'Trebuchet MS',sans-serif;margin:7px 0}
+@media(max-width:650px){.rank-list{grid-template-columns:1fr}.rank-title{font-size:17px}#ceremony-certificate .certificate-actions button{font-size:14px;flex:1 1 140px}#certificate-back h2{font-size:22px}}
+#certificate-back .rank-rules,#certificate-back .rank-rules summary{color:#354462}
+@media(min-width:1100px){.rank-list{grid-template-columns:repeat(3,minmax(0,1fr))}.rank-card:last-child{grid-column:2}}
+
+/* Fit the complete diploma and its actions; paginate ranks rather than scroll. */
+#cinema-player #ceremony-certificate{inset:3% 4%!important;padding:0!important;overflow:hidden!important;display:block}
+.certificate-sheet{position:absolute;top:12px;left:50%;width:calc(100% - 28px);transform:translateX(-50%) scale(var(--sheet-scale,1));transform-origin:top center;display:flex;flex-direction:column;align-items:center;gap:8px;box-sizing:border-box}
+#certificate-front{gap:6px;margin:0}
+#certificate-back .rank-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#certificate-back .rank-card:last-child{grid-column:auto}
+.rank-pagination{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 0;font:13px sans-serif;color:#253c53}
+#ceremony-certificate .rank-pagination button{font:13px sans-serif;padding:6px 10px;margin:0}
+#certificate-back .rank-card{padding:8px}
+#certificate-back .rank-rules{margin:4px 0}
+@media(max-width:650px){
+ #certificate-back .rank-list{grid-template-columns:1fr}
+ #certificate-front .certificate-brand{font-size:18px!important}
+ #certificate-front .certificate-score{font-size:38px}
+ #ceremony-certificate .certificate-actions button{flex:1 1 90px;font-size:12px;padding:7px}
+ #ceremony-certificate #certificate-student{font-size:21px;margin:4px 0}
+}

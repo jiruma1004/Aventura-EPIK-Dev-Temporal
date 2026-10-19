@@ -1,0 +1,17 @@
+#ignitia-dialog{position:absolute;z-index:12;left:3%;right:3%;bottom:85px;display:flex;gap:18px;padding:20px;border:1px solid #c9ab72;border-radius:14px;background:linear-gradient(135deg,#162c45f5,#181c36fa);box-shadow:0 10px 45px #0009;align-items:center;max-height:80%;overflow:auto}
+#ignitia-dialog img{width:135px;image-rendering:pixelated;align-self:flex-end}#ignitia-dialog p{font-size:17px;line-height:1.6;margin:5px 0 12px}#ignitia-dialog .eyebrow{font-size:12px;color:#f2cb8b}#ignitia-dialog button{padding:8px 16px}
+#rocket-console{z-index:10;max-height:calc(100% - 110px);overflow:auto;width:min(480px,92%);top:15px;bottom:auto;left:18px;transform:none}#rocket-console p{font-size:15px;line-height:1.45}#rocket-form{display:grid;gap:10px}#rocket-form input{display:block;width:100%;padding:8px;background:#0c2437;border:1px solid #799bab;color:white}#rocket-feedback{color:#f5d298}#flight-banner{position:absolute;z-index:8;top:20px;left:15%;right:15%;text-align:center;border:1px solid #8fccf5;background:#142238e8;padding:14px;font-size:20px;color:#eef6ff}.scene-view.has-rocket #game{height:660px;aspect-ratio:auto}
+#language-toggle{font-size:14px;white-space:nowrap}#chase-indicator.frozen{background:#144675;color:#b1faff}
+@media(max-width:750px){#ignitia-dialog{gap:10px;padding:12px;bottom:90px}#ignitia-dialog img{width:70px}#ignitia-dialog p{font-size:14px}#rocket-console{left:10px;width:calc(100% - 20px)}.scene-view.has-rocket #game{height:730px}}
+
+#rocket-console{padding:16px 18px}#rocket-console h2{font-size:24px;margin:8px 0}#rocket-console p{font-size:14px;margin:9px 0;line-height:1.4}#rocket-form{gap:7px}#rocket-form label{font-size:14px}#rocket-form button{position:sticky;bottom:-16px;margin-top:6px}.story-language{float:right;font-size:13px;padding:6px 10px}
+#completion-card{position:absolute;z-index:15;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100% - 32px));max-height:85%;overflow:auto;padding:26px;background:linear-gradient(135deg,#172d70f5,#071735fa);border:3px solid #d3d9e7;border-radius:8px;text-align:center;box-shadow:0 12px 40px #0009;color:#f7f4df}
+#completion-card summary{cursor:pointer;font-size:22px;font-weight:600;line-height:1.4}#completion-card strong{display:block;font-size:52px;color:#bdffd1;margin:20px 0 10px}#completion-card p{font-size:21px;line-height:1.6;margin:12px 0}
+@media(max-width:750px){#completion-card{padding:20px}#completion-card summary{font-size:18px}#completion-card p{font-size:18px}}
+#completion-continue{margin-top:14px;padding:12px 28px;font-size:20px}
+#chapter-ending{position:absolute;inset:0;z-index:40;display:grid;place-items:center;isolation:isolate;overflow:hidden;border-radius:inherit}
+#chapter-ending::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 45%,#10162afc 0%,#03050bfE 58%,#000 100%);animation:chapter-darken 2s ease forwards}
+#chapter-ending p{margin:0;padding:28px;max-width:90%;text-align:center;font-size:clamp(24px,4vw,46px);line-height:1.5;color:#f4ead2;text-shadow:0 0 25px #acb9ef45;opacity:0;animation:chapter-title 1.4s ease 1.8s forwards}
+@keyframes chapter-darken{from{opacity:0}to{opacity:1}}
+@keyframes chapter-title{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){#chapter-ending::before{animation-duration:.3s}#chapter-ending p{animation-duration:.3s;animation-delay:.3s}}

@@ -1,0 +1,44 @@
+/* Gameplay gestures are confined to the world; forms and dialogs still scroll. */
+.touch-mode #game,#touch-controls{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.touch-mode-label{display:flex;gap:5px;align-items:center;font:12px sans-serif;color:#c9d9ef}
+#touch-mode{max-width:145px;padding:6px;background:#14243e;color:#edf5ff;border:1px solid #738bb0;border-radius:5px;font:12px sans-serif}
+#touch-controls{position:absolute;inset:0;z-index:5;pointer-events:none}
+#touch-stick{position:absolute;left:max(18px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));width:132px;height:132px;pointer-events:auto;touch-action:none;border-radius:50%;background:#07122570;border:2px solid #b7d8ef77;box-shadow:inset 0 0 20px #9bd6fb20}
+.stick-ring{position:absolute;inset:24px;border:1px dashed #d5e8fa55;border-radius:50%}.stick-knob{position:absolute;width:52px;height:52px;left:calc(50% - 26px);top:calc(50% - 26px);border-radius:50%;border:2px solid #d5ebfa;background:#789bbcc9;box-shadow:0 3px 10px #0008;pointer-events:none}
+#touch-stick small{position:absolute;bottom:5px;width:100%;text-align:center;font:11px sans-serif;color:white;pointer-events:none}
+.touch-actions{position:absolute;right:max(16px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));display:grid;grid-template-columns:64px 86px;grid-template-rows:54px 76px;gap:10px;align-items:center;pointer-events:none}
+.touch-actions button{pointer-events:auto;touch-action:none;min-height:52px;padding:6px;font:15px sans-serif;border-radius:15px;background:#152b45db;color:#fff;border:2px solid #aac9e7a6;box-shadow:0 3px 9px #0005}
+#touch-jump{grid-column:2;grid-row:2;height:76px;border-radius:50%;font-size:17px;font-weight:bold;background:#32546ce8;border-color:#f6e0a3}
+#touch-run{grid-column:1;grid-row:2}#touch-use{grid-column:2;grid-row:1}#touch-run[aria-pressed=true]{background:#34725b;color:#fff4bd;border-color:#b9ffba}
+.touch-look-hint{position:absolute;right:20px;bottom:174px;color:#dbeaffbd;font:11px sans-serif;text-shadow:0 1px 3px black}
+.touch-mode .controls>span,.touch-mode #camera-hint{display:none}
+.touch-mode #ask-paola{bottom:164px;left:18px;padding:5px 10px;font-size:12px}.touch-mode #ask-paola small{font-size:10px}
+.touch-mode #interaction-hint{bottom:6px;left:165px;right:185px;max-width:none;transform:none;text-align:center;font-size:12px;pointer-events:none}
+.touch-mode #world-toast{bottom:182px;left:170px;right:180px;max-width:none;font-size:13px;pointer-events:none}
+.touch-mode .adventure-timer{top:3px;bottom:auto;right:8px;transform:scale(.8);transform-origin:top right}
+.touch-mode .scene-view #game{height:100%;min-height:0;aspect-ratio:auto}
+.touch-mode .controls{gap:5px;padding:5px 8px}.touch-mode .controls button,.touch-mode .controls summary{font-size:12px;padding:6px 8px}
+.touch-mode body>header{padding:6px}.touch-mode body>header .brand{font-size:17px}.touch-mode main{padding:0 4px}
+.touch-mode .topbar{padding:5px 8px;font-size:11px}.touch-mode #door-status{white-space:normal;text-align:right}
+:is(html:fullscreen,html.expanded-game).touch-mode .scene-view{height:100%;min-height:0}
+@media(orientation:landscape) and (max-height:600px){
+ #touch-stick{width:112px;height:112px;bottom:12px;left:16px}
+ .touch-actions{bottom:12px;grid-template-rows:46px 64px;grid-template-columns:60px 72px;gap:8px}.touch-actions button{min-height:46px}#touch-jump{height:64px}
+ .touch-look-hint{bottom:145px;font-size:10px}.touch-mode #ask-paola{bottom:133px}.touch-mode #world-toast{bottom:145px;font-size:12px}
+ .touch-mode #interaction-hint{left:140px;right:165px;font-size:11px}
+}
+@media(max-width:500px){.touch-look-hint{max-width:150px;text-align:right}.touch-mode #world-toast{left:14px;right:14px;bottom:215px}.touch-mode #interaction-hint{left:145px;right:172px;font-size:10px}}
+
+/* Let the toolbar wrap without pushing the joystick below the phone viewport. */
+.touch-mode .viewport{height:calc(100dvh - 36px);display:flex;flex-direction:column}
+.touch-mode .viewport>.topbar,.touch-mode .viewport>.controls{flex-shrink:0}
+.touch-mode .scene-layout{display:block;flex:1;min-height:0;overflow:hidden}
+.touch-mode .scene-view{height:100%;min-height:0}
+:is(html:fullscreen,html.expanded-game).touch-mode .viewport{height:100dvh}
+.touch-mode .viewport>.hud,.touch-mode #jump,.touch-mode #cinematics-open{display:none}
+.touch-mode body>footer{display:none}
+
+.touch-mode .adventure-timer{min-width:82px;padding:2px 7px;transform:none;border-radius:6px;box-shadow:none}
+.touch-mode .adventure-timer>span,.touch-mode .adventure-timer small{display:none}
+.touch-mode .adventure-timer strong{font-size:22px;line-height:1.1}
+:is(html:fullscreen,html.expanded-game).touch-mode .topbar{padding-right:98px}

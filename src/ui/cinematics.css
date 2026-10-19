@@ -1,0 +1,71 @@
+#cinematics-library,#cinema-player{color:#f1e6cf;background:#0c1726;border:2px solid #aeb4bd;border-radius:9px;padding:16px;max-width:calc(100vw - 24px);max-height:94vh;box-shadow:0 20px 80px #000c}#cinematics-library::backdrop,#cinema-player::backdrop{background:#030913d9}#cinematics-library{width:680px}#cinema-player{width:1120px;overflow:auto}
+.cinema-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;font-size:21px}.cinema-title h2{font-size:24px;margin:0}.cinema-title button{padding:2px 10px;font-size:24px;background:none;box-shadow:none;border:0}#cinematics-list{display:grid;gap:12px;margin-top:20px}#cinematics-list button{text-align:left;padding:18px;display:grid;gap:8px}#cinematics-list strong{font-size:21px}#cinematics-list span{font-size:16px;color:#cad5df}#cinematics-list small{color:#e9cf97}
+.cinema-screen{position:relative;height:min(58vh,610px);min-height:320px;overflow:hidden;background:#091120;border:1px solid #34434b}#cinema-canvas{width:100%;height:100%;image-rendering:pixelated}#cinema-caption{font-size:18px;line-height:1.5;min-height:54px;margin:12px 4px}.cinema-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.cinema-controls button{font-size:15px;padding:8px 13px}#cinema-time{margin-left:auto;font-size:14px;color:#aabbc9}
+#cinema-newspaper{position:absolute;inset:3% 25%;background:#e6d4af;color:#372c25;border:7px double #705b43;padding:12px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;box-shadow:0 12px 35px #000b;animation:paper-zoom .8s ease-out both;font-family:Georgia,serif}#cinema-newspaper .newspaper-masthead{font-size:clamp(10px,1.2vw,17px);font-weight:bold;border-bottom:2px solid #67533a;padding-bottom:4px;width:100%}#cinema-newspaper h2{font-size:clamp(23px,3vw,38px);margin:2px 0;letter-spacing:3px}#cinema-newspaper h3{font-size:clamp(20px,2.5vw,30px);margin:0;letter-spacing:4px}#cinema-newspaper img{height:42%;max-width:80%;object-fit:contain;image-rendering:pixelated;min-height:0}#cinema-newspaper p{font-size:clamp(13px,1.5vw,19px);line-height:1.3;margin:5px 0;max-width:340px}#cinema-newspaper small{font-size:clamp(9px,1vw,12px)}#cinema-ivan-line{position:absolute;left:6%;top:28%;max-width:55%;padding:13px 18px;background:#f3e4c7;color:#342439;border:2px solid #725047;border-radius:14px;font-size:clamp(16px,2vw,25px);box-shadow:0 5px 12px #0006}
+#cinema-end{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse,#142039f5,#02040cfb 75%);animation:chapter-darken 1.5s ease both}#cinema-end p{font-size:clamp(23px,3vw,42px);padding:24px;text-align:center;animation:chapter-title 1.2s ease .8s both}
+@keyframes paper-zoom{from{opacity:0;transform:scale(.3) rotate(-9deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+#cinema-newspaper h2,#cinema-newspaper h3{color:#372c25;font-family:Georgia,serif;font-weight:bold}
+@media(max-width:650px){#cinema-player{padding:9px}.cinema-screen{height:48vh;min-height:330px}#cinema-newspaper{inset:3% 8%;padding:7px}#cinema-caption{font-size:16px;min-height:72px}.cinema-title{font-size:18px}#cinema-ivan-line{max-width:75%;left:4%;top:20%}.cinema-controls{gap:6px}.cinema-controls button{font-size:13px;padding:8px}.cinema-controls #cinema-time{font-size:12px}}
+@media(prefers-reduced-motion:reduce){#cinema-newspaper,#cinema-end,#cinema-end p{animation:none}}
+/* Carteles impresos: el rostro ya forma parte del papel; texto vivo bilingüe. */
+#cinema-newspaper{inset:3% 0;margin:0 auto;width:min(420px,78%);max-width:calc(58vh * .70);height:94%;border:0;padding:0;display:block;background:transparent left center/200% 100% no-repeat;box-shadow:none;filter:grayscale(1)}
+#cinema-newspaper h2{position:absolute;top:7%;left:4%;width:92%;font-size:clamp(25px,3.1vw,44px);letter-spacing:1px;margin:0}
+#cinema-newspaper .wanted-archive{position:absolute;top:19%;left:7%;width:86%;font-weight:bold;font-size:clamp(8px,1vw,12px)}
+#cinema-newspaper h3{position:absolute;top:77%;left:6%;width:88%;font-size:clamp(19px,2.2vw,28px);letter-spacing:3px}
+#cinema-newspaper p{position:absolute;top:85%;left:10%;width:80%;font-size:clamp(12px,1.2vw,17px);line-height:1.25;margin:0}
+#cinema-newspaper .wanted-footer{display:none}
+#cinema-eric-line{position:absolute;right:5%;top:12%;max-width:52%;margin:0;padding:14px 18px;border:2px solid #b99379;border-radius:14px;background:#f2e4c9;color:#38293c;box-shadow:0 5px 12px #0009;font-size:clamp(16px,2vw,25px);line-height:1.4}
+#cinema-eric-line:after{content:'';position:absolute;bottom:-12px;left:30px;border:6px solid transparent;border-top-color:#f2e4c9}
+#cinema-player[data-phase="impact"] #cinema-eric-line{top:auto;bottom:6%}
+@media(max-width:650px){#cinema-newspaper{max-width:calc(48vh * .70);width:78%}#cinema-newspaper h2{font-size:27px}#cinema-newspaper h3{font-size:21px}#cinema-newspaper p{font-size:12px}#cinema-eric-line{right:5%;top:5%;max-width:90%;font-size:16px;padding:9px 12px}}
+
+/* Texto centrado dentro del margen impreso del cartel, sin deriva lateral. */
+#cinema-newspaper p{left:11%;width:78%;max-width:none;top:84%;text-align:center;text-wrap:balance;padding:0 3px;box-sizing:border-box;line-height:1.3}
+
+#cinema-end{align-content:center;gap:12px}#cinema-end p{margin:0}#cinema-ceremony-next{font-size:18px;padding:12px 20px}
+#ceremony-dialogue{position:absolute;bottom:4%;left:17%;width:66%;padding:14px 20px;background:linear-gradient(135deg,#112b54f5,#111931f5);border:2px solid #d1ba83;border-radius:8px;color:#fbf1d9;box-shadow:0 8px 30px #0009;box-sizing:border-box}#ceremony-speaker{color:#e6c887;font-size:15px;letter-spacing:1px}#ceremony-words{font-size:clamp(16px,1.5vw,21px);line-height:1.4;margin:6px 0 0;min-height:3em}
+#ceremony-certificate{position:absolute;inset:4% 14%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px 32px;background:linear-gradient(125deg,#fff4dcf7,#f2e1bdf7);color:#263450;border:7px double #927344;text-align:center;box-sizing:border-box;box-shadow:0 12px 45px #050d24aa;font-family:Georgia,serif}
+#ceremony-certificate p,#ceremony-certificate h2,#ceremony-certificate h3{margin:0;color:inherit}#ceremony-certificate h2{font:clamp(22px,2.6vw,34px) Georgia,serif}#ceremony-certificate h3{font-size:clamp(13px,1.5vw,19px);letter-spacing:2px}#ceremony-certificate p{font-size:clamp(13px,1.3vw,17px);line-height:1.35}.certificate-brand{font-size:25px!important;letter-spacing:4px}.certificate-label{font-size:11px!important;letter-spacing:2px}.certificate-score{font-size:clamp(38px,5vw,68px);font-weight:normal;color:#866124}#certificate-instruction{max-width:560px;padding:12px 0;border-top:1px solid #ad9673}#ceremony-preview{color:#843d35;font:bold 12px sans-serif;padding:4px 8px;border:1px solid #a66e55}#ceremony-certificate footer{display:flex;justify-content:space-around;width:100%;gap:18px;font-size:18px}#ceremony-certificate footer small{font-size:12px}
+@media(max-width:650px){#ceremony-dialogue{left:3%;width:94%;bottom:2%;padding:10px 12px}#ceremony-speaker{font-size:12px}#ceremony-words{font-size:15px}#ceremony-certificate{inset:2%;padding:10px;gap:6px;border-width:5px}#ceremony-certificate h2{font-size:23px}#ceremony-certificate p{font-size:12px}.certificate-brand{font-size:19px!important}.certificate-score{font-size:42px}#certificate-instruction{padding:7px 0}#ceremony-certificate footer{font-size:15px}#ceremony-certificate footer small{font-size:10px}#ceremony-preview{font-size:10px}}
+
+#ceremony-certificate footer,#ceremony-certificate footer small{color:#293551;opacity:1}
+#cinema-player[data-phase="captured"] #cinema-eric-line,#cinema-player[data-phase="bars"] #cinema-eric-line,#cinema-player[data-phase="cell-entry"] #cinema-eric-line{top:3%}
+
+#certificate-continue{font:18px 'Trebuchet MS',sans-serif;padding:9px 22px;margin-top:4px;flex-shrink:0}
+@media(max-width:650px){#cinema-player[data-phase="ceremony"] .cinema-screen{min-height:510px}#certificate-continue{font-size:16px;padding:7px 18px}}
+
+#cinema-player.cinema-enter .cinema-screen{animation:cinema-enter .45s ease both}@keyframes cinema-enter{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){#cinema-player.cinema-enter .cinema-screen{animation:none}}
+
+/* En la historia las escenas ocupan la vista del mundo, sin abrir un reproductor. */
+#cinema-player[data-presentation="world"]{position:fixed;inset:auto;left:var(--world-left);top:var(--world-top);width:var(--world-width);height:var(--world-height);max-width:none;max-height:none;margin:0;padding:0;border:0;border-radius:inherit;overflow:hidden;box-shadow:none}
+#cinema-player[data-presentation="world"]::backdrop{background:transparent}
+#cinema-player[data-presentation="world"] .cinema-title{display:none}
+#cinema-player[data-presentation="world"] .cinema-screen{height:100%;min-height:0;border:0;box-sizing:border-box}
+#cinema-player[data-presentation="world"] #cinema-caption{position:absolute;bottom:0;left:0;right:0;margin:0;min-height:0;padding:14px 20px;background:linear-gradient(transparent,#081322ee 35%);text-align:center;font-size:clamp(15px,1.3vw,20px);pointer-events:none}
+#cinema-player[data-presentation="world"] .cinema-controls{position:absolute;top:10px;right:10px;gap:6px}
+#cinema-player[data-presentation="world"] .cinema-controls button{font-size:13px;padding:5px 9px;background:#10203acc;opacity:.8}
+#cinema-player[data-presentation="world"] #cinema-time{display:none}
+#cinema-player[data-presentation="world"][data-phase="ceremony"] #cinema-caption{display:none}
+#cinema-player[data-presentation="world"] #ceremony-certificate{overflow:auto;inset:8% 14%;padding:12px 24px;gap:5px}
+@media(max-width:650px){#cinema-player[data-presentation="world"] #ceremony-certificate{inset:9% 2% 2%;padding:10px;justify-content:flex-start}#cinema-player[data-presentation="world"] #cinema-caption{padding:10px;font-size:14px}}
+
+#scene-next{position:absolute;bottom:10px;right:18px;z-index:15;font-size:17px;padding:8px 20px}
+#cinema-player[data-dialogues="click"] #cinema-caption{padding-bottom:62px}
+#cinema-player[data-dialogues="click"] #ceremony-dialogue{bottom:66px}
+#cinema-player[data-dialogues="click"][data-presentation="world"] .cinema-controls{display:none}
+#cinema-player[data-phase="escape-cell"] #cinema-caption{display:none}
+#cinema-player[data-dialogues="click"] #scene-next:disabled{opacity:.45}
+
+#cinema-player[data-presentation="gallery"] #scene-next{bottom:106px}#cinema-player[data-dialogues="click"] #scene-next[hidden]{display:none}
+
+#angelica-radio-face{display:none}
+#cinema-player[data-phase="escape-cell"] #ceremony-dialogue{display:grid;grid-template-columns:120px 1fr;column-gap:16px;text-align:left;align-items:center;bottom:70px}
+#cinema-player[data-phase="escape-cell"] #angelica-radio-face{display:block;width:120px;height:120px;grid-row:1 / 3;image-rendering:pixelated}
+#cinema-player[data-phase="escape-cell"] #ceremony-words{margin-top:8px}
+@media(max-width:650px){#cinema-player[data-phase="escape-cell"] #ceremony-dialogue{grid-template-columns:76px 1fr;gap:8px;padding:10px}#cinema-player[data-phase="escape-cell"] #angelica-radio-face{width:76px;height:76px}#cinema-player[data-phase="escape-cell"] #ceremony-words{font-size:16px;line-height:1.35}}
+#escape-next{position:absolute;right:18px;bottom:18px;z-index:12}
+
+#cinema-loading{position:absolute;inset:0;z-index:20;display:grid;place-content:center;gap:16px;text-align:center;background:#091120;color:#efe2c0;padding:24px}#cinema-loading[hidden]{display:none}
+
+#applause-close{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:12}

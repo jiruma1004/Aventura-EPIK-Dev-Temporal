@@ -1,0 +1,10 @@
+const form=document.querySelector('#unlock'),status=document.querySelector('#status');
+const bytes=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+form.onsubmit=async event=>{event.preventDefault();const button=form.querySelector('button');button.disabled=true;status.textContent='Abriendo la vista de pruebas…';
+try{if(!window.isSecureContext||!crypto.subtle)throw Error('HTTPS');
+const response=await fetch('preview.enc.json',{cache:'no-store'});if(!response.ok)throw Error('LOAD');const data=await response.json();
+const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(form.password.value),'PBKDF2',false,['deriveKey']);
+form.password.value='';const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:bytes(data.salt),iterations:data.iterations,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['decrypt']);
+const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes(data.iv)},key,bytes(data.cipher));
+const iframe=document.createElement('iframe');iframe.title='Aventura EPIK · Modo desarrollador';iframe.allow='fullscreen';iframe.srcdoc=new TextDecoder().decode(plain);document.body.replaceChildren(iframe);
+}catch(error){status.textContent=error.message==='HTTPS'?'Abre esta página con HTTPS (o localhost para probar).':error.message==='LOAD'?'No se encontró el archivo de la vista de pruebas.':'No se pudo abrir. Revisa la contraseña y la conexión.';}finally{button.disabled=false;}};

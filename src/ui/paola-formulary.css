@@ -1,0 +1,16 @@
+#paola-formula-open { margin: .4rem 0; border: 1px solid #cfb67a; background: #243d47cf; color: #fff0c7; padding: .55rem .8rem; border-radius: .4rem; font: inherit; cursor: pointer; }
+.scene-view #paola-dialog.formulary-open { width: min(720px, calc(100% - 24px)); max-height: 80%; overflow: auto; background: #101e31e8; }
+#paola-formula-content section { border-top: 1px solid #baac7b55; padding: .45rem 0; }
+#paola-formula-content h3 { color: #ffe1a0; margin: .35rem 0; font: 600 1.05rem "Astralia RPG", Georgia, serif; }
+#paola-formula-content pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 1rem/1.65 "Astralia RPG", Georgia, serif; color: #c8f2e8; margin: .4rem 0; }
+#paola-formula-content p { font-size: .9rem; line-height: 1.4; color: #e1dfcf; }
+#paola-formula-content[hidden], #paola-formula-open[hidden] { display: none; }
+@media(max-width:600px) { .scene-view #paola-dialog.formulary-open { grid-template-columns: 1fr; } .formulary-open #paola-portrait { display:none; } }
+/* The compact mobile dialogue uses display:contents and a two-column grid.
+   A long reference sheet instead needs one continuous reading column. */
+.scene-view #paola-dialog.formulary-open:not([hidden]) { display: block; }
+.scene-view #paola-dialog.formulary-open .paola-words { display: block; }
+.scene-view #paola-dialog.formulary-open #paola-text { min-height: 0; font-size: 17px; line-height: 1.45; }
+.formulary-open #paola-portrait { float: left; width: 64px; height: 64px; margin: 0 12px 8px 0; }
+#paola-formula-content { clear: both; }
+.formulary-open #paola-close { position: sticky; top: 0; float: right; z-index: 2; background: #142b3a; }

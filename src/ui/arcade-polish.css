@@ -1,0 +1,42 @@
+/* Translucent surfaces use alpha backgrounds, never opacity on the text.
+   No backdrop blur: keep the raycaster fluid on tablets. */
+.scene-view :is(#question-bubble,#boss-mission,#paola-dialog,#maze-notice,#ignitia-dialog,.world-toast){
+ background:linear-gradient(125deg,rgba(12,24,52,.60),rgba(5,13,31,.53));
+ color:#fff8e3;border-color:#bcbdc6;text-shadow:0 1px 2px #000,0 0 4px #061123;
+ box-shadow:inset 0 0 0 1px #d5dbf12b,0 3px 12px #0004;
+}
+.scene-view :is(.world-console,#station.cannon-console){background:linear-gradient(125deg,#122340b8,#091329ad)}
+#question-bubble #problem-card{background:transparent;box-shadow:none;border:0}
+#chase-indicator{left:16px;top:16px;max-width:calc(100% - 48px);box-sizing:border-box;
+ font:700 13px/1.35 var(--adventure-lettering);background:#760f23aa;color:#fff2e7;border:1px solid #ff7c80;
+ text-shadow:0 1px 3px #32040e;pointer-events:none;z-index:9;
+ transition:left .8s ease,top .8s ease,transform .8s ease,font-size .8s ease,padding .8s ease;
+}
+#chase-indicator.chase-intro{left:50%;top:45%;transform:translate(-50%,-50%);width:max-content;
+ max-width:85%;font-size:clamp(20px,3vw,32px);padding:18px 24px;text-align:center;background:#a21631b0;
+ border:2px solid #ff9092;box-shadow:0 0 22px #d222334d;
+}
+#story-experience{border:1px solid #a8b8d07a;border-radius:5px;padding:8px 12px;margin:12px 0 0;text-align:left}
+#story-experience legend{padding:0 7px;font-weight:bold;color:#ffe6a0}
+#story-experience label{display:inline-flex;align-items:center;gap:8px;margin:5px 16px 5px 0;font-size:16px;cursor:pointer}
+#story-experience input{width:18px;height:18px;margin:0;accent-color:#d5b358}
+#story-experience small{display:block;font-size:13px;color:#d4dfef}
+/* Rank cards resemble little guild commendations. Values stay readable. */
+#certificate-back h2{font:700 clamp(22px,3vw,34px)/1.1 Georgia,serif;color:#32213e;letter-spacing:.4px;text-shadow:0 1px #fff5dc}
+#certificate-back .rank-card{position:relative;border:1px solid #a88854;border-top:3px solid #a88854;border-radius:3px 12px 3px 12px;
+ padding:10px 13px;background:linear-gradient(115deg,#fff6e0,#ecdbb7);box-shadow:inset 0 0 0 2px #fff9e79c,0 3px 5px #38244221}
+#certificate-back .rank-title{font:bold 19px/1.18 Georgia,serif;color:#322b47;text-shadow:0 1px #fff8da}
+#certificate-back .rank-room{font:700 12px/1.4 var(--adventure-lettering);color:#614a2a;letter-spacing:.3px}
+#certificate-back .rank-score{border-radius:20px;padding:4px 8px;color:#fff1c7;background:#343149}
+.rating-stars{display:inline-flex;gap:3px;color:var(--star-color,#bf8620);vertical-align:middle;white-space:nowrap}
+.rating-stars[data-stars="1"]{--star-color:#bf273a}
+.rating-stars[data-stars="2"],.rating-stars[data-stars="3"]{--star-color:#217d43}
+.rating-stars[data-stars="4"],.rating-stars[data-stars="5"]{--star-color:#e6ab13}
+.rating-stars .star{position:relative;font:26px/1.2 Georgia,serif;text-shadow:0 1px 0 #67420c,0 0 1px #67420c}
+.rating-stars .star.empty{color:#a69b87;opacity:.55;text-shadow:none}
+.rating-stars[data-stars="5"] .star.filled::after{content:'✦';position:absolute;left:55%;top:-14%;color:#fffbe0;font-size:14px;pointer-events:none;animation:star-glint 2.8s ease-in-out infinite;animation-delay:calc(var(--star-index)*.35s);text-shadow:0 0 5px #e7a91c}
+@keyframes star-glint{0%,55%,100%{opacity:0;transform:scale(.3) rotate(0)}70%{opacity:1;transform:scale(1.2) rotate(65deg)}85%{opacity:.3;transform:scale(.6) rotate(100deg)}}
+@media(prefers-reduced-motion:reduce){#chase-indicator{transition:none}.rating-stars[data-stars="5"] .star.filled::after{animation:none;opacity:.8}}
+
+/* The green veil obscures world hints as well as the 3D scene. */
+.scene-view.nova-blind > :not(#game){visibility:hidden!important}

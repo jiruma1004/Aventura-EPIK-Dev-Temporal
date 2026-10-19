@@ -1,0 +1,30 @@
+/* Última hoja: sustituye la antigua columna lateral de la primera sala. */
+.scene-view.has-cannon #game{height:min(74vh,760px);min-height:560px;aspect-ratio:auto}
+#station.cannon-console{position:absolute;z-index:6;left:16px;top:16px;width:min(440px,52%);max-height:calc(100% - 120px);box-sizing:border-box;overflow:auto;display:block;padding:16px 18px;border:1px solid #cbb787;border-radius:14px;background:linear-gradient(145deg,#22364af5,#102335f7);box-shadow:0 12px 35px #0008}
+.cannon-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.cannon-heading h2{margin:0!important;font-size:23px!important}.cannon-heading .eyebrow{margin:0 0 4px!important}.cannon-heading button{padding:3px 10px;font-size:24px;background:none;border:0;box-shadow:none}
+.cannon-tabs{display:flex;gap:7px;margin:12px 0}.cannon-tabs button{flex:1;padding:8px;font-size:13px}.cannon-tabs [aria-selected=true]{border-color:#e4cea1;background:#435673;color:#fff1ce}
+#station.cannon-console #cannon-settings>label{display:block;font-size:13px}#station.cannon-console select{width:100%;margin-top:5px;padding:7px}
+#station.cannon-console .numeric-settings{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:12px 0;grid-row:auto;grid-column:auto}
+#station.cannon-console .numeric-settings label{display:block;margin:0;font-size:13px}#station.cannon-console .numeric-settings input{width:100%;height:38px;font-size:17px;padding:6px 8px;box-sizing:border-box;margin-top:5px}
+#station.cannon-console .numeric-settings output{font-size:12px}#station.cannon-console #input-feedback{font-size:12px;margin:7px 0;line-height:1.4}
+#station.cannon-console .ammo-shelf{margin:10px 0 0;grid-row:auto;grid-column:auto}#station.cannon-console #ammo-options{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+#station.cannon-console .ammo{padding:4px 1px}#station.cannon-console .ammo b{font-size:11px}#station.cannon-console .ammo small{font-size:12px}
+#station.cannon-console #load-ammo,#station.cannon-console #station-fire{padding:9px;font-size:14px;margin-top:7px}#station.cannon-console #loaded-status{min-height:0;margin:7px 0;font-size:12px;line-height:1.4}#station.cannon-console #energy-warning{font-size:12px;margin:7px 0}#station.cannon-console .station-guide{font-size:12px;margin-top:8px}
+#station.cannon-console #lab{padding:0;border:0}#station.cannon-console #lab h2{font-size:22px}#station.cannon-console #lab p{font-size:13px;line-height:1.5}#station.cannon-console .experiment{display:block;margin-top:10px}#station.cannon-console .readings{display:block}
+@media(max-width:750px){.scene-view.has-cannon #game{height:720px;min-height:0}#station.cannon-console{left:10px;top:10px;width:calc(100% - 20px);max-height:calc(100% - 108px);padding:12px 14px}.cannon-heading h2{font-size:21px!important}#station.cannon-console .orb{width:23px;height:23px}#station.cannon-console .station-guide p{font-size:12px}}
+
+#station.cannon-console .ammo-shelf{padding:7px 0 4px;margin-top:7px;border-bottom-width:2px}
+#station.cannon-console .ammo-shelf .eyebrow{margin-bottom:4px}
+#station.cannon-console .cannon-actions{display:block;position:sticky;bottom:-16px;background:#14283e;padding:8px 0;margin-top:6px;z-index:1}
+#station.cannon-console .cannon-action-buttons{display:flex;gap:8px}
+#station.cannon-console #cannon-feedback{font-size:13px;line-height:1.4;color:#ffe0a0;margin:0 0 8px}
+#station.cannon-console .cannon-energy-note{padding:8px 10px;border:1px solid #709198;border-radius:5px;background:#102e37}
+#station.cannon-console .cannon-energy-note p:first-child{font:18px/1.5 sans-serif!important;color:#c8ffe5}
+.scene-view:has(#station.cannon-console:not([hidden])) #world-toast{display:none}
+.world-toast{pointer-events:none}
+#station.cannon-console .cannon-actions button{flex:1;width:auto;margin:0!important}
+#station.cannon-console .numeric-settings{gap:7px 12px;margin:8px 0}
+#station.cannon-console .numeric-settings input{height:34px;margin-top:3px}
+#station.cannon-console .cannon-tabs{margin:9px 0}
+
+.cannon-target-live{font-size:15px!important;line-height:1.35!important;margin:4px 0!important;color:#b9efd7}

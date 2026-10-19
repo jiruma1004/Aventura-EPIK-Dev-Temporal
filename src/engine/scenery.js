@@ -51,11 +51,16 @@ window.makeScenery=()=>{
   // Fondo transparente: la pintura queda directamente sobre los ladrillos.
   const equations=[
    ['x = v₀ cos(θ)t',70,110,-.008,72,'#d5e6ed'],
-   ['t = x / (v₀ cos(θ))',850,110,.008,62,'#d9e9d1'],
+   ['t_vuelo = x / (v₀ cos(θ))',850,110,.008,62,'#d9e9d1'],
    ['y = y₀ + v₀ sen(θ)t − ½gt²',70,260,.008,70,'#d5e6ed'],
    ['y − y₀ = x tan(θ) − gx²/(2v₀² cos²θ)',70,420,-.008,62,'#d9e9d1']
   ];
-  for(const [eq,x,y,angle,size,color] of equations){c.save();c.translate(x,y);c.rotate(angle);c.fillStyle=color;c.globalAlpha=.93;c.font=`italic ${size}px Georgia`;c.fillText(eq,0,0);c.restore();}
+  for(const [eq,x,y,angle,size,color] of equations){c.save();c.translate(x,y);c.rotate(angle);c.fillStyle=color;c.globalAlpha=.93;c.font=`italic ${size}px Georgia`;if(eq.startsWith('t_vuelo')){
+    c.fillText('t',0,0);const start=c.measureText('t').width;
+    c.font=`italic ${size*.55}px Georgia`;c.fillText('vuelo',start,size*.22);
+    const end=start+c.measureText('vuelo').width;c.font=`italic ${size}px Georgia`;
+    c.fillText(eq.slice('t_vuelo'.length),end,0);
+   }else c.fillText(eq,0,0);c.restore();}
   // Desgaste en los trazos, sin añadir una placa ni un recuadro opaco.
   c.globalCompositeOperation='destination-out';
   for(let i=0;i<3500;i++){c.fillStyle='#00000055';c.fillRect(rnd()*1600,rnd()*500,1+rnd()*3,1+rnd()*2);}

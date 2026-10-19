@@ -1,6 +1,6 @@
 /* Símbolos en carriles rectos: jamás siguen al jugador. */
 window.RelaxCorridor=class {
- constructor(onEvent){this.onEvent=onEvent;this.guardian=new GardenGuardian(onEvent);this.time=0;this.hitboxScale=EpikDifficulty.easy?1:.9;this.readyShown=false;this.caught=false;
+ constructor(onEvent){this.onEvent=onEvent;this.guardian=new GardenGuardian(onEvent);this.time=0;this.hitboxScale=EpikDifficulty.profile.symbolHitboxScale;this.readyShown=false;this.caught=false;
   this.obstacles=[{x:8,y:2.9,width:2.2,height:.22},{x:12,y:6.1,width:2.2,height:.22},{x:16,y:4.5,width:1.8,height:.22},{x:20,y:2.9,width:2.2,height:.22},{x:24,y:6.1,width:2.2,height:.22}];
   this.obstacles.push(...this.obstacles.map(o=>({...o,x:o.x+27})));
   this.obstacles.forEach(o=>o.x=2.9+(o.x-2.5)*.9);

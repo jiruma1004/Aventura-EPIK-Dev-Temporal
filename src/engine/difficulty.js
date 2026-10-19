@@ -10,12 +10,12 @@ window.EpikDifficulty = {
   profiles: Object.freeze({
     normal: Object.freeze({
       platformCheckpoint: false, ivanSpeed: .8751645,
-      symbolSpeed: 1.6, symbolInterval: (28.5 - 1.8) / 1.6 / 3 / 2 / 1.4 / 1.5,
+      symbolHitboxScale: .9, symbolSpeed: 1.6, symbolInterval: (28.5 - 1.8) / 1.6 / 3 / 2 / 1.4 / 1.5,
       potionFirst: 8 * 1.2 / 1.1, potionInterval: 9 * 1.2 / 1.1, flameEnabled: true
     }),
     easy: Object.freeze({
       platformCheckpoint: true, ivanSpeed: .8751645 * .8,
-      symbolSpeed: 1.6 * .8, symbolInterval: (28.5 - 1.8) / 1.6 / 3 / 2 / 1.4 / 1.5 * 1.5625,
+      symbolHitboxScale: .9, symbolSpeed: 1.6 * .8, symbolInterval: (28.5 - 1.8) / 1.6 / 3 / 2 / 1.4 / 1.5 * 1.5625,
       potionFirst: 8 * 1.2 * 1.2 / 1.1, potionInterval: 9 * 1.2 * 1.2 * 1.25 / 1.1, flameEnabled: false
     })
   })

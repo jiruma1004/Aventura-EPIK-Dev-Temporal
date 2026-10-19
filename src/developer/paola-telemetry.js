@@ -65,7 +65,7 @@
   get pending(){return this.enabled&&!this.done;}
   reset(room,preserve=false){const saved=preserve?this.snapshot():null;this.close();this.enabled=!!room.rocket;this.stage=0;this.done=false;this.passed=false;this.failures=[0,0,0];this.answers=[{},{},{}];this.points=[0,4];this.seek=0;if(saved)this.restore(saved);}
   snapshot(){return {version:1,stage:this.stage,done:this.done,passed:this.passed,failures:[...this.failures],answers:JSON.parse(JSON.stringify(this.answers)),points:[...this.points],seek:this.seek};}
-  restore(s){if(!s||s.version!==1)return;this.stage=Math.max(0,Math.min(2,Math.trunc(s.stage)||0));this.done=s.done===true;this.passed=s.passed===true;this.failures=[0,1,2].map(i=>Math.max(0,Math.min(1000,Number(s.failures?.[i])||0)));this.answers=[0,1,2].map(i=>s.answers?.[i]&&typeof s.answers[i]==='object'?{...s.answers[i]}:{});this.points=Array.isArray(s.points)?[...new Set(s.points.filter(t=>[0,2,4].includes(t)))].slice(-2):[0,4];this.seek=Math.max(0,Math.min(M.impact,Number(s.seek)||0));}
+  restore(s){if(!s||s.version!==1)return;this.stage=Math.max(0,Math.min(2,Math.trunc(s.stage)||0));this.done=s.done===true;this.passed=s.passed===true;this.failures=[0,1,2].map(i=>Math.max(0,Math.min(1000,Number(s.failures?.[i])||0)));this.answers=[0,1,2].map(i=>s.answers?.[i]&&typeof s.answers[i]==='object'?{...s.answers[i]}:{});this.points=Array.isArray(s.points)?[...new Set(s.points.filter(t=>[0,2,4].includes(t)))].slice(-2):[0,4];this.seek=Math.max(0,Math.min(M.impact,Number(s.seek)||0));if(this.passed&&!this.done){if(this.stage===2)this.done=true;else{this.stage++;this.passed=false;this.seek=0;}}}
   near(p){return this.enabled&&Math.hypot(p.x-7.4,p.y-7.3)<2.7&&Math.cos(Math.atan2(7.3-p.y,7.4-p.x)-p.angle)>.65;}
   open(){if(!this.enabled)return;this.owner.closeConsole();this.owner.speaking=false;document.querySelector('#ignitia-dialog').hidden=true;document.querySelector('#paola-dialog').hidden=true;window.dispatchEvent(new Event('astralia:ui-open'));this.panel.hidden=false;this.render();this.panel.querySelector('#telemetry-close').focus({preventScroll:true});}
   close(){this.playing=false;if(this.panel){this.panel.hidden=true;document.querySelector('#game')?.focus({preventScroll:true});}}
@@ -93,7 +93,7 @@
    this.panel.querySelectorAll('[data-choice]').forEach(b=>{b.setAttribute('aria-pressed',String(this.answers[this.stage][b.dataset.choice]===b.dataset.value));b.disabled=this.passed;});
    this.panel.querySelectorAll('[name]').forEach(n=>n.disabled=this.passed);
    this.panel.querySelector('#telemetry-check').hidden=this.passed||this.done;
-   const next=this.panel.querySelector('#telemetry-next');next.hidden=!this.passed&&!this.done;next.textContent=this.done?'Ir a la consola':this.stage===2?'Completar análisis':'Siguiente ejercicio';
+   const next=this.panel.querySelector('#telemetry-next');next.hidden=true;
    this.panel.querySelector('#telemetry-hint').hidden=this.done;
    const palma=this.panel.querySelector('#telemetry-palma');palma.hidden=this.done;palma.disabled=this.failures[this.stage]<3||this.passed;palma.textContent=this.failures[this.stage]<3?'Palma IA · tras 3 errores':'Palma IA · paso final';
    const mark=this.panel.querySelector('#telemetry-mark');if(mark)mark.disabled=this.passed;
@@ -110,7 +110,8 @@
   submit(){if(this.done||this.passed)return;const output=this.panel.querySelector('#telemetry-feedback');if(this.stage===0&&this.points.length!==2){output.textContent='Selecciona primero dos puntos de la gráfica.';output.dataset.ok='false';return;}
    const answer={...this.answers[this.stage]},errors=M.issues(this.stage,answer);this.onAttempt?.(this.stage,answer,!errors.length);this.markErrors(errors);
    if(errors.length){this.failures[this.stage]++;output.textContent=errors.length===1?'Paola: «Revisa el inciso marcado en rojo. Tu otra información se conserva».':`Paola: «Revisa los ${errors.length} incisos marcados en rojo. Debajo de cada uno encontrarás qué debes revisar».`;output.dataset.ok='false';}else{this.passed=true;this.playing=false;output.textContent=success[this.stage];output.dataset.ok='true';Sound.click();}
-   this.syncControls();this.onProgress?.();const first=this.panel.querySelector('.telemetry-invalid');if(first){first.scrollIntoView({block:'nearest'});first.querySelector('input,select,button')?.focus({preventScroll:true});}else output.scrollIntoView({block:'nearest'});if(this.passed)this.panel.querySelector('#telemetry-next').focus({preventScroll:true});
+   if(this.passed){this.next();return;}
+   this.syncControls();this.onProgress?.();const first=this.panel.querySelector('.telemetry-invalid');if(first){first.scrollIntoView({block:'nearest'});first.querySelector('input,select,button')?.focus({preventScroll:true});}else output.scrollIntoView({block:'nearest'});
   }
   markErrors(errors){
    this.panel.querySelectorAll('.telemetry-invalid').forEach(n=>n.classList.remove('telemetry-invalid'));
@@ -121,7 +122,7 @@
     for(const n of control?[control]:[box,...box.querySelectorAll('button')]){n.setAttribute('aria-invalid','true');n.setAttribute('aria-describedby',note.id);}
    }
   }
-  next(){if(this.done){this.close();return;}if(!this.passed)return;if(this.stage===2){this.done=true;this.seek=0;}else{this.stage++;this.passed=false;this.seek=0;}this.render();this.panel.scrollTop=0;this.onProgress?.();}
+  next(){if(this.done){this.close();return;}if(!this.passed)return;if(this.stage===2){this.done=true;this.seek=0;this.close();this.onProgress?.();return;}this.stage++;this.passed=false;this.seek=0;this.render();this.panel.scrollTop=0;this.panel.querySelector('[name], [data-choice]')?.focus({preventScroll:true});this.onProgress?.();}
   help(palma){if(this.done)return;if(palma){if(this.failures[this.stage]<3||this.onPalma?.()===false)return;}else this.onHint?.();const p=this.panel.querySelector('#telemetry-help');p.hidden=false;p.textContent=(palma?'Palma IA: ':'Paola: ')+hints[this.stage][palma?1:0]+(palma?' El uso de Palma IA queda registrado como ayuda.':'');this.onProgress?.();p.scrollIntoView({block:'nearest'});}
   tick(dt){if(!this.visible||!this.playing||document.hidden)return;this.seek=Math.min(M.impact,this.seek+dt);if(this.seek===M.impact)this.playing=false;this.updateTime();this.drawGraphs();}
   updateTime(){const range=this.panel.querySelector('#telemetry-time');if(!range)return;range.value=this.seek;this.panel.querySelector('#telemetry-time-value').textContent=this.seek.toFixed(2)+' s';this.panel.querySelector('#telemetry-play').textContent=this.playing?'Pausar registro':'Reproducir registro';const d=M.at(this.seek);this.panel.querySelector('#telemetry-reading').textContent=`vᵧ = ${d.v.toFixed(2)} m/s`+(this.done?` · y = ${d.y.toFixed(2)} m · aᵧ = ${d.a.toFixed(2)} m/s²`:'');}

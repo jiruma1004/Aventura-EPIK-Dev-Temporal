@@ -20,7 +20,7 @@ window.RoomCompanions=class {
   document.querySelector('#question-fold').setAttribute('aria-label','Minimizar o mostrar la pregunta');
   document.querySelector('#roulette-panel').hidden=true;
   view.insertAdjacentHTML('beforeend','<button id="ask-paola" class="paola-bubble" aria-controls="paola-dialog" aria-expanded="false"><canvas id="helper-face" width="48" height="48" aria-hidden="true"></canvas> <b id="helper-name">Epi Paola</b> <small>Una pista · H</small></button>');
-  this.paolaPortrait=new Image();this.paolaPortrait.src='assets/cast/paola-b-v1-help.webp';this.josePortrait=new Image();this.josePortrait.src='assets/cast/jose-medieval-portrait.webp';this.portrait=this.paolaPortrait;this.dialogue=null;this.paolaPortrait.onload=()=>this.drawHelpButton();this.josePortrait.onload=()=>this.drawHelpButton();
+  this.paolaPortrait=new Image();this.paolaPortrait.src='assets/cast/paola-b-v2-help.webp';this.josePortrait=new Image();this.josePortrait.src='assets/cast/jose-medieval-portrait.webp';this.portrait=this.paolaPortrait;this.dialogue=null;this.paolaPortrait.onload=()=>this.drawHelpButton();this.josePortrait.onload=()=>this.drawHelpButton();
   document.querySelector('#ask-paola').onclick=()=>this.help();
   document.querySelector('#paola-close').onclick=()=>this.closeHelp();
   document.querySelector('#paola-skip').onclick=()=>{if(this.dialogue?.speaking)this.finishDialogue();else this.closeHelp();document.querySelector('#game').focus({preventScroll:true});};

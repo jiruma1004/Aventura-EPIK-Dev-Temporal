@@ -2,6 +2,7 @@
    per-frame foot anchors keep the cast grounded without rotating whole bodies. */
 window.EpiFarewell=class {
  static source='assets/cast/epis-farewell-v1.webp';
+ static paolaSource='assets/cast/paola-farewell-v2.webp';
  static cast=[
   {name:'Iván',height:388,frames:[[98,6,164,393],[402,18,175,381],[705,80,181,319],[998,6,166,393]]},
   {name:'Eric',height:380,frames:[[53,405,248,385],[370,414,229,376],[670,473,240,317],[980,405,216,385]]},
@@ -9,6 +10,7 @@ window.EpiFarewell=class {
  ];
  constructor(el){
   this.el=el;this.age=0;this.active=false;this.loaded=false;this.art=new Image();this.art.decoding='async';
+  this.paolaArt=new Image();this.paolaArt.decoding='async';
   el.classList.add('epi-farewell');el.insertAdjacentHTML('afterbegin','<canvas id="epi-farewell-canvas" role="img" aria-label="Iván, Eric y Paola hacen una reverencia de despedida"></canvas>');
   el.insertAdjacentHTML('beforeend','<nav class="epi-farewell-actions" aria-label="Opciones al terminar"><button id="epi-farewell-replay" type="button">Repetir reverencia</button><div class="epi-play-again-group"><button id="epi-play-again" type="button" class="primary" aria-describedby="epi-ending-hint">¿Otra vez? ¡Eric no aprende!</button><small id="epi-ending-hint">Quizá este no es el único final....</small></div></nav>');
   this.canvas=el.querySelector('canvas');this.ctx=this.canvas.getContext('2d');this.title=el.querySelector('#chapter-ending-text');this.replay=el.querySelector('#epi-farewell-replay');
@@ -19,7 +21,7 @@ window.EpiFarewell=class {
  }
  prepare(){
   if(this.loading)return this.loading;
-  this.loading=new Promise((resolve,reject)=>{this.art.onload=async()=>{try{await this.art.decode();this.loaded=true;resolve();if(this.active)this.draw();}catch(e){this.loading=null;reject(e)}};this.art.onerror=()=>{this.loading=null;reject(Error('Farewell sprites unavailable'))};this.art.src=EpiFarewell.source;});return this.loading;
+  this.loading=Promise.all([[this.art,EpiFarewell.source],[this.paolaArt,EpiFarewell.paolaSource]].map(([image,src])=>{image.src=src;return image.decode();})).then(()=>{this.loaded=true;if(this.active)this.draw();}).catch(e=>{this.loading=null;throw e;});return this.loading;
  }
  labels(){const en=I18n.lang==='en';this.title.textContent=en?'Thank you for playing · Aventura EPIK':'Gracias por jugar · Aventura EPIK';this.replay.textContent=en?'Repeat bow':'Repetir reverencia';this.restart.textContent=en?'Again? Eric never learns!':'¿Otra vez? ¡Eric no aprende!';this.el.querySelector('#epi-ending-hint').textContent=en?'Perhaps this is not the only ending....':'Quizá este no es el único final....';this.restart.setAttribute('aria-label',en?'Play again from the beginning':'Volver a jugar desde el principio');this.canvas.setAttribute('aria-label',en?'Iván, Eric and Paola take a farewell bow':'Iván, Eric y Paola hacen una reverencia de despedida');}
  open(){this.active=true;this.age=0;this.animate=!matchMedia('(prefers-reduced-motion: reduce)').matches;this.el.hidden=false;this.labels();this.prepare().catch(()=>{});this.draw();this.title.focus({preventScroll:true});}
@@ -38,7 +40,7 @@ window.EpiFarewell=class {
   if(this.loaded)EpiFarewell.cast.forEach((actor,i)=>{
    const frame=this.animate?EpiFarewell.pose(this.age-i*.1):3,rect=actor.frames[frame],scale=height/actor.height,x=positions[i],foot=baseline;
    c.fillStyle='#03071077';c.beginPath();c.ellipse(x,foot+2,height*.24,height*.035,0,0,Math.PI*2);c.fill();
-   c.drawImage(this.art,...rect,x-rect[2]*scale/2,foot-rect[3]*scale,rect[2]*scale,rect[3]*scale);
+   c.drawImage(i===2?this.paolaArt:this.art,...rect,x-rect[2]*scale/2,foot-rect[3]*scale,rect[2]*scale,rect[3]*scale);
    c.textAlign='center';c.fillStyle='#f4dfae';c.font=`${Math.max(14,Math.min(22,w*.026))}px "Astralia RPG", Georgia, serif`;c.fillText(actor.name,x,baseline+Math.max(30,height*.14));
   });
  }

@@ -40,7 +40,7 @@
   constructor(owner){
    this.owner=owner;this.stage=0;this.done=false;this.passed=false;this.failures=[0,0,0];this.answers=[{},{},{}];this.points=[0,4];this.seek=0;this.enabled=false;this.playing=false;
    this.body=new Image();
-   this.portrait=new Image();this.portrait.src='assets/cast/paola-b-v1-portrait.webp';this.portrait.onload=()=>this.drawPortrait();
+   this.portrait=new Image();this.portrait.src='assets/cast/paola-b-v2-portrait.webp';this.portrait.onload=()=>this.drawPortrait();
    document.querySelector('.scene-view').insertAdjacentHTML('beforeend',`<section id="paola-tablet" class="world-console" hidden role="dialog" aria-modal="true" aria-labelledby="telemetry-title" data-no-translate>
     <header class="telemetry-header"><canvas width="128" height="128" aria-label="Paola"></canvas><div><p class="eyebrow">PAOLA · ARCHIVO DE VUELO</p><h2 id="telemetry-title">El rastro de Eric</h2><p id="telemetry-intro">Antes de usar la consola, aprendamos a leer su movimiento.</p></div><button type="button" id="telemetry-close" aria-label="Cerrar tablet">×</button></header>
     <div class="telemetry-meta"><span id="telemetry-progress"></span><span>Ventaja de Eric en pausa · El tiempo general continúa</span></div>
@@ -66,7 +66,7 @@
   }
   get visible(){return !this.panel.hidden;}
   get pending(){return this.enabled&&!this.done;}
-  reset(room,preserve=false){clearTimeout(this.praiseTimer);if(this.praise)this.praise.hidden=true;const saved=preserve?this.snapshot():null;this.close();this.enabled=!!room.rocket;if(this.enabled&&!this.body.getAttribute('src')){this.body.decoding='async';this.body.src='assets/cast/paola-b-v1.webp';}this.stage=0;this.done=false;this.passed=false;this.failures=[0,0,0];this.answers=[{},{},{}];this.points=[0,4];this.seek=0;if(saved)this.restore(saved);}
+  reset(room,preserve=false){clearTimeout(this.praiseTimer);if(this.praise)this.praise.hidden=true;const saved=preserve?this.snapshot():null;this.close();this.enabled=!!room.rocket;if(this.enabled&&!this.body.getAttribute('src')){this.body.decoding='async';this.body.src='assets/cast/paola-b-v2.webp';}this.stage=0;this.done=false;this.passed=false;this.failures=[0,0,0];this.answers=[{},{},{}];this.points=[0,4];this.seek=0;if(saved)this.restore(saved);}
   snapshot(){return {version:1,stage:this.stage,done:this.done,passed:this.passed,failures:[...this.failures],answers:JSON.parse(JSON.stringify(this.answers)),points:[...this.points],seek:this.seek};}
   restore(s){if(!s||s.version!==1)return;this.stage=Math.max(0,Math.min(2,Math.trunc(s.stage)||0));this.done=s.done===true;this.passed=s.passed===true;this.failures=[0,1,2].map(i=>Math.max(0,Math.min(1000,Number(s.failures?.[i])||0)));this.answers=[0,1,2].map(i=>s.answers?.[i]&&typeof s.answers[i]==='object'?{...s.answers[i]}:{});this.points=Array.isArray(s.points)?[...new Set(s.points.filter(t=>[0,2,4].includes(t)))].slice(-2):[0,4];this.seek=Math.max(0,Math.min(M.impact,Number(s.seek)||0));if(this.passed&&!this.done){if(this.stage===2)this.done=true;else{this.stage++;this.passed=false;this.seek=0;}}}
   near(p){return this.enabled&&Math.hypot(p.x-7.4,p.y-7.3)<2.7&&Math.cos(Math.atan2(7.3-p.y,7.4-p.x)-p.angle)>.65;}

@@ -16,7 +16,7 @@ window.ControlTutorial=class {
    <button id="control-tutorial-cancel" class="tutorial-cancel">Omitir tutorial</button>
   </aside>`);
   this.choice=document.querySelector('#control-tutorial-choice');this.panel=document.querySelector('#control-tutorial');
-  this.paola=new Image();this.paola.onload=()=>RPGCast.portrait(this.choice.querySelector('canvas'),this.paola,false,0);this.paola.src='assets/cast/paola-b-v1-portrait.webp';
+  this.paola=new Image();this.paola.onload=()=>RPGCast.portrait(this.choice.querySelector('canvas'),this.paola,false,0);this.paola.src='assets/cast/paola-b-v2-portrait.webp';
   document.querySelector('#control-tutorial-start').onclick=()=>this.begin();
   document.querySelector('#control-tutorial-skip').onclick=()=>this.finish(false);
   document.querySelector('#control-tutorial-cancel').onclick=()=>this.finish(false);

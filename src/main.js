@@ -349,6 +349,7 @@ function restoreRecovery(saved,away) {
   Object.assign(maze,{doors:m.doors,passed:new Set(m.passed),openDoors:new Set(m.openDoors),usedFreezeButtons:new Set(m.usedFreezeButtons),
    caught:false,path:[],pathClock:0,grace:Math.max(3,m.grace||0),freezeLeft:Math.max(0,m.freezeLeft-away/1000)});
   rooms[i].map=m.map;rooms[i].environment=m.environment;
+  maze.sealFailedDoors();
   if(maze.dungeon)player={x:6.5,y:6.5,angle:0,pitch:0,jumpHeight:0,jumpVelocity:0};
   else if(maze.finished)player={...maze.checkpointPosition(3),pitch:0,jumpHeight:0,jumpVelocity:0};
   maze.enemy=maze.dungeon?{x:2.5,y:6.5}:{x:maze.stage*12+1.5,y:8.5};

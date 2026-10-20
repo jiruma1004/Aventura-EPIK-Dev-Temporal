@@ -1,5 +1,5 @@
 /* Un reloj para toda la aventura, independiente de la velocidad de renderizado. */
-window.ADVENTURE_CONFIG={durationSeconds:150*60,warningSeconds:10*60,dangerSeconds:3*60,
+window.ADVENTURE_CONFIG={durationSeconds:180*60,warningSeconds:10*60,dangerSeconds:3*60,
   // Reservas para futuras pistas. Se entregan en el evento astralia:urgency.
   musicCues:{calm:null,warning:null,danger:null,expired:null,complete:null}
 };

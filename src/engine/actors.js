@@ -1,8 +1,17 @@
 window.RoomActors=class {
  constructor(){this.ivan=new Image();this.ivan.src='assets/cast/ivan-chase-demonic-v3.webp';this.doorArt=new Map();}
  doorTexture(door){
-  const key=(door.dungeon?'dungeon-':'maze-')+door.stage+'-'+door.choice;if(this.doorArt.has(key))return this.doorArt.get(key);
+  const key=(door.dungeon?'dungeon-':'maze-')+door.stage+'-'+door.choice+(door.blocked?'-blocked-'+I18n.lang:'');if(this.doorArt.has(key))return this.doorArt.get(key);
   const art=document.createElement('canvas');art.width=art.height=512;const c=art.getContext('2d');
+  if(door.blocked){
+   c.fillStyle='#21141c';c.fillRect(0,0,512,512);
+   const glow=c.createRadialGradient(256,256,30,256,256,250);glow.addColorStop(0,'#4a101c');glow.addColorStop(.7,'#8f2034');glow.addColorStop(.9,'#ed4b55');glow.addColorStop(1,'#26121c');c.fillStyle=glow;
+   c.beginPath();c.ellipse(256,256,215,245,0,0,Math.PI*2);c.fill();
+   for(let i=0;i<7;i++){c.strokeStyle=i%2?'#ff6c69':'#ad3042';c.lineWidth=3;c.beginPath();c.ellipse(256,256,80+i*20,110+i*20,i*.13,0,Math.PI*1.7);c.stroke();}
+   c.fillStyle='#260e18e8';c.fillRect(85,191,342,147);c.strokeStyle='#ffaf9a';c.lineWidth=8;c.beginPath();c.arc(256,231,25,Math.PI,0);c.lineTo(281,259);c.moveTo(231,231);c.lineTo(231,259);c.stroke();c.fillStyle='#ffaf9a';c.fillRect(223,251,66,47);
+   c.textAlign='center';c.font='bold 27px Georgia';c.fillText('SELLADO',256,325);
+   this.doorArt.set(key,art);return art;
+  }
   c.fillStyle=door.branch?(door.choice===0?'#18396c':'#6c202b'):'#273346';c.fillRect(0,0,512,512);for(let i=0;i<8;i++){c.fillStyle=door.branch?(door.choice===0?(i%2?'#346ccc':'#244f9a'):(i%2?'#b7434a':'#8b2837')):(i%2?'#324257':'#2b394d');c.fillRect(14+i*61,12,56,488);}c.strokeStyle=door.branch?(door.choice===0?'#8bc4ff':'#ffa0a7'):'#ba9764';c.lineWidth=13;c.strokeRect(14,14,484,484);
   c.fillStyle='#101c2bf2';c.fillRect(36,113,440,239);c.strokeStyle='#d0bb8e';c.lineWidth=3;c.strokeRect(36,113,440,239);c.textAlign='center';c.fillStyle='#ecd3a2';c.font='bold 68px Georgia';if(!door.branch)c.fillText(door.letter,256,192,416);
   c.fillStyle='#ddba76';c.beginPath();c.arc(432,404,13,0,Math.PI*2);c.fill();this.doorArt.set(key,art);return art;
@@ -10,7 +19,7 @@ window.RoomActors=class {
  project(renderer,player,x,y,z){const w=renderer.canvas.width,h=renderer.canvas.height,dx=x-player.x,dy=y-player.y,depth=dx*Math.cos(player.angle)+dy*Math.sin(player.angle),side=-dx*Math.sin(player.angle)+dy*Math.cos(player.angle);if(depth<.12)return null;return {x:w/2+side/depth*w/1.32,y:h*(.5+(player.pitch||0))-(z-.5-(player.jumpHeight||0))*h/depth,scale:h/depth,depth};}
  draw(renderer,room,player,opened,time,maze){
   if(opened&&(room.physics||room.boss))this.drawBridgeRails(renderer,room,player);
-  const objects=[];if(room.answerDesk)objects.push({...room.answerDesk,kind:'desk'});if(maze&&!maze.dungeon)for(const d of maze.doors)if(!d.correct&&maze.openDoors.has(d.stage+':'+d.choice))objects.push({x:d.x+.5,y:d.y+.5,kind:'rift'});if(maze?.chasing&&!maze.caught)objects.push({...maze.enemy,kind:'ivan'});
+  const objects=[];if(room.answerDesk)objects.push({...room.answerDesk,kind:'desk'});if(maze?.chasing&&!maze.caught)objects.push({...maze.enemy,kind:'ivan'});
   objects.sort((a,b)=>Math.hypot(b.x-player.x,b.y-player.y)-Math.hypot(a.x-player.x,a.y-player.y));
   this.deskBounds=this.guideBounds=null;
   this.freezeButtonBounds=null;if(maze?.freezeButton)this.drawFreezePlate(renderer,player,maze,time);
@@ -83,7 +92,7 @@ window.RoomActors=class {
  }
  drawDoorLabels(renderer,room,player,maze){
   const c=renderer.ctx;
-  for(const door of maze.doors.filter(d=>d.stage===maze.stage&&room.map[d.y][d.x]===2)){
+  for(const door of maze.doors.filter(d=>d.stage===maze.stage&&!d.blocked&&room.map[d.y][d.x]===2)){
    const x=door.x-.02,y=door.y+.5,p=this.project(renderer,player,x,y,.52);if(!p||p.depth<.45||p.depth>10)continue;
    const hit=renderer.cast(room,player.x,player.y,Math.atan2(y-player.y,x-player.x),false);if(hit.distance+.03<Math.hypot(x-player.x,y-player.y))continue;
    c.save();const width=Math.min(280,Math.max(104,p.scale*.83)),font=Math.max(14,Math.min(22,p.scale*.08));c.font=`${font}px Trebuchet MS`;c.textAlign='center';

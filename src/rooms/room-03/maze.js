@@ -57,6 +57,7 @@ window.ConceptMaze=class {
   this.lastDungeonQuestion=this.questionPool.pop();return DUNGEON_QUESTIONS[this.lastDungeonQuestion];
  }
  enterDungeon(player,door){
+  door.blocked=true;this.room.map[door.y][door.x]=2;
   this.savedWorld={map:this.room.map,doors:this.doors};this.dungeon=true;this.dungeonVisit++;this.freezeLeft=0;this.dungeonQuestion=this.nextDungeonQuestion();this.returnGrace=false;
   this.room.environment={kind:'interior',label:'Calabozo del error',tint:'#395338',moss:true,abandoned:true,ceilingHeight:1.5,portraits:[]};
   this.room.map=Array.from({length:13},(_,y)=>Array.from({length:15},(_,x)=>x===0||x===14||y===0||y===12?1:0));
@@ -72,6 +73,10 @@ window.ConceptMaze=class {
   this.onEvent('return',EpikDifficulty.easy?'Sello resuelto. Regresas a la última prueba alcanzada. Iván esperará 10 segundos.':'Sello resuelto. Regresas al inicio del laberinto; las puertas que abriste siguen abiertas. Iván esperará 10 segundos: aprovecha para alejarte.');
  }
  doorAt(x,y){return this.doors.find(d=>d.x===x&&d.y===y);}
+ sealFailedDoors(){
+  const doors=this.dungeon?this.savedWorld.doors:this.doors,map=this.dungeon?this.savedWorld.map:this.room.map;
+  for(const door of doors)if(!door.correct&&this.openDoors.has(door.stage+':'+door.choice)){door.blocked=true;map[door.y][door.x]=2;}
+ }
  choose(door,player={}){
   if(this.dungeon){
    if(!door||!this.doors.includes(door)||this.caught)return null;
@@ -81,14 +86,14 @@ window.ConceptMaze=class {
   if(!door||door.stage!==this.stage||this.finished||this.caught||this.openDoors.has(door.stage+':'+door.choice))return null;
   this.onAnswer?.(door);if(CONCEPT_QUESTIONS[this.stage].branch){if(this.routeChoice!==null)return null;this.routeChoice=door.choice;StoryRoute.choose(door.choice===0?'particle':'wave');}
   this.room.map[door.y][door.x]=0;this.openDoors.add(door.stage+':'+door.choice);
-  if(!door.correct||this.openDoors.size>=2)this.awaken();
+  if(!door.correct||this.passed.size>=1)this.awaken();
   if(door.correct){this.passed.add(this.stage);this.onEvent('correct','La puerta se abre. Explora el pasaje y cruza hasta la siguiente galería.');return true;}
   this.enterDungeon(player,door);
   return false;
  }
  awaken(silent=false){if(this.chasing)return;this.chasing=true;this.enemy={x:this.stage*12+1.5,y:8.5};this.path=[];this.pathClock=0;this.grace=silent?10:2.5;if(!silent)this.onEvent('presence','Oyes pasos entre los muros. No estás solo.');}
  checkpointPosition(stage=this.stage){if(stage===0)return {...this.room.spawn};const previous=this.doors.find(d=>d.stage===stage-1&&d.correct);return {x:stage*12+1.5,y:previous.y+.5,angle:0};}
- restoreCheckpoint(stage){this.reset();this.stage=Math.max(0,Math.min(3,stage));for(const door of this.doors)if(door.stage<this.stage&&door.correct){this.room.map[door.y][door.x]=0;this.passed.add(door.stage);this.openDoors.add(door.stage+':'+door.choice);}if(this.openDoors.size>=2)this.awaken(true);return this.checkpointPosition();}
+ restoreCheckpoint(stage){const failed=(this.dungeon?this.savedWorld.doors:this.doors).filter(d=>!d.correct&&this.openDoors.has(d.stage+':'+d.choice)).map(d=>d.stage+':'+d.choice);this.reset();this.openDoors=new Set(failed);this.sealFailedDoors();this.stage=Math.max(0,Math.min(3,stage));for(const door of this.doors)if(door.stage<this.stage&&door.correct){this.room.map[door.y][door.x]=0;this.passed.add(door.stage);this.openDoors.add(door.stage+':'+door.choice);}if(this.passed.size>=2)this.awaken(true);return this.checkpointPosition();}
  routeTo(player){
   const start=[Math.floor(this.enemy.x),Math.floor(this.enemy.y)],goal=[Math.floor(player.x),Math.floor(player.y)],key=(x,y)=>x+','+y,queue=[start],parents=new Map([[key(...start),null]]);
   for(let i=0;i<queue.length;i++){const [x,y]=queue[i];if(x===goal[0]&&y===goal[1])break;for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,k=key(nx,ny);if(this.room.map[ny]?.[nx]===0&&!parents.has(k)){parents.set(k,[x,y]);queue.push([nx,ny]);}}}
@@ -103,10 +108,6 @@ window.ConceptMaze=class {
   this.bite=Math.max(0,this.bite-dt);
   const pursuitDt=Math.max(0,dt-this.freezeLeft);
   this.freezeLeft=Math.max(0,this.freezeLeft-dt);
-  if(!this.dungeon&&!this.caught){
-   const portal=this.doors.find(d=>!d.correct&&this.openDoors.has(d.stage+':'+d.choice)&&player.x>=d.x&&player.x<d.x+4&&Math.abs(player.y-(d.y+.5))<1.5);
-   if(portal){this.enterDungeon(player,portal);return;}
-  }
   if(!this.dungeon&&this.passed.has(this.stage)&&player.x>(this.stage===3?this.room.exitX:(this.stage+1)*12+1)){this.stage++;if(this.stage===CONCEPT_QUESTIONS.length){this.finished=true;this.onEvent('complete','¡Superaste el laberinto!');return;}this.onEvent('advance','Punto seguro guardado. Nueva galería: lee la pregunta y elige una puerta.');}
   if(!this.chasing||this.finished||this.caught||this.freezeLeft>0)return;
   dt=pursuitDt;if(dt<=0)return;

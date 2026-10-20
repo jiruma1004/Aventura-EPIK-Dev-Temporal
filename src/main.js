@@ -120,7 +120,7 @@ function trialEvent(type,position){
 }
 function mazeEvent(type,text){
  if(type==='caught'){die('ivan');return;}
- if(type==='return'){player=spawnPlayer(rooms[index]);checkpoint={room:index,stage:0,position:spawnPlayer(rooms[index])};keys.clear();}
+ if(type==='return'){player={...spawnPlayer(rooms[index]),...maze.checkpointPosition()};checkpoint={room:index,stage:maze.stage,position:{...player}};keys.clear();}
  if(type==='dungeon'||type==='return'){keys.clear();companions.closeHelp();camera.release();}
  if(type==='presence')Sound.tone(85,.6,'sine',.11);
  else if(type==='wrong')Sound.tone(180,.25,'triangle',.15);

@@ -64,12 +64,12 @@ window.ConceptMaze=class {
   for(const d of this.doors)this.room.map[d.y][d.x]=2;
   Object.assign(player,{x:6.5,y:6.5,angle:0,pitch:0,jumpHeight:0,jumpVelocity:0});
   this.chasing=true;this.enemy={x:2.5,y:6.5};this.path=[];this.pathClock=0;this.grace=10;
-  this.onEvent('dungeon','El portal te arrastra al calabozo. Resuelve el sello de dos puertas para volver al inicio. Cuidado, alguien te persigue.');
+  this.onEvent('dungeon',EpikDifficulty.easy?'El portal te arrastra al calabozo. Resuelve el sello para volver a la última prueba alcanzada. Cuidado, alguien te persigue.':'El portal te arrastra al calabozo. Resuelve el sello de dos puertas para volver al inicio. Cuidado, alguien te persigue.');
  }
  leaveDungeon(){
-  this.room.map=this.savedWorld.map;this.doors=this.savedWorld.doors;this.room.environment=this.baseEnvironment;this.dungeon=false;this.freezeLeft=0;this.stage=0;this.savedWorld=null;
-  this.enemy={x:1.5,y:8.5};this.path=[];this.pathClock=0;this.grace=10;this.returnGrace=true;
-  this.onEvent('return','Sello resuelto. Regresas al inicio del laberinto; las puertas que abriste siguen abiertas. Iván esperará 10 segundos: aprovecha para alejarte.');
+  this.room.map=this.savedWorld.map;this.doors=this.savedWorld.doors;this.room.environment=this.baseEnvironment;this.dungeon=false;this.freezeLeft=0;this.stage=EpikDifficulty.easy?this.stage:0;this.savedWorld=null;
+  this.enemy={x:this.stage*12+1.5,y:8.5};this.path=[];this.pathClock=0;this.grace=10;this.returnGrace=true;
+  this.onEvent('return',EpikDifficulty.easy?'Sello resuelto. Regresas a la última prueba alcanzada. Iván esperará 10 segundos.':'Sello resuelto. Regresas al inicio del laberinto; las puertas que abriste siguen abiertas. Iván esperará 10 segundos: aprovecha para alejarte.');
  }
  doorAt(x,y){return this.doors.find(d=>d.x===x&&d.y===y);}
  choose(door,player={}){

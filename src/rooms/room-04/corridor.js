@@ -14,7 +14,8 @@ window.RelaxCorridor=class {
  resetHazards(){this.caught=false;this.time=0;this.nextLane=0;this.symbols=this.guardian.arrived?[]:this.initialSymbols();this.spawnClock=this.spawnInterval;}
  // El aviso y su confirmación comparten el mismo alcance.
  nearExit(player){return Math.hypot(player.x-67,player.y-4.5)<=2.4;}
- blocks(x,y,height){return this.guardian.blocks(x,y)||height<.25*.9&&this.obstacles.some(o=>Math.abs(x-o.x)<.32*.9&&Math.abs(y-o.y)<(o.width/2+.18)*.9);}
+ // Tighter wooden-barrier bounds in both difficulties; symbols keep their own hitbox.
+ blocks(x,y,height){const woodScale=.8;return this.guardian.blocks(x,y)||height<.25*.9*woodScale&&this.obstacles.some(o=>Math.abs(x-o.x)<.32*.9*woodScale&&Math.abs(y-o.y)<(o.width/2+.18)*.9*woodScale);}
  tick(dt,player){if(this.caught)return;this.time+=dt;
   if(player.x>=GUARDIAN_GARDEN.start)this.guardian.enter();
   if(this.guardian.arrived){this.symbols=[];this.guardian.tick(dt,player);return;}

@@ -1,7 +1,7 @@
 /* Membership checks for the supplied class lists. Not server authentication. */
 (()=>{'use strict';
 const key='epik.enrollment.access.v1';
-const masterHash='ec9f8ee21e32525fded7c6035697249ceefafeee3110674248208f008f769851';
+const masterHash='30c8b9f5fcdab43e54d5af325a19bc2ea8fd27befe818986fb27a24d86e1b261';
 const sha=async text=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
 const member=(group,hash)=>window.EpikStudentRoster?.groups[group]?.includes(hash)===true;
 window.EpikGroupAccess={group:null,studentId:null,teacher:false,

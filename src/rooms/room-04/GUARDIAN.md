@@ -55,7 +55,7 @@ antiguo acertijo conserva el acceso; quien aún no lo hizo inicia los tres sello
 
 ## Arte y pruebas
 
-assets/garden: luis-monument.webp, rodrigo-monument.webp, fountain.webp, gate-frame.webp,
+assets/garden: luis-monument-v2.webp, rodrigo-monument.webp, fountain.webp, gate-frame.webp,
 gate-leaves.webp, castle-16bit.webp. Todas son imágenes locales con alpha.
 Fuentes y prompts ImageGen en outputs/guardian-garden-2026-10-16/twin-guardians
 (del workspace). Puerta separada en marco y hojas mediante recorte técnico FFmpeg;

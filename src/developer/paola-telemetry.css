@@ -61,3 +61,9 @@
 @media(pointer:coarse){#paola-tablet button,#paola-tablet select,#paola-tablet input:not([type=range]){min-height:44px}}
 
 #paola-encouragement[hidden]{display:none!important}#paola-encouragement{position:absolute;z-index:60;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:12px;align-items:center;width:min(660px,calc(100% - 38px));box-sizing:border-box;padding:10px 15px;border:1px solid #d7bd7b;border-radius:9px;background:linear-gradient(120deg,#183e35ed,#14252bef);color:#fff0c6;box-shadow:0 6px 25px #0008;pointer-events:none;font:17px/1.4 var(--adventure-lettering)}#paola-encouragement canvas{width:56px;height:56px;flex:none}#paola-encouragement p{margin:0}@media(max-width:600px){#paola-encouragement{font-size:14px;bottom:8px;padding:8px;gap:8px}#paola-encouragement canvas{width:40px;height:40px}}
+
+/* Progressive disclosure keeps one decision group visible at a time. */
+#paola-tablet [hidden]{display:none!important}
+#paola-tablet .telemetry-model summary{cursor:pointer;color:#e5ce9e;padding:8px 0}
+#paola-tablet .telemetry-step-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0}
+#paola-tablet .telemetry-step-nav span{color:#ffe3a1}

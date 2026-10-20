@@ -43,8 +43,8 @@
    this.portrait=new Image();this.portrait.src='assets/cast/paola-b-v2-portrait.webp';this.portrait.onload=()=>this.drawPortrait();
    document.querySelector('.scene-view').insertAdjacentHTML('beforeend',`<section id="paola-tablet" class="world-console" hidden role="dialog" aria-modal="true" aria-labelledby="telemetry-title" data-no-translate>
     <header class="telemetry-header"><canvas width="128" height="128" aria-label="Paola"></canvas><div><p class="eyebrow">PAOLA · ARCHIVO DE VUELO</p><h2 id="telemetry-title">El rastro de Eric</h2><p id="telemetry-intro">Antes de usar la consola, aprendamos a leer su movimiento.</p></div><button type="button" id="telemetry-close" aria-label="Cerrar tablet">×</button></header>
-    <div class="telemetry-meta"><span id="telemetry-progress"></span><span>Ventaja de Eric en pausa · El tiempo general continúa</span></div>
-    <p class="telemetry-model">Vuelo vertical de práctica: y es la altura sobre la plataforma y t se mide desde el despegue. Hacia arriba es positivo. No es el radar en directo.</p>
+    <div class="telemetry-meta"><span id="telemetry-progress"></span><span>El reloj general continúa</span></div>
+    <details class="telemetry-model"><summary>Ver datos del vuelo de práctica</summary><p>y: altura sobre la plataforma. t: tiempo desde el despegue. Hacia arriba es positivo. Sin resistencia del aire. La ventaja de Eric está en pausa durante este reto.</p></details>
     <div id="telemetry-content"></div>
     <p id="telemetry-feedback" role="status" aria-live="polite"></p><p id="telemetry-help" hidden></p>
     <footer class="telemetry-actions"><button type="button" id="telemetry-hint">Pista de Paola</button><button type="button" id="telemetry-palma">Palma IA · 3 errores</button><button type="button" id="telemetry-check" class="primary">Comprobar respuestas</button><button type="button" id="telemetry-next" class="primary" hidden>Siguiente ejercicio</button></footer>
@@ -80,16 +80,39 @@
    this.panel.dataset.stage=this.done?'review':String(this.stage);
    const c=this.panel.querySelector('#telemetry-content');
    this.panel.querySelector('#telemetry-progress').textContent=this.done?'Tres ejercicios completados':`Ejercicio ${this.stage+1} de 3 · ${['Calcula la pendiente','Relaciona las gráficas','El motor deja de funcionar'][this.stage]}`;
-   this.panel.querySelector('#telemetry-intro').textContent=this.done?'Ya sabes leer su movimiento. Ahora podemos calcular cómo alcanzarlo.':['Observa la velocidad del cohete durante los primeros 4 segundos. Elige dos puntos de la recta y calcula su pendiente.','Estas gráficas representan el mismo vuelo, entre 0 y 4 segundos. Elige una gráfica de altura y otra de aceleración que correspondan a la velocidad mostrada.','Cuatro segundos después del despegue, el motor falla. El cohete está a 40 m de altura y sube a 20 m/s. Desde ese instante solo actúa la gravedad; desprecia la resistencia del aire.'][this.stage];
+   this.panel.querySelector('#telemetry-intro').textContent=this.done?'Ya sabes leer su movimiento. Ahora podemos calcular cómo alcanzarlo.':['Elige dos puntos y calcula la pendiente de la velocidad entre 0 y 4 s.','Relaciona esta velocidad con la altura y la aceleración entre 0 y 4 s.','El motor falla a los 4 s: altura 40 m y velocidad 20 m/s hacia arriba. Después, aᵧ = −9.81 m/s².'][this.stage];
    if(this.done)c.innerHTML=`<div class="telemetry-synced">${this.plot('full-a','Aceleración aᵧ(t)')}${this.plot('full-v','Velocidad vᵧ(t)')}${this.plot('full-y','Altura y(t)')}</div>${this.transport()}<p class="telemetry-recap">El motor falla a los 4.00 s · Alcanza su altura máxima a los ${M.peak.toFixed(2)} s · Regresa a la plataforma a los ${M.impact.toFixed(2)} s. El tiempo se mide desde el despegue.</p>`;
    else if(this.stage===0)c.innerHTML=`<div class="telemetry-workspace"><div>${this.plot('velocity','Velocidad vertical · Selecciona dos puntos')}<div class="telemetry-points">${[0,2,4].map(t=>`<button type="button" data-point="${t}" aria-pressed="${this.points.includes(t)}">(${t} s, ${5*t} m/s)</button>`).join('')}</div><output id="telemetry-delta"></output></div><div class="telemetry-fields">${this.select('meaning','¿Qué representa la pendiente?',[['position','Posición'],['velocity','Velocidad'],['acceleration','Aceleración']])}${this.select('sign','¿Cuál es el signo de la pendiente?',[['positive','Positivo'],['zero','Cero'],['negative','Negativo']])}<label class="telemetry-select">Valor de la pendiente<input name="value" type="text" inputmode="decimal" autocomplete="off" placeholder="Tu cálculo"></label>${this.select('unit','Unidades',[['velocity','m/s'],['acceleration','m/s²'],['position','m']])}${this.select('trend','¿Cómo cambia la aceleración?',[['increasing','Aumenta'],['constant','Permanece constante'],['decreasing','Disminuye']])}</div></div>`;
-   else if(this.stage===1)c.innerHTML=`${this.plot('velocity','Registro conocido: velocidad vertical')}${this.choices('position','1 · ¿Qué gráfica muestra la altura y(t)? El cohete parte de y₀ = 0.',[['line','A · Recta creciente','candidate-y-line'],['curved','B · Cada vez más inclinada','candidate-y-up'],['flat','C · Se va aplanando','candidate-y-flat']])}${this.choices('acceleration','2 · ¿Qué gráfica muestra la aceleración aᵧ(t) durante esos mismos 4 segundos?',[['rising','A · Creciente','candidate-a-up'],['zero','B · Cero','candidate-a-zero'],['constant','C · Constante positiva','candidate-a-constant']])}`;
-   else c.innerHTML=`${this.plot('full-v','Registro completo · Fallo del motor en t = 4 s')}${this.transport()}<div class="telemetry-fields two"><label class="telemetry-select">¿Cuántos segundos después del despegue alcanza su altura máxima?<input name="peak" type="text" inputmode="decimal" autocomplete="off" placeholder="Respuesta en segundos"></label><button type="button" id="telemetry-mark">Usar el tiempo seleccionado</button>${this.select('motion','Después de que falla el motor y antes de alcanzar su altura máxima, ¿cómo se mueve el cohete?',[['down','Ya está bajando'],['up-slow','Sube cada vez más despacio'],['stopped','Está detenido']])}${this.select('gravity','¿Cuál es su aceleración cuando alcanza la altura máxima?',[['zero','Es cero'],['positive','Es positiva'],['negative','Es −9.81 m/s²']])}</div>${this.choices('position','¿Qué gráfica describe la altura del cohete después de que falla el motor?',[['drop','A · La altura disminuye desde el fallo','candidate-fall'],['coast','B · La altura aumenta hasta un máximo y luego disminuye','candidate-coast'],['linear','C · La altura aumenta a un ritmo constante','candidate-rise']])}`;
+   else if(this.stage===1)c.innerHTML=`${this.plot('velocity','Registro conocido: velocidad vertical')}${this.choices('position','1 · ¿Qué gráfica muestra la altura y(t)? El cohete parte de y₀ = 0.',[['line','A · Recta creciente','candidate-y-line'],['curved','B · Cada vez más inclinada','candidate-y-up'],['flat','C · Se va aplanando','candidate-y-flat']])}${this.choices('acceleration','2 · Elige la aceleración aᵧ(t).',[['rising','A · Creciente','candidate-a-up'],['zero','B · Cero','candidate-a-zero'],['constant','C · Constante positiva','candidate-a-constant']])}`;
+   else c.innerHTML=`${this.plot('full-v','Registro completo · Fallo del motor en t = 4 s')}${this.transport()}<div class="telemetry-fields two"><label class="telemetry-select">¿Cuántos segundos después del despegue alcanza su altura máxima?<input name="peak" type="text" inputmode="decimal" autocomplete="off" placeholder="Respuesta en segundos"></label><button type="button" id="telemetry-mark">Usar el tiempo seleccionado</button>${this.select('motion','Justo después del fallo, ¿cómo se mueve?',[['down','Ya está bajando'],['up-slow','Sube cada vez más despacio'],['stopped','Está detenido']])}${this.select('gravity','¿Cuál es su aceleración cuando alcanza la altura máxima?',[['zero','Es cero'],['positive','Es positiva'],['negative','Es −9.81 m/s²']])}</div>${this.choices('position','¿Cómo cambia la altura después del fallo?',[['drop','A · La altura disminuye desde el fallo','candidate-fall'],['coast','B · La altura aumenta hasta un máximo y luego disminuye','candidate-coast'],['linear','C · La altura aumenta a un ritmo constante','candidate-rise']])}`;
+   this.substep=0;this.buildSteps();
    this.panel.querySelectorAll('[name]').forEach(n=>n.value=this.answers[this.stage][n.name]??'');
    this.panel.querySelector('#telemetry-feedback').textContent=this.passed?success[this.stage]:'';
    this.panel.querySelector('#telemetry-feedback').dataset.ok=String(this.passed);
    this.panel.querySelector('#telemetry-help').hidden=true;
    this.syncControls();this.drawPortrait();this.drawGraphs();this.updateTime();
+  }
+  buildSteps(){
+   this.panel.querySelector('#telemetry-step-nav')?.remove();
+   if(this.done||this.stage===0)return;
+   const nav=document.createElement('nav');nav.id='telemetry-step-nav';nav.className='telemetry-step-nav';nav.setAttribute('aria-label','Pasos del ejercicio');
+   nav.innerHTML='<button type="button" id="telemetry-back">Anterior</button><span id="telemetry-step-label"></span><button type="button" id="telemetry-forward">Continuar</button>';
+   this.panel.querySelector('#telemetry-content').after(nav);
+   nav.querySelector('#telemetry-back').onclick=()=>{this.substep=0;this.syncControls();this.drawGraphs();};
+   nav.querySelector('#telemetry-forward').onclick=()=>{this.substep=1;this.syncControls();this.drawGraphs();this.panel.querySelector('#telemetry-content').scrollIntoView({block:'start'});};
+  }
+  showStep(){
+   if(this.done||this.stage===0)return;
+   const first=this.stage===1?['position']:['motion','position'];
+   for(const name of this.stage===1?['position','acceleration']:['motion','position','peak','gravity']){
+    const control=this.panel.querySelector(`[name="${name}"]`),box=this.panel.querySelector(`[data-field="${name}"]`)||control?.closest('label');
+    if(box)box.hidden=first.includes(name)?this.substep!==0:this.substep!==1;
+   }
+   for(const node of this.panel.querySelectorAll('.telemetry-transport,#telemetry-mark'))node.hidden=this.substep===0;
+   this.panel.querySelector('#telemetry-back').hidden=this.substep===0;
+   this.panel.querySelector('#telemetry-forward').hidden=this.substep===1;
+   this.panel.querySelector('#telemetry-check').hidden=this.substep===0||this.passed;
+   this.panel.querySelector('#telemetry-step-label').textContent=this.stage===1?(this.substep?'2 / 2 · Aceleración':'1 / 2 · Altura'):(this.substep?'2 / 2 · Altura máxima':'1 / 2 · Después del fallo');
   }
   transport(){return `<div class="telemetry-transport"><button type="button" id="telemetry-play">Reproducir registro</button><label for="telemetry-time">Tiempo desde el despegue <output id="telemetry-time-value"></output></label><input id="telemetry-time" type="range" min="0" max="${M.impact}" step="0.01" value="${this.seek}" aria-label="Tiempo desde el despegue"><output id="telemetry-reading" aria-live="off"></output></div>`;}
   syncControls(){
@@ -101,6 +124,7 @@
    const palma=this.panel.querySelector('#telemetry-palma');palma.hidden=this.done;palma.disabled=this.failures[this.stage]<3||this.passed;palma.textContent=this.failures[this.stage]<3?'Palma IA · tras 3 errores':'Palma IA · paso final';
    const mark=this.panel.querySelector('#telemetry-mark');if(mark)mark.disabled=this.passed;
    const delta=this.panel.querySelector('#telemetry-delta');if(delta){const p=[...this.points].sort((a,b)=>a-b);delta.textContent=p.length===2?`P₁ = (${p[0]} s, ${p[0]*5} m/s) · P₂ = (${p[1]} s, ${p[1]*5} m/s)`:'Selecciona dos puntos para calcular la pendiente.';}
+   this.showStep();
   }
   input(e){if(e.target.id==='telemetry-time'){this.playing=false;this.seek=Number(e.target.value);this.updateTime();this.drawGraphs();}else if(e.target.name&&!this.passed){this.answers[this.stage][e.target.name]=e.target.value;this.onProgress?.();}}
   click(e){const choice=e.target.closest('[data-choice]'),point=e.target.closest('[data-point]');
@@ -112,7 +136,8 @@
   }
   submit(){if(this.done||this.passed)return;clearTimeout(this.praiseTimer);this.praise.hidden=true;const output=this.panel.querySelector('#telemetry-feedback');if(this.stage===0&&this.points.length!==2){output.textContent='Selecciona primero dos puntos de la gráfica.';output.dataset.ok='false';return;}
    const answer={...this.answers[this.stage]},errors=M.issues(this.stage,answer);this.onAttempt?.(this.stage,answer,!errors.length);this.markErrors(errors);
-   if(errors.length){this.failures[this.stage]++;output.textContent=errors.length===1?'Paola: «Revisa el inciso marcado en rojo. Tu otra información se conserva».':`Paola: «Revisa los ${errors.length} incisos marcados en rojo. Debajo de cada uno encontrarás qué debes revisar».`;output.dataset.ok='false';}else{this.passed=true;this.playing=false;output.textContent=success[this.stage];output.dataset.ok='true';Sound.click();}
+   if(errors.length&&this.stage>0){const first=this.stage===1?['position']:['motion','position'];this.substep=first.includes(errors[0].field)?0:1;}
+   if(errors.length){this.failures[this.stage]++;output.textContent=errors.length===1?'Paola: «Revisa el inciso en rojo; conservé tus respuestas».':`Paola: «Revisa los ${errors.length} incisos en rojo; conservé tus respuestas».`;output.dataset.ok='false';}else{this.passed=true;this.playing=false;output.textContent=success[this.stage];output.dataset.ok='true';Sound.click();}
    if(this.passed){
     const words=['¡Felicidades, está todo correcto! Ya sabes interpretar la pendiente. ¡Vamos por el siguiente reto!','¡Felicidades, está todo correcto! Has conectado las gráficas con muy buen razonamiento. ¡Sigue así!','¡Felicidades, está todo correcto! Tu razonamiento nos acerca a Eric. ¡Confía en lo que has aprendido!'];
     this.praise.querySelector('p').textContent='Paola: «'+words[this.stage]+'»';this.praise.hidden=false;
@@ -165,7 +190,7 @@
   constructor(...args){super(...args);this.telemetry=new PaolaTelemetry(this);const canRun=this.simulator.canRun;this.simulator.canRun=()=>!this.telemetry.pending&&canRun();}
   speak(text,speaker='jose'){return super.speak(text.replace('Aquí José Luis. Camisa de rayas, cohete listo: solo falta tu trayectoria.','¡Aquí José Luis, líder de Ignitia! El cohete está listo; solo falta calcular la trayectoria.'),speaker);}
   get blocking(){return super.blocking||!!this.telemetry?.visible;}
-  reset(room,options={}){super.reset(room,options);this.telemetry.reset(room,options.preserveTelemetry);if(room.rocket&&!this.telemetry.done)this.speak('¡Aquí José Luis, líder de Ignitia! El cohete está listo. Antes de usar la consola, habla con Paola: te espera a un lado para revisar tres ejercicios de movimiento en su tablet. Cuando termines, podrás programar la trayectoria.');}
+  reset(room,options={}){super.reset(room,options);this.telemetry.reset(room,options.preserveTelemetry);if(room.rocket&&!this.telemetry.done)this.speak('¡Aquí José Luis, líder de Ignitia! Antes de programar el cohete, habla con Paola junto a la consola.');}
   open(p){if(this.telemetry.pending){if(this.blocking)return false;if(this.telemetry.near(p)){this.telemetry.open();return true;}if(super.near(p)){this.speak('Primero habla con Paola. Está a un lado de la consola y necesita revisar contigo los registros del vuelo.');return true;}return false;}return super.open(p);}
   startLaunch(){if(this.telemetry.pending)return;super.startLaunch();}
   closeConsole(){super.closeConsole();this.telemetry?.close();}

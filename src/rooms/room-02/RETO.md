@@ -1,9 +1,11 @@
 # La rueda del destino
 
-Mesa central con botón de cristal. Interacción por clic, botón accesible o tecla E, a no más de 2.4 casillas. Campanada al pulsar y ticks al girar. Selección aleatoria sin repetición; el sector indicado por la flecha corresponde al problema seleccionado.
+Seis ejercicios con dos respuestas cada uno: frenada, encuentro de transportadores, lanzamiento desde una plataforma, aerodeslizador, carrito y caída desde un balcón. No incluye tiro parabólico ni caída entre sensores.
 
-Diez problemas originales con dos respuestas cada uno. 01–08: cinemática universitaria, incluidas fases, sistemas de referencia y raíces físicas. 09: arranque desde el reposo con aceleración constante. 10: caída desde un balcón sin resistencia. Todos los sectores tienen el estilo normal, sin rojos ni especiales.
+La rueda dibuja seis sectores, numerados del 01 al 06, calculados a partir del tamaño del banco. El puntero, los ticks y el resultado comparten ese tamaño. Solo hay que resolver el ejercicio seleccionado. Se permiten un giro inicial y un único giro extra, compartidos por cristal y botón.
 
-Una respuesta completa correcta abre la puerta. La tolerancia por campo es el máximo de 1 % del valor esperado y 0.02 unidades. Se acepta coma o punto decimal y notación científica. Entradas vacías, texto, NaN e infinito se rechazan. Pistas y soluciones están disponibles para aprendizaje autónomo. Se puede seguir practicando tras abrir la puerta.
+Paola proporciona pistas y un formulario de los temas disponibles. Palma IA deja las ecuaciones despejadas y sustituidas sin evaluar la respuesta final. La tolerancia es el máximo de 1 % y 0.02 unidades; se acepta coma o punto decimal.
 
-`problems.js` contiene enunciados, respuestas y soluciones; `roulette.js` gestiona el sorteo, animación, formulario y evaluación. `tests/physics.cjs` comprueba por sustitución las soluciones de los diez enunciados.
+Los IDs internos originales 1, 2, 6, 7, 9 y 10 se mantienen para ayudas y registros. La numeración visible es consecutiva. Las partidas antiguas conservan el ejercicio si sigue disponible; los retirados se sustituyen por el carrito, sin añadir giros ni borrar progreso. La instantánea usa bankVersion 2.
+
+Pruebas: tests/physics.cjs, tests/guided-assistance.cjs, tests/roulette-guidance.browser.cjs y tests/roulette-six.browser.cjs.

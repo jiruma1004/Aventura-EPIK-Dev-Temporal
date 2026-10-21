@@ -306,7 +306,7 @@ function captureRecovery() {
  if(room.physics)world.cannon={target:pick(lab.target,['index','misses']),physics:{...room.physics},
   values:[lab.v.value,lab.a.value,lab.az.value],history:lab.history,selected:lab.selected,loaded:lab.loaded,
   shot:lab.shot?.done&&lab.shot.result.hit?lab.shot:null};
- if(room.roulette)world.roulette={current:roulette.current?.id,selected:roulette.selected,remaining:roulette.remaining,solved:[...roulette.solved],angle:roulette.angle};
+ if(room.roulette)world.roulette={bankVersion:2,current:roulette.current?.id,selected:roulette.selected,remaining:roulette.remaining,solved:[...roulette.solved],angle:roulette.angle};
  if(maze)world.maze={...pick(maze,mazeRecoveryFields),map:room.map,environment:room.environment,doors:maze.doors,
   passed:[...maze.passed],openDoors:[...maze.openDoors],usedFreezeButtons:[...maze.usedFreezeButtons]};
  if(boss)world.boss={support:boss.puzzle.support.id,cuts:boss.puzzle.cuts,stun:boss.stun.snapshot(),escapeTime:ignitia.ignited?ignitia.simulator.missionTime:null};
@@ -339,10 +339,7 @@ function restoreRecovery(saved,away) {
   lab.renderHistory();lab.update();
  }
  if(rooms[i].roulette&&w.roulette){
-  Object.assign(roulette,{remaining:w.roulette.remaining,solved:new Set(w.roulette.solved),angle:w.roulette.angle});
-  const q=PHYSICS_PROBLEMS.findIndex(q=>q.id===w.roulette.current);
-  if(q>=0)roulette.present(q);
-  else if(Number.isInteger(w.roulette.selected))roulette.present(w.roulette.selected);
+  roulette.restore(w.roulette);
  }
  if(maze&&w.maze){
   const m=w.maze;Object.assign(maze,pick(m,mazeRecoveryFields));

@@ -75,7 +75,7 @@ Set your calculator to degrees.`);
       const q = roulette.current;
       if(!q)return say('Primero gira la rueda.','Spin the wheel first.');
       const setup=this.rouletteSetups[q.id];
-      return say('Ya dejé las ecuaciones despejadas y los datos sustituidos. Evalúa las operaciones en orden; si aparece una variable anterior, usa el valor que acabas de calcular. Conserva decimales hasta el final y usa grados en tu calculadora.\n', 'The equations are isolated and the data substituted. Evaluate the operations in order; use your previous result wherever that variable appears. Keep precision until the end and set your calculator to degrees.\n')+setup;
+      return say('Ya dejé las ecuaciones despejadas y los datos sustituidos. Evalúa las operaciones en orden; si aparece una variable anterior, usa el valor que acabas de calcular. Conserva decimales hasta el final.\n', 'The equations are isolated and the data substituted. Evaluate the operations in order; use your previous result wherever that variable appears. Keep precision until the end.\n')+setup;
     }
     if (room.conceptual) {
       const q = maze.question;
